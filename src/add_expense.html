@@ -13,11 +13,11 @@
 <body onload="runAddExpense(); ">
 	<div id="container">
 		<form>
-			<input type="text" placeholder="amount" onfocus="this.placeholder='amount'" onblur="this.placeholder='amount'">
-			<input type="date">
-			<select name="payment-method" id="payment-option-select"></select>
-			<select name="category" id="expense-category-select"></select>
-			<input type="text" placeholder="optional comment" onfocus="this.placeholder='optional comment'" onblur="this.placeholder='optional comment'">
+			<input type="number" step="0.01" placeholder="amount" onfocus="this.placeholder='amount'" onblur="this.placeholder='amount'" required>
+			<input type="date" min='2010-01-01' required>
+			<select name="payment-method" id="payment-option-select" required></select>
+			<select name="category" id="expense-category-select" required></select>
+			<input type="text" placeholder="comment (optional)" onfocus="this.placeholder='optional comment'" onblur="this.placeholder='optional comment'">
 			<input type="submit" value="Add">
 		</form>
 		<form action="main_menu.html">

@@ -12,9 +12,9 @@
 <body onload="runAddIncome();">
 	<div id="container">
 		<form>
-			<input type="text" placeholder="amount" onfocus="this.placeholder='amount'" onblur="this.placeholder='amount'">
-			<input type="date">
-			<select name="category" id="income-category-select"></select>
+			<input type="number" step="0.01" placeholder="amount" onfocus="this.placeholder='amount'" onblur="this.placeholder='amount'" required>
+			<input type="date" min='2010-01-01' required>
+			<select name="category" id="income-category-select" required></select>
 			<input type="text" placeholder="comment (optional)" onfocus="this.placeholder='comment (optional)'" onblur="this.placeholder='comment (optional)'">
 			<input type="submit" value="Add">
 		</form>
