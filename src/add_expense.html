@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<script src="js/functions.js"></script>
 </head>
-<body onload="runAddExpense(); ">
+<body onload="runAddExpense();">
 	<div id="container">
 		<form>
 			<input type="number" min="0" step="0.01" placeholder="amount" onfocus="this.placeholder='amount'" onblur="this.placeholder='amount'" required>
@@ -18,11 +18,9 @@
 			<select name="payment-method" id="payment-option-select" required></select>
 			<select name="category" id="expense-category-select" required></select>
 			<input type="text" placeholder="comment (optional)" onfocus="this.placeholder='optional comment'" onblur="this.placeholder='optional comment'">
-			<input type="submit" value="Add">
+			<button>Add</button>
 		</form>
-		<form action="main_menu.html">
-			<input type="submit" value="Cancel">
-		</form>
+		<button>Cancel</button>
 	</div>
 </body>
 </html>

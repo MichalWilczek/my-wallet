@@ -1,0 +1,43 @@
+/* 
+palette:
+1F2421
+216869
+49A078
+9CC5A1
+DCE1DE
+*/
+
+
+body {
+    background-color: #DCE1DE;
+}
+
+nav {
+    background-color: #9CC5A1;
+}
+
+button {
+    background-color: #49A078;
+}
+
+
+/* #main_page_content {
+
+}
+
+button.upper_nav_bar {
+
+}
+
+button.main_button {
+    
+}
+
+#main_nav_bar {
+} */
+
+
+#footer_nav_bar {
+    
+    font-size: 15px;
+}

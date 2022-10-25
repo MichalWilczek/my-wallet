@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>FORMS</h1>
+    <form action="/tacos">
+        <button type="button">Do not submit the form!!!</button>
+        <p>
+            <label for="myusername">Type in User Name:</label>
+            <input type="text" id="myusername" placeholder="user name" name="username">
+        </p>
+        <p>
+            <label for="mypasswod">Type in Password:</label>
+            <input type="password" id="mypassword" placeholder="password" name="password">
+        </p>
+        <p>
+            <label for="mycolor">Set color:</label>
+            <input type="color" id="mycolor" name="color">
+        </p>
+        <p>
+            <label for="myfile">Input file:</label>
+            <input type="file" id="myfile">
+        </p>
+        <p>
+            <input type="month" name="month">
+            <input type="date" name="date">
+        </p>
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+    <hr>
+    <button>Outside the form does not submit anything!</button>
+
+
+    <form action="https://www.google.com/search">
+        <label for="googlesearch">Search in Google</label>
+        <input type="text" name="q" id="googlesearch">
+        <button>Submit</button>
+    </form>
+
+    <h2>More Inputs!</h2>
+    <form action="/birds">
+        <input type="checkbox" name="agree_tos" id="agree">
+        <label for="agree">I agree to everything</label>
+        <button>Submit</button>
+    </form>
+
+    
+    <h2>Size type</h2>
+    <form action="/birds">
+        <input type="radio" name="size" id="XS" value="xs">
+        <label for="XS">XS</label>
+        <input type="radio" name="size" id="S" value="s">
+        <label for="S">S</label>
+        <input type="radio" name="size" id="M" value="m">
+        <label for="M">M</label>
+        <button>Submit</button>
+    </form>
+
+    <h2>Meal Options</h2>
+    <form action="/birds">
+        <select name="meal" id="meal">
+            <option value="fish">fish</option>
+            <option value="veggies">veggies</option>
+            <option value="meat">meat</option>
+        </select>
+        <button>Submit</button>
+    </form>
+
+    <h2>Ranges</h2>
+    <form action="range">
+        <input type="range" name="cheese" id="cheese" min="1" max="10">
+        <button>Submit</button> 
+    </form>
+
+    <p>
+        <label for="requests">Any special requests?</label>
+        <textarea name="requests" id="requests" cols="50" rows="10" placeholder="Special text..."></textarea>
+    </p>
+    
+</body>
+</html>
