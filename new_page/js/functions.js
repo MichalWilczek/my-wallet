@@ -22,42 +22,59 @@ class Options {
     removeOption(optionName) {
         this.options = this.options.filter(e => e !== optionName);
     }
-    showOptions(elementID) {
-        var optionsElement = document.getElementById(elementID);
+    createElement() {
+        var selectObj = document.createElement("select");
+        selectObj.setAttribute("name", "category");
+        selectObj.setAttribute("id", "income-category-select");
+        selectObj.setAttribute("id", `${this.id}-select`);
+        selectObj.setAttribute("required", true);
 
         var baseOption = document.createElement("option");
         baseOption.setAttribute("value", this.id);
         baseOption.setAttribute("disabled", true);
         baseOption.setAttribute("selected", true);
         baseOption.innerText = `--- ${this.id} ---`;
-        optionsElement.append(baseOption);
+        selectObj.append(baseOption);
 
         for (let option of this.options) {
             var newOption = document.createElement("option");
             newOption.setAttribute("value", option);
             newOption.innerText = option;
-            optionsElement.append(newOption);
+            selectObj.append(newOption);
         }
 
         for (let option of this.defaultOptions) {
             var newOption = document.createElement("option");
             newOption.setAttribute("value", option);
             newOption.innerText = option;
-            optionsElement.append(newOption);
+            selectObj.append(newOption);
         }
+
+        return selectObj;
     }
 }
 
 // DEFINITION OF VARIABLES
+// localStorage.setItem(
+//     "incomeOptions",
+//     new Options(
+//         "category", 
+//         [
+//             "bank interest", 
+//             "pay"
+//         ]
+//     )
+// )
+
 let incomeOptions = new Options(
-    "category", 
+    "income-option", 
     [
         "bank interest", 
         "pay"
     ]
 );
 let paymentOptions = new Options(
-    "payment option", 
+    "payment-option", 
     [
         "cash",
         "credit card",
@@ -65,7 +82,7 @@ let paymentOptions = new Options(
     ]
 );
 let expenseOptions = new Options(
-    "category", 
+    "expense-option", 
     [
         "appartment",
         "books",
@@ -116,10 +133,7 @@ function addIncome(elementID) {
     date.setAttribute("required", true);
     form.append(date);
 
-    var category = document.createElement("select");
-    category.setAttribute("name", "category");
-    category.setAttribute("id", "income-category-select");
-    category.setAttribute("required", true);
+    var category = incomeOptions.createElement();
     form.append(category);
 
     var comments = document.createElement("text");
@@ -131,7 +145,6 @@ function addIncome(elementID) {
     form.append(button);
 
     document.getElementById(elementID).append(form);
-    incomeOptions.showOptions("income-category-select");
 }
 
 function addExpense(elementID) {
@@ -152,16 +165,10 @@ function addExpense(elementID) {
     date.setAttribute("required", true);
     form.append(date);
 
-    var paymentMethod = document.createElement("select");
-    paymentMethod.setAttribute("name", "payment-method");
-    paymentMethod.setAttribute("id", "payment-option-select");
-    paymentMethod.setAttribute("required", true);
+    var paymentMethod = paymentOptions.createElement();
     form.append(paymentMethod);
 
-    var category = document.createElement("select");
-    category.setAttribute("name", "category");
-    category.setAttribute("id", "expense-category-select");
-    category.setAttribute("required", true);
+    var category = expenseOptions.createElement();
     form.append(category);
 
     var comments = document.createElement("text");
@@ -173,8 +180,6 @@ function addExpense(elementID) {
     form.append(button);
 
     document.getElementById(elementID).append(form);
-    paymentOptions.showOptions("payment-option-select");
-    expenseOptions.showOptions("expense-category-select");
 }
 
 function showBalance(elementID) {
@@ -227,23 +232,18 @@ function changePassword(elementID) {
     return form;
 }
 
-function changePaymentOptions(elementID) {
+function modifyOptions(elementID, optionsObj) {
     clearBox(elementID);
 
     var deleteForm = document.createElement("form");
-    var selectObj = document.createElement("select");
-    selectObj.setAttribute("name", "payment-method");
-    selectObj.setAttribute("id", "payment-option-select");
-    selectObj.setAttribute("required", true);
+    var selectObj = optionsObj.createElement();
     deleteForm.append(selectObj);
     var deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
     deleteButton.onclick = function() {
         var objToDelete = selectObj.options[selectObj.selectedIndex].text;
-        paymentOptions.removeOption(objToDelete);
-        alert("no way!");
-
-        return paymentOptions;
+        optionsObj.removeOption(objToDelete);
+        alert(optionsObj.options);
     }
     deleteForm.append(deleteButton);
     document.getElementById(elementID).append(deleteForm);
@@ -251,32 +251,18 @@ function changePaymentOptions(elementID) {
     var appendForm = document.createElement("form");
     var textObj = document.createElement("input");
     textObj.setAttribute("type", "text");
-    textObj.setAttribute("placeholder", "new payment option");
+    textObj.setAttribute("placeholder", "new option");
     appendForm.append(textObj);
     var appendButton = document.createElement("button");
     appendButton.innerText = "Append";
     appendButton.onclick = function() {
         var objToAdd = textObj.value;
-        paymentOptions.addOption(objToAdd);
-        alert(paymentOptions.options);
+        optionsObj.addOption(objToAdd);
         // TODO: This piece of code is not working!!! 
         // But why...?
     }
     appendForm.append(appendButton);
     document.getElementById(elementID).append(appendForm);
-    paymentOptions.showOptions("payment-option-select");
-}
-
-function changeIncomeCategories(elementID) {
-    clearBox(elementID);
-    var form = document.createElement("form");
-    // TO BE DONE! 
-}
-
-function changeExpenseCategories(elementID) {
-    clearBox(elementID);
-    var form = document.createElement("form");
-    // TO BE DONE! 
 }
 
 function changeSettings(elementID) {
@@ -287,17 +273,17 @@ function changeSettings(elementID) {
     document.getElementById(elementID).append(passwordChange);
 
     paymentOptionsEdition = document.createElement("button");
-    paymentOptionsEdition.onclick = function() {changePaymentOptions(elementID)};
+    paymentOptionsEdition.onclick = function() {modifyOptions(elementID, paymentOptions)};
     paymentOptionsEdition.textContent = "Edit Payment Options";
     document.getElementById(elementID).append(paymentOptionsEdition);
 
     incomeCategoriesEdition = document.createElement("button");
-    incomeCategoriesEdition.onclick = function() {changeIncomeCategories(elementID)};
+    incomeCategoriesEdition.onclick = function() {modifyOptions(elementID, incomeOptions)};
     incomeCategoriesEdition.textContent = "Edit Income Categories";
     document.getElementById(elementID).append(incomeCategoriesEdition);
 
     expenseCategoriesEdition = document.createElement("button");
-    expenseCategoriesEdition.onclick = function() {changeExpenseCategories(elementID)};
+    expenseCategoriesEdition.onclick = function() {modifyOptions(elementID, expenseOptions)};
     expenseCategoriesEdition.textContent = "Edit Expense Categories";
     document.getElementById(elementID).append(expenseCategoriesEdition);
 }
