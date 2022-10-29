@@ -6,12 +6,11 @@ a4c3b2
 6b9080
 */
 
-
 body {
     background-color: #f6fff8;
     color: #24302b;
     /* font-family: 'Open Sans', sans-serif; */
-    font-family: 'Arapey', serif;
+    font-family: 'Arapey', 'Open Sans', serif;
 	font-size: 25px;
 }
 
@@ -20,23 +19,24 @@ button, input {
     font-family: inherit;
     color: inherit;
     font-size: 25px;
+    border-radius: 5px;
 }
 
-.logo {
-    width: 300px;
-}
-
+/* 
+---------------------------
+--- MAIN NAVIGATION BAR ---
+---------------------------
+*/
 #main_nav_bar {
-    /* width: 20%; */
-    float: left;
+    display: inline-block;
 }
 
 .main_button {
     background-color: #cce3de;
     color: inherit;
-    display: inline-block;
-    width: 180px;;
-    padding: 10px;
+    display: block;
+    width: 200px;
+    padding: 5px;
     border: 1px solid black;
 }
 
@@ -48,6 +48,15 @@ button:focus {
     background-color: #6b9080;
 }
 
+/* 
+--------------------
+--- MAIN CONTENT ---
+--------------------
+*/
+main {
+    display: inline-block;
+    margin-left: auto;
+}
 
 /* 
 -------------
@@ -74,6 +83,23 @@ label.clickable-label:hover {
 --- MAIN FOOTER ---
 -------------------
 */
+.logo-div {
+    display: inline;
+}
+
+.login-out {
+    margin: right;
+    display: inline;
+}
+
+.welcome_user_span {
+    /* TODO: Add margin to right!!! */
+}
+
+.logo {
+    width: 25%;
+}
+
 #footer_nav_bar > ul > li{
     display: inline;
 }

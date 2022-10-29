@@ -19,14 +19,18 @@
             showMainPage('main_page_content');
             showUserID('welcome_user_span');">
         <nav id="upper_nav_bar">
-            <img class="logo", src="img/logo-high-resolution.png" alt="Logo sign" />
-            <span class="welcome_user_span" id="welcome_user_span"></span>
-            <button
-                id="logOutButton"
-                class="upper_nav_bar"
-                onclick="logOut('logOutButton');">
-                Log out
-            </button>
+            <div class="logo-div">
+                <img class="logo", src="img/logo-high-resolution.png" alt="Logo sign" />
+            </div>
+            <div class="login-out">
+                <span class="welcome_user_span" id="welcome_user_span"></span>
+                <button
+                    id="logOutButton"
+                    class="upper_nav_bar"
+                    onclick="logOut('logOutButton');">
+                    Log out
+                </button>
+            </div>
         </nav>
 
         <nav id="main_nav_bar">
