@@ -110,6 +110,68 @@ function clearBox(elementID) {
     document.getElementById(elementID).innerHTML = "";
 }
 
+function createUserElementwithLabel(
+    form,
+    type, 
+    elementID, 
+    labelText="User name"
+) {
+    var userNameLabel = document.createElement("label");
+    userNameLabel.setAttribute("for", elementID);
+    userNameLabel.innerText = labelText
+    form.append(userNameLabel);
+    var userName = document.createElement("input");
+    userName.setAttribute("type", type);
+    userName.setAttribute("id", elementID);
+    userName.setAttribute("required", true);
+    form.append(userName);
+    return form;
+}
+
+function logIn(elementID) {
+    clearBox(elementID);
+    var form = document.createElement("form");
+    form.setAttribute("action", "main_page.html");
+
+    form = createUserElementwithLabel(form, "text", "user-name-login-id", "User name");
+    form = createUserElementwithLabel(form, "password", "password-login-id", "Password");
+    var button = document.createElement("button");
+    button.innerText = "Log in";
+    form.append(button);
+    document.getElementById(elementID).append(form);
+
+    var registerLabel1 = document.createElement("label");
+    registerLabel1.innerText = "Don't have an account yet? Sign up ";
+    var registerLabel2 = document.createElement("label");
+    registerLabel2.setAttribute("class", "clickable-label");
+    registerLabel2.innerText = "here";
+    registerLabel2.onclick = function () {
+        registerUser(elementID);
+    }
+    var registerLabel3 = document.createElement("label");
+    registerLabel3.innerText = "!";
+    document.getElementById(elementID).append(registerLabel1);
+    document.getElementById(elementID).append(registerLabel2);
+    document.getElementById(elementID).append(registerLabel3);
+}
+
+function logOut(elementID) {
+    document.getElementById(elementID).onclick = function () {
+        location.href = "login.html";
+    };
+}
+
+function registerUser(elementID) {
+    clearBox(elementID);
+    var form = document.createElement("form");
+    form = createUserElementwithLabel(form, "text", "user-name-registration-id", "User name");
+    form = createUserElementwithLabel(form, "password", "password-registration-id", "Password");
+    var button = document.createElement("button");
+    button.innerText = "Register";
+    form.append(button);
+    document.getElementById(elementID).append(form);
+}
+
 function showMainPage(elementID) {
     clearBox(elementID);
     document.getElementById(elementID).innerHTML = "Main page to be filled in...";
@@ -190,46 +252,14 @@ function showBalance(elementID) {
 function changePassword(elementID) {
     clearBox(elementID);
     var form = document.createElement("form");
-
-    var oldPasswordLabel = document.createElement("label");
-    oldPasswordLabel.setAttribute("for", "old-password-change-label");
-    oldPasswordLabel.innerText = "Type old password";
-    form.append(oldPasswordLabel);
-    var oldPassword = document.createElement("input");
-    oldPassword.setAttribute("type", "password");
-    oldPassword.setAttribute("id", "old-password-change-label");
-    oldPassword.setAttribute("placeholder", "old password");
-    oldPassword.setAttribute("required", true);
-    form.append(oldPassword);
-
-    var newPasswordLabel = document.createElement("label");
-    newPasswordLabel.setAttribute("for", "new-password-change-label");
-    newPasswordLabel.innerText = "Type new password";
-    form.append(newPasswordLabel);
-    var newPassword = document.createElement("input");
-    newPassword.setAttribute("type", "password");
-    newPassword.setAttribute("id", "new-password-change-label");
-    newPassword.setAttribute("placeholder", "new password");
-    newPassword.setAttribute("required", true);
-    form.append(newPassword);
-
-    var repeatedNewPasswordLabel = document.createElement("label");
-    repeatedNewPasswordLabel.setAttribute("for", "repeated-new-password-change-label");
-    repeatedNewPasswordLabel.innerText = "Retype new password";
-    form.append(repeatedNewPasswordLabel);
-    var repeatedNewPassword = document.createElement("input");
-    repeatedNewPassword.setAttribute("type", "password");
-    repeatedNewPassword.setAttribute("id", "repeated-new-password-change-label");
-    repeatedNewPassword.setAttribute("placeholder", "repeated new password");
-    repeatedNewPassword.setAttribute("required", true);
-    form.append(repeatedNewPassword);
-
+    form = createUserElementwithLabel(form, "password", "old-password-change-id", labelText="Old password");
+    form = createUserElementwithLabel(form, "password", "new-password-change-id", labelText="New password");
+    form = createUserElementwithLabel(form, "password", "new2-password-change-id", labelText="Repeated new password");
     var button = document.createElement("button");
     button.innerText = "Submit";
     form.append(button);
 
     document.getElementById(elementID).append(form);
-    return form;
 }
 
 function modifyOptions(elementID, optionsObj) {

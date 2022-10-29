@@ -20,6 +20,10 @@ button {
     background-color: #49A078;
 }
 
+label.clickable-label {
+    cursor: pointer;
+    color: blue;
+}
 
 /* #main_page_content {
 
