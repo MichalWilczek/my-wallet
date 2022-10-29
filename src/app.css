@@ -1,47 +1,79 @@
 /* 
-palette:
-1F2421
-216869
-49A078
-9CC5A1
-DCE1DE
+f6fff8
+eaf4f4
+cce3de
+a4c3b2
+6b9080
 */
 
 
 body {
-    background-color: #DCE1DE;
+    background-color: #f6fff8;
+    color: #24302b;
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: 'Arapey', serif;
+	font-size: 25px;
 }
 
-nav {
-    background-color: #9CC5A1;
+button, input {
+    background-color: inherit;
+    font-family: inherit;
+    color: inherit;
+    font-size: 25px;
 }
 
-button {
-    background-color: #49A078;
+.logo {
+    width: 300px;
+}
+
+#main_nav_bar {
+    /* width: 20%; */
+    float: left;
+}
+
+.main_button {
+    background-color: #cce3de;
+    color: inherit;
+    display: inline-block;
+    width: 180px;;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+button:hover {
+    background-color: #a4c3b2;
+}
+
+button:focus {
+    background-color: #6b9080;
+}
+
+
+/* 
+-------------
+--- LOGIN ---
+-------------
+*/
+.welcome_user_span {
+    margin-right: auto;
 }
 
 label.clickable-label {
     cursor: pointer;
-    color: blue;
+    color: #6b9080;
+    font-weight: 700;
 }
 
-/* #main_page_content {
-
+label.clickable-label:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
-button.upper_nav_bar {
-
-}
-
-button.main_button {
-    
-}
-
-#main_nav_bar {
-} */
-
-
-#footer_nav_bar {
-    
-    font-size: 15px;
+/* 
+-------------------
+--- MAIN FOOTER ---
+-------------------
+*/
+#footer_nav_bar > ul > li{
+    display: inline;
 }

@@ -65,7 +65,7 @@ class Options {
 //         ]
 //     )
 // )
-
+var userIDValue = "RandomUserID";
 let incomeOptions = new Options(
     "income-option", 
     [
@@ -110,6 +110,11 @@ function clearBox(elementID) {
     document.getElementById(elementID).innerHTML = "";
 }
 
+function showUserID(elementID) {
+    const loginText = document.getElementById(elementID);
+    loginText.textContent = `Welcome ${userIDValue}`;
+}
+
 function createUserElementwithLabel(
     form,
     type, 
@@ -131,7 +136,7 @@ function createUserElementwithLabel(
 function logIn(elementID) {
     clearBox(elementID);
     var form = document.createElement("form");
-    form.setAttribute("action", "main_page.html");
+    form.setAttribute("action", "my_wallet.html");
 
     form = createUserElementwithLabel(form, "text", "user-name-login-id", "User name");
     form = createUserElementwithLabel(form, "password", "password-login-id", "Password");
@@ -157,7 +162,7 @@ function logIn(elementID) {
 
 function logOut(elementID) {
     document.getElementById(elementID).onclick = function () {
-        location.href = "login.html";
+        location.href = "welcome.html";
     };
 }
 

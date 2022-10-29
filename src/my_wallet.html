@@ -7,13 +7,26 @@
         <title>Your Budget</title>
         <link rel="stylesheet" href="app.css" />
         <script src="js/functions.js"></script>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Arapey&display=swap');
+        </style>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap');
+        </style>
     </head>
-    <body 
-    onload="showMainPage('main_page_content');">
+    <body
+        onload="
+            showMainPage('main_page_content');
+            showUserID('welcome_user_span');">
         <nav id="upper_nav_bar">
-            <img src="#" alt="Logo sign" />
-            Welcome Michal Wilczek!
-            <button id="logOutButton" class="upper_nav_bar" onclick="logOut('logOutButton');">Log out</button>
+            <img class="logo", src="img/logo-high-resolution.png" alt="Logo sign" />
+            <span class="welcome_user_span" id="welcome_user_span"></span>
+            <button
+                id="logOutButton"
+                class="upper_nav_bar"
+                onclick="logOut('logOutButton');">
+                Log out
+            </button>
         </nav>
 
         <nav id="main_nav_bar">
@@ -44,8 +57,7 @@
             </button>
         </nav>
 
-        <main id="main_page_content">
-        </main>
+        <main id="main_page_content"></main>
 
         <footer>
             <nav id="footer_nav_bar">
@@ -54,7 +66,6 @@
                 <ul>
                     <li>About me</li>
                     <li>Additional links</li>
-                    <li>Something else...</li>
                 </ul>
             </nav>
         </footer>
