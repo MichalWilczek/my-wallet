@@ -8,68 +8,70 @@
         <link rel="stylesheet" href="app.css" />
         <script src="js/functions.js"></script>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Arapey&display=swap');
+            @import url("https://fonts.googleapis.com/css2?family=Arapey&display=swap");
         </style>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap');
+            @import url("https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap");
         </style>
     </head>
     <body
         onload="
             showMainPage('main_page_content');
-            showUserID('welcome_user_span');">
+            showUserID('upper_nav_bar_span');">
         <nav id="upper_nav_bar">
-            <div class="logo-div">
-                <img class="logo", src="img/logo-high-resolution.png" alt="Logo sign" />
+            <div class="upper_nav_bar_div">
+                <img class="logo" , src="img/logo-black.png" alt="Logo sign" />
             </div>
-            <div class="login-out">
-                <span class="welcome_user_span" id="welcome_user_span"></span>
+            <div id="upper_nav_bar_logout">
                 <button
                     id="logOutButton"
-                    class="upper_nav_bar"
+                    class="log_button"
                     onclick="logOut('logOutButton');">
                     Log out
                 </button>
             </div>
+            <div id="upper_nav_bar_span_div">
+                <span id="upper_nav_bar_span"></span>
+            </div>
         </nav>
 
-        <nav id="main_nav_bar">
-            <button
-                class="main_button"
-                onclick="showMainPage('main_page_content');">
-                Home
-            </button>
-            <button
-                class="main_button"
-                onclick="addIncome('main_page_content');">
-                Add Income
-            </button>
-            <button
-                class="main_button"
-                onclick="addExpense('main_page_content');">
-                Add Expense
-            </button>
-            <button
-                class="main_button"
-                onclick="showBalance('main_page_content');">
-                Show Balance
-            </button>
-            <button
-                class="main_button"
-                onclick="changeSettings('main_page_content');">
-                Settings
-            </button>
-        </nav>
-
-        <main id="main_page_content"></main>
+        <div class="main_container">
+            <nav id="main_nav_bar">
+                <button
+                    class="main_button"
+                    onclick="showMainPage('main_page_content');">
+                    Home
+                </button>
+                <button
+                    class="main_button"
+                    onclick="addIncome('main_page_content');">
+                    Add Income
+                </button>
+                <button
+                    class="main_button"
+                    onclick="addExpense('main_page_content');">
+                    Add Expense
+                </button>
+                <button
+                    class="main_button"
+                    onclick="showBalance('main_page_content');">
+                    Show Balance
+                </button>
+                <button
+                    class="main_button"
+                    onclick="changeSettings('main_page_content');">
+                    Settings
+                </button>
+            </nav>
+    
+            <main id="main_page_content"></main>
+        </div>
 
         <footer>
             <nav id="footer_nav_bar">
                 <br />
-                Footer bar...
                 <ul>
                     <li>About me</li>
-                    <li>Additional links</li>
                 </ul>
             </nav>
         </footer>

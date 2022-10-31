@@ -54,18 +54,7 @@ class Options {
     }
 }
 
-// DEFINITION OF VARIABLES
-// localStorage.setItem(
-//     "incomeOptions",
-//     new Options(
-//         "category", 
-//         [
-//             "bank interest", 
-//             "pay"
-//         ]
-//     )
-// )
-var userIDValue = "RandomUserID";
+var userIDValue = "mich.wilcz";
 let incomeOptions = new Options(
     "income-option", 
     [
@@ -111,8 +100,8 @@ function clearBox(elementID) {
 }
 
 function showUserID(elementID) {
-    const loginText = document.getElementById(elementID);
-    loginText.textContent = `Welcome ${userIDValue}`;
+    var spanElement = document.getElementById(elementID);
+    spanElement.textContent = `Welcome ${userIDValue}`;
 }
 
 function createUserElementwithLabel(
@@ -133,31 +122,43 @@ function createUserElementwithLabel(
     return form;
 }
 
-function logIn(elementID) {
+function logIn(elementID, loginButtonID) {
+    document.getElementById(loginButtonID).remove();
     clearBox(elementID);
+
+    var sectionLogin = document.createElement("section");
+    sectionLogin.setAttribute("class", "login_registration");
+    var heading = document.createElement("h2");
+    heading.innerText = "Please, log in";
+    sectionLogin.append(heading);
     var form = document.createElement("form");
     form.setAttribute("action", "my_wallet.html");
 
-    form = createUserElementwithLabel(form, "text", "user-name-login-id", "User name");
-    form = createUserElementwithLabel(form, "password", "password-login-id", "Password");
+    var form = createUserElementwithLabel(form, "text", "user-name-login-id", "User name");
+    var form = createUserElementwithLabel(form, "password", "password-login-id", "Password");
     var button = document.createElement("button");
     button.innerText = "Log in";
     form.append(button);
-    document.getElementById(elementID).append(form);
-
-    var registerLabel1 = document.createElement("label");
-    registerLabel1.innerText = "Don't have an account yet? Sign up ";
-    var registerLabel2 = document.createElement("label");
-    registerLabel2.setAttribute("class", "clickable-label");
-    registerLabel2.innerText = "here";
-    registerLabel2.onclick = function () {
+    sectionLogin.append(form);
+    
+    var sectionRegister = document.createElement("section"); 
+    var paragraph = document.createElement("p");
+    var span1 = document.createElement("span");
+    span1.innerText = "Don't have an account yet? Sign up ";
+    var span2 = document.createElement("span");
+    span2.innerText = "here"
+    span2.setAttribute("class", "clickable_span");
+    span2.onclick = function () {
         registerUser(elementID);
     }
-    var registerLabel3 = document.createElement("label");
-    registerLabel3.innerText = "!";
-    document.getElementById(elementID).append(registerLabel1);
-    document.getElementById(elementID).append(registerLabel2);
-    document.getElementById(elementID).append(registerLabel3);
+    var span3 = document.createElement("span");
+    span3.innerText = "!"
+    paragraph.append(span1);
+    paragraph.append(span2);
+    paragraph.append(span3);
+    sectionRegister.append(paragraph);
+    document.getElementById(elementID).append(sectionLogin);
+    document.getElementById(elementID).append(sectionRegister);
 }
 
 function logOut(elementID) {
@@ -168,18 +169,28 @@ function logOut(elementID) {
 
 function registerUser(elementID) {
     clearBox(elementID);
+
+    var sectionRegister = document.createElement("section");
+    sectionRegister.setAttribute("class", "login_registration");
+    var heading = document.createElement("h2");
+    heading.innerText = "Please, register";
+    sectionRegister.append(heading);
+
     var form = document.createElement("form");
     form = createUserElementwithLabel(form, "text", "user-name-registration-id", "User name");
     form = createUserElementwithLabel(form, "password", "password-registration-id", "Password");
     var button = document.createElement("button");
     button.innerText = "Register";
     form.append(button);
-    document.getElementById(elementID).append(form);
+    sectionRegister.append(form);
+    document.getElementById(elementID).append(sectionRegister);
 }
 
 function showMainPage(elementID) {
     clearBox(elementID);
-    document.getElementById(elementID).innerHTML = "Main page to be filled in...";
+    var paragraph = document.createElement("p");
+    paragraph.innerText = "Main page to be filled in...";
+    document.getElementById(elementID).append(paragraph);
 }
 
 function addIncome(elementID) {
@@ -251,7 +262,9 @@ function addExpense(elementID) {
 
 function showBalance(elementID) {
     clearBox(elementID);
-    document.getElementById(elementID).innerHTML = "Show balance to be added...";
+    var paragraph = document.createElement("p");
+    paragraph.innerText = "Show balance to be added...";
+    document.getElementById(elementID).append(paragraph);
 }
 
 function changePassword(elementID) {
