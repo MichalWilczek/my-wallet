@@ -72,11 +72,7 @@ button:focus {
 }
 
 main {
-    display: inline-block;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left: auto;
-    margin-right: auto;
+    float: left;
     padding: 0;
     text-align: center;
 }
@@ -92,20 +88,28 @@ main {
 }
 
 #main_page_content {
-    width: 70%;
+    width: 75%;
     padding: 0;
     height: 500px;
     margin-top: 0px;
 }
 
+.div_class_main_content {
+    margin-top: 100px;
+}
+
 #main_nav_bar {
-    /* margin-top: 90px; */
     padding: 0;
     height: 500px;
     margin-left: auto;
     margin-right: auto;
     width: 25%;
-    display: inline-block;
+    float: left;
+}
+
+#main_nav_bar button:first-of-type
+{
+    margin-top: 100px;
 }
 
 .main_button {
@@ -123,7 +127,6 @@ main select, button, input {
     -webkit-box-sizing: content-box; 
     box-sizing: content-box;
 }
-
 
 /* 
 -------------
@@ -215,7 +218,7 @@ main select, button, input {
 -------------------
 */
 #footer_nav_bar {
-    height: 50px;
+    height: 120px;
     border-top: 2px solid #313133;
 }
 

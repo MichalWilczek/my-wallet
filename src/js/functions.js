@@ -195,6 +195,9 @@ function showMainPage(elementID) {
 
 function addIncome(elementID) {
     clearBox(elementID);
+
+    var divElement = document.createElement("div");
+    divElement.setAttribute("class", "div_class_main_content");
     var form = document.createElement("form");
 
     var amount = document.createElement("input");
@@ -222,11 +225,16 @@ function addIncome(elementID) {
     button.innerText = "Add";
     form.append(button);
 
-    document.getElementById(elementID).append(form);
+    divElement.append(form);
+
+    document.getElementById(elementID).append(divElement);
 }
 
 function addExpense(elementID) {
     clearBox(elementID);
+
+    var divElement = document.createElement("div");
+    divElement.setAttribute("class", "div_class_main_content");
     var form = document.createElement("form");
 
     var amount = document.createElement("input");
@@ -257,7 +265,8 @@ function addExpense(elementID) {
     button.innerText = "Add";
     form.append(button);
 
-    document.getElementById(elementID).append(form);
+    divElement.append(form);
+    document.getElementById(elementID).append(divElement);
 }
 
 function showBalance(elementID) {
@@ -269,6 +278,10 @@ function showBalance(elementID) {
 
 function changePassword(elementID) {
     clearBox(elementID);
+
+    var divElement = document.createElement("div");
+    divElement.setAttribute("class", "div_class_main_content");
+
     var form = document.createElement("form");
     form = createUserElementwithLabel(form, "password", "old-password-change-id", labelText="Old password");
     form = createUserElementwithLabel(form, "password", "new-password-change-id", labelText="New password");
@@ -276,12 +289,16 @@ function changePassword(elementID) {
     var button = document.createElement("button");
     button.innerText = "Submit";
     form.append(button);
+    divElement.append(form);
 
-    document.getElementById(elementID).append(form);
+    document.getElementById(elementID).append(divElement);
 }
 
 function modifyOptions(elementID, optionsObj) {
     clearBox(elementID);
+
+    var divElement = document.createElement("div");
+    divElement.setAttribute("class", "div_class_main_content");
 
     var deleteForm = document.createElement("form");
     var selectObj = optionsObj.createElement();
@@ -294,7 +311,7 @@ function modifyOptions(elementID, optionsObj) {
         alert(optionsObj.options);
     }
     deleteForm.append(deleteButton);
-    document.getElementById(elementID).append(deleteForm);
+    divElement.append(deleteForm);
 
     var appendForm = document.createElement("form");
     var textObj = document.createElement("input");
@@ -310,28 +327,34 @@ function modifyOptions(elementID, optionsObj) {
         // But why...?
     }
     appendForm.append(appendButton);
-    document.getElementById(elementID).append(appendForm);
+    divElement.append(appendForm);
+    document.getElementById(elementID).append(divElement);
 }
 
 function changeSettings(elementID) {
     clearBox(elementID);
+
+    var divElement = document.createElement("div");
+    divElement.setAttribute("class", "div_class_main_content");
+
     passwordChange = document.createElement("button");
     passwordChange.onclick = function() {changePassword(elementID)};
     passwordChange.textContent = "Change Password";
-    document.getElementById(elementID).append(passwordChange);
+    divElement.append(passwordChange);
 
     paymentOptionsEdition = document.createElement("button");
     paymentOptionsEdition.onclick = function() {modifyOptions(elementID, paymentOptions)};
     paymentOptionsEdition.textContent = "Edit Payment Options";
-    document.getElementById(elementID).append(paymentOptionsEdition);
+    divElement.append(paymentOptionsEdition);
 
     incomeCategoriesEdition = document.createElement("button");
     incomeCategoriesEdition.onclick = function() {modifyOptions(elementID, incomeOptions)};
     incomeCategoriesEdition.textContent = "Edit Income Categories";
-    document.getElementById(elementID).append(incomeCategoriesEdition);
+    divElement.append(incomeCategoriesEdition);
 
     expenseCategoriesEdition = document.createElement("button");
     expenseCategoriesEdition.onclick = function() {modifyOptions(elementID, expenseOptions)};
     expenseCategoriesEdition.textContent = "Edit Expense Categories";
-    document.getElementById(elementID).append(expenseCategoriesEdition);
+    divElement.append(expenseCategoriesEdition);
+    document.getElementById(elementID).append(divElement);
 }
