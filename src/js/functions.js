@@ -108,17 +108,28 @@ function createUserElementwithLabel(
     form,
     type, 
     elementID, 
-    labelText="User name"
+    labelText="User name",
+    iconName="fa fa-user icon"
 ) {
     var userNameLabel = document.createElement("label");
     userNameLabel.setAttribute("for", elementID);
     userNameLabel.innerText = labelText
     form.append(userNameLabel);
+
+    var div = document.createElement("div");
+    div.setAttribute("class", "input_icons");
+
+    var icon = document.createElement("i");
+    icon.setAttribute("class", iconName);
+    div.append(icon);
+
     var userName = document.createElement("input");
     userName.setAttribute("type", type);
     userName.setAttribute("id", elementID);
     userName.setAttribute("required", true);
-    form.append(userName);
+    div.append(userName);
+
+    form.append(div);
     return form;
 }
 
@@ -135,7 +146,7 @@ function logIn(elementID, loginButtonID) {
     form.setAttribute("action", "my_wallet.html");
 
     var form = createUserElementwithLabel(form, "text", "user-name-login-id", "User name");
-    var form = createUserElementwithLabel(form, "password", "password-login-id", "Password");
+    var form = createUserElementwithLabel(form, "password", "password-login-id", "Password", "fa fa-unlock-alt");
     var button = document.createElement("button");
     button.innerText = "Log in";
     form.append(button);
@@ -178,7 +189,7 @@ function registerUser(elementID) {
 
     var form = document.createElement("form");
     form = createUserElementwithLabel(form, "text", "user-name-registration-id", "User name");
-    form = createUserElementwithLabel(form, "password", "password-registration-id", "Password");
+    form = createUserElementwithLabel(form, "password", "password-registration-id", "Password", "fa fa-unlock-alt");
     var button = document.createElement("button");
     button.innerText = "Register";
     form.append(button);
@@ -200,13 +211,21 @@ function addIncome(elementID) {
     divElement.setAttribute("class", "div_class_main_content");
     var form = document.createElement("form");
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "input_icons");
+
+    var icon = document.createElement("i");
+    icon.setAttribute("class", "fa fa-money");
+    subDiv.append(icon);
+
     var amount = document.createElement("input");
     amount.setAttribute("type", "number");
     amount.setAttribute("min", 0);
     amount.setAttribute("step", 0.01);
     amount.setAttribute("placeholder", "amount");
     amount.setAttribute("required", true);
-    form.append(amount);
+    subDiv.append(amount);
+    form.append(subDiv);
 
     var date = document.createElement("input");
     date.setAttribute("type", "date");
@@ -237,13 +256,21 @@ function addExpense(elementID) {
     divElement.setAttribute("class", "div_class_main_content");
     var form = document.createElement("form");
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "input_icons");
+
+    var icon = document.createElement("i");
+    icon.setAttribute("class", "fa fa-money");
+    subDiv.append(icon);
+
     var amount = document.createElement("input");
     amount.setAttribute("type", "number");
     amount.setAttribute("min", 0);
     amount.setAttribute("step", 0.01);
     amount.setAttribute("placeholder", "amount");
     amount.setAttribute("required", true);
-    form.append(amount);
+    subDiv.append(amount);
+    form.append(subDiv);
 
     var date = document.createElement("input");
     date.setAttribute("type", "date");
