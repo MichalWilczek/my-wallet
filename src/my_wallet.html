@@ -20,13 +20,18 @@
     </head>
     <body
         onload="
-            showMainPage('main_page_content');
-            showUserID('upper_nav_bar_span');">
+        showMainPage('main_page_content');
+        showUserID('upper_nav_bar_span_id');">
         <nav id="upper_nav_bar">
             <div class="upper_nav_bar_div">
-                <img class="logo" , src="img/logo-black.png" alt="Logo sign" />
+                <a href="my_wallet.html">
+                    <img
+                        class="logo"
+                        src="img/logo-black.png"
+                        alt="Logo sign" />
+                </a>
             </div>
-            <div id="upper_nav_bar_logout">
+            <div class="upper_nav_bar_logout">
                 <button
                     id="logOutButton"
                     class="log_button"
@@ -34,46 +39,42 @@
                     Log out
                 </button>
             </div>
-            <div id="upper_nav_bar_span_div">
-                <span id="upper_nav_bar_span"></span>
+            <div class="upper_nav_bar_userID">
+                <span id="upper_nav_bar_span_id">Hello world</span>
             </div>
         </nav>
 
-        <div class="main_container">
-            <nav id="main_nav_bar">
-                <button
-                    class="main_button"
-                    onclick="showMainPage('main_page_content');">
-                    Home
-                </button>
-                <button
-                    class="main_button"
-                    onclick="addIncome('main_page_content');">
-                    Add Income
-                </button>
-                <button
-                    class="main_button"
-                    onclick="addExpense('main_page_content');">
-                    Add Expense
-                </button>
-                <button
-                    class="main_button"
-                    onclick="showBalance('main_page_content');">
-                    Show Balance
-                </button>
-                <button
-                    class="main_button"
-                    onclick="changeSettings('main_page_content');">
-                    Settings
-                </button>
-            </nav>
-    
-            <main id="main_page_content">
-                Hello world!
+        <nav id="main_nav_bar">
+            <button
+                class="main_button"
+                onclick="showMainPage('main_page_content');">
+                Home
+            </button>
+            <button
+                class="main_button"
+                onclick="addIncome('main_page_content');">
+                Add Income
+            </button>
+            <button
+                class="main_button"
+                onclick="addExpense('main_page_content');">
+                Add Expense
+            </button>
+            <button
+                class="main_button"
+                onclick="showBalance('main_page_content');">
+                Show Balance
+            </button>
+            <button
+                class="main_button"
+                onclick="changeSettings('main_page_content');">
+                Settings
+            </button>
+        </nav>
 
-            </main>
-        </div>
+        <main id="main_page_content">Hello world!</main>
 
+        
         <footer>
             <nav id="footer_nav_bar">
                 <ul>
@@ -81,5 +82,6 @@
                 </ul>
             </nav>
         </footer>
+       
     </body>
 </html>

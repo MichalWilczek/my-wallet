@@ -117,7 +117,7 @@ function createUserElementwithLabel(
     form.append(userNameLabel);
 
     var div = document.createElement("div");
-    div.setAttribute("class", "input_icons");
+    div.setAttribute("class", "form_element");
 
     var icon = document.createElement("i");
     icon.setAttribute("class", iconName);
@@ -199,25 +199,36 @@ function registerUser(elementID) {
 
 function showMainPage(elementID) {
     clearBox(elementID);
-    var paragraph = document.createElement("p");
-    paragraph.innerText = "Main page to be filled in...";
-    document.getElementById(elementID).append(paragraph);
+    var section = document.createElement("section");
+
+    var image = document.createElement("img");
+    image.setAttribute("class", "background_photo");
+    image.setAttribute("src", "img/background-photo.jpg");
+    image.setAttribute("alt", "Background photo for quote");
+    section.append(image);
+
+    header = document.createElement("h2");
+    header.innerHTML = "A budget is more than just a series of numbers on a page; <br> it is an embodiment of our values."
+    section.append(header);
+
+    document.getElementById(elementID).append(section);
 }
 
 function addIncome(elementID) {
     clearBox(elementID);
 
+    var header = document.createElement("h3");
+    header.innerText = "Please, add income below:"
+    document.getElementById(elementID).append(header);
+
     var divElement = document.createElement("div");
-    divElement.setAttribute("class", "div_class_main_content");
     var form = document.createElement("form");
 
     var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "input_icons");
-
+    subDiv.setAttribute("class", "form_element");
     var icon = document.createElement("i");
     icon.setAttribute("class", "fa fa-money");
     subDiv.append(icon);
-
     var amount = document.createElement("input");
     amount.setAttribute("type", "number");
     amount.setAttribute("min", 0);
@@ -227,42 +238,54 @@ function addIncome(elementID) {
     subDiv.append(amount);
     form.append(subDiv);
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "form_element");
     var date = document.createElement("input");
     date.setAttribute("type", "date");
     date.setAttribute("min", "2010-01-01");
     date.setAttribute("required", true);
-    form.append(date);
+    subDiv.append(date);
+    form.append(subDiv);
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "form_element");
     var category = incomeOptions.createElement();
-    form.append(category);
+    subDiv.append(category);
+    form.append(subDiv);
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "form_element");
     var comments = document.createElement("text");
     comments.setAttribute("placeholder", "comment (optional)");
-    form.append(comments);
+    subDiv.append(comments);
+    form.append(subDiv);
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "form_element");
     var button = document.createElement("button");
     button.innerText = "Add";
-    form.append(button);
+    subDiv.append(button);
+    form.append(subDiv);
 
     divElement.append(form);
-
     document.getElementById(elementID).append(divElement);
 }
 
 function addExpense(elementID) {
     clearBox(elementID);
 
+    var header = document.createElement("h3");
+    header.innerText = "Please, add expense below:"
+    document.getElementById(elementID).append(header);
+
     var divElement = document.createElement("div");
-    divElement.setAttribute("class", "div_class_main_content");
     var form = document.createElement("form");
 
     var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "input_icons");
-
+    subDiv.setAttribute("class", "form_element");
     var icon = document.createElement("i");
     icon.setAttribute("class", "fa fa-money");
     subDiv.append(icon);
-
     var amount = document.createElement("input");
     amount.setAttribute("type", "number");
     amount.setAttribute("min", 0);
@@ -272,25 +295,40 @@ function addExpense(elementID) {
     subDiv.append(amount);
     form.append(subDiv);
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "form_element");
     var date = document.createElement("input");
     date.setAttribute("type", "date");
     date.setAttribute("min", "2010-01-01");
     date.setAttribute("required", true);
-    form.append(date);
+    subDiv.append(date);
+    form.append(subDiv);
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "form_element");
     var paymentMethod = paymentOptions.createElement();
-    form.append(paymentMethod);
+    subDiv.append(paymentMethod);
+    form.append(subDiv);
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "form_element");
     var category = expenseOptions.createElement();
-    form.append(category);
+    subDiv.append(category);
+    form.append(subDiv);
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "form_element");
     var comments = document.createElement("text");
     comments.setAttribute("placeholder", "comment (optional)");
-    form.append(comments);
+    subDiv.append(comments);
+    form.append(subDiv);
 
+    var subDiv = document.createElement("div");
+    subDiv.setAttribute("class", "form_element");
     var button = document.createElement("button");
     button.innerText = "Add";
-    form.append(button);
+    subDiv.append(button);
+    form.append(subDiv);
 
     divElement.append(form);
     document.getElementById(elementID).append(divElement);
@@ -298,38 +336,52 @@ function addExpense(elementID) {
 
 function showBalance(elementID) {
     clearBox(elementID);
-    var paragraph = document.createElement("p");
-    paragraph.innerText = "Show balance to be added...";
-    document.getElementById(elementID).append(paragraph);
+
+    var header = document.createElement("h2");
+    header.innerText = "Wallet balance:"
+    document.getElementById(elementID).append(header);
+
 }
 
 function changePassword(elementID) {
     clearBox(elementID);
 
-    var divElement = document.createElement("div");
-    divElement.setAttribute("class", "div_class_main_content");
+    var header = document.createElement("h3");
+    header.innerText = "You can change password below:"
+    document.getElementById(elementID).append(header);
 
+    var divElement = document.createElement("div");
     var form = document.createElement("form");
-    form = createUserElementwithLabel(form, "password", "old-password-change-id", labelText="Old password");
-    form = createUserElementwithLabel(form, "password", "new-password-change-id", labelText="New password");
-    form = createUserElementwithLabel(form, "password", "new2-password-change-id", labelText="Repeated new password");
+    form = createUserElementwithLabel(form, "password", "old-password-change-id", labelText="Old password", "fa fa-unlock-alt");
+    form = createUserElementwithLabel(form, "password", "new-password-change-id", labelText="New password", "fa fa-unlock-alt");
+    form = createUserElementwithLabel(form, "password", "new2-password-change-id", labelText="Repeated new password", "fa fa-unlock-alt");
+
+    var buttonDiv = document.createElement("div");
+    buttonDiv.setAttribute("class", "form_element");
     var button = document.createElement("button");
     button.innerText = "Submit";
-    form.append(button);
+    buttonDiv.append(button);
+    form.append(buttonDiv);
     divElement.append(form);
-
     document.getElementById(elementID).append(divElement);
 }
 
 function modifyOptions(elementID, optionsObj) {
     clearBox(elementID);
-
     var divElement = document.createElement("div");
-    divElement.setAttribute("class", "div_class_main_content");
+    
+    var headerDelete = document.createElement("h3");
+    headerDelete.innerText = "Delete option below:"
+    divElement.append(headerDelete);
 
     var deleteForm = document.createElement("form");
+    var formElement = document.createElement("div");
+    formElement.setAttribute("class", "form_element");
     var selectObj = optionsObj.createElement();
-    deleteForm.append(selectObj);
+    formElement.append(selectObj);
+    deleteForm.append(formElement);
+    var formElement = document.createElement("div");
+    formElement.setAttribute("class", "form_element");
     var deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
     deleteButton.onclick = function() {
@@ -337,14 +389,26 @@ function modifyOptions(elementID, optionsObj) {
         optionsObj.removeOption(objToDelete);
         alert(optionsObj.options);
     }
-    deleteForm.append(deleteButton);
+    formElement.append(deleteButton)
+    deleteForm.append(formElement);
     divElement.append(deleteForm);
 
+
     var appendForm = document.createElement("form");
+    var headerAdd = document.createElement("h3");
+    headerAdd.innerText = "Add option below:"
+    divElement.append(headerAdd);
+
+    var formElement = document.createElement("div");
+    formElement.setAttribute("class", "form_element");
     var textObj = document.createElement("input");
     textObj.setAttribute("type", "text");
     textObj.setAttribute("placeholder", "new option");
-    appendForm.append(textObj);
+    formElement.append(textObj);
+    appendForm.append(formElement);
+
+    var formElement = document.createElement("div");
+    formElement.setAttribute("class", "form_element");
     var appendButton = document.createElement("button");
     appendButton.innerText = "Append";
     appendButton.onclick = function() {
@@ -353,7 +417,8 @@ function modifyOptions(elementID, optionsObj) {
         // TODO: This piece of code is not working!!! 
         // But why...?
     }
-    appendForm.append(appendButton);
+    formElement.append(appendButton);
+    appendForm.append(formElement);
     divElement.append(appendForm);
     document.getElementById(elementID).append(divElement);
 }
@@ -361,27 +426,58 @@ function modifyOptions(elementID, optionsObj) {
 function changeSettings(elementID) {
     clearBox(elementID);
 
-    var divElement = document.createElement("div");
-    divElement.setAttribute("class", "div_class_main_content");
+    var header = document.createElement("h3");
+    header.innerText = "Please, select one of the options below:"
+    document.getElementById(elementID).append(header);
 
-    passwordChange = document.createElement("button");
+    var divElement = document.createElement("div");
+    divElement.setAttribute("class", "form_element");
+    var passwordChange = document.createElement("button");
     passwordChange.onclick = function() {changePassword(elementID)};
     passwordChange.textContent = "Change Password";
     divElement.append(passwordChange);
-
-    paymentOptionsEdition = document.createElement("button");
+    document.getElementById(elementID).append(divElement);
+ 
+    var divElement = document.createElement("div");
+    divElement.setAttribute("class", "form_element");
+    var paymentOptionsEdition = document.createElement("button");
     paymentOptionsEdition.onclick = function() {modifyOptions(elementID, paymentOptions)};
     paymentOptionsEdition.textContent = "Edit Payment Options";
     divElement.append(paymentOptionsEdition);
-
-    incomeCategoriesEdition = document.createElement("button");
+    document.getElementById(elementID).append(divElement);
+ 
+    var divElement = document.createElement("div");
+    divElement.setAttribute("class", "form_element");
+    var incomeCategoriesEdition = document.createElement("button");
     incomeCategoriesEdition.onclick = function() {modifyOptions(elementID, incomeOptions)};
     incomeCategoriesEdition.textContent = "Edit Income Categories";
     divElement.append(incomeCategoriesEdition);
-
-    expenseCategoriesEdition = document.createElement("button");
+    document.getElementById(elementID).append(divElement);
+ 
+    var divElement = document.createElement("div");
+    divElement.setAttribute("class", "form_element");
+    var expenseCategoriesEdition = document.createElement("button");
     expenseCategoriesEdition.onclick = function() {modifyOptions(elementID, expenseOptions)};
     expenseCategoriesEdition.textContent = "Edit Expense Categories";
     divElement.append(expenseCategoriesEdition);
     document.getElementById(elementID).append(divElement);
 }
+
+
+// // When the user scrolls the page, execute myFunction
+// window.onscroll = function() {myFunction()};
+
+// // Get the navbar
+// var navbar = document.getElementById("navbar");
+
+// // Get the offset position of the navbar
+// var sticky = navbar.offsetTop;
+
+// // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+// function myFunction() {
+//   if (window.pageYOffset >= sticky) {
+//     navbar.classList.add("sticky")
+//   } else {
+//     navbar.classList.remove("sticky");
+//   }
+// }
