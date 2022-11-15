@@ -216,6 +216,7 @@ function showMainPage(elementID) {
 
 function addIncome(elementID) {
     clearBox(elementID);
+    window.scrollTo(0, 0);
 
     var header = document.createElement("h3");
     header.innerText = "Please, add income below:"
@@ -273,6 +274,7 @@ function addIncome(elementID) {
 
 function addExpense(elementID) {
     clearBox(elementID);
+    window.scrollTo(0, 0);
 
     var header = document.createElement("h3");
     header.innerText = "Please, add expense below:"
@@ -336,6 +338,7 @@ function addExpense(elementID) {
 
 function showBalance(elementID) {
     clearBox(elementID);
+    window.scrollTo(0, 0);
 
     var header = document.createElement("h2");
     header.innerText = "Wallet balance:"
@@ -345,6 +348,7 @@ function showBalance(elementID) {
 
 function changePassword(elementID) {
     clearBox(elementID);
+    window.scrollTo(0, 0);
 
     var header = document.createElement("h3");
     header.innerText = "You can change password below:"
@@ -368,6 +372,8 @@ function changePassword(elementID) {
 
 function modifyOptions(elementID, optionsObj) {
     clearBox(elementID);
+    window.scrollTo(0, 0);
+
     var divElement = document.createElement("div");
     
     var headerDelete = document.createElement("h3");
@@ -425,6 +431,7 @@ function modifyOptions(elementID, optionsObj) {
 
 function changeSettings(elementID) {
     clearBox(elementID);
+    window.scrollTo(0, 0);
 
     var header = document.createElement("h3");
     header.innerText = "Please, select one of the options below:"

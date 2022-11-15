@@ -1,0 +1,203 @@
+@import url(reset.css);
+
+html {
+    font-size: 20px;
+}
+
+body {
+    background-color: #f7f2f2;
+    color: #000000;
+    font-family: 'Arapey', 'Open Sans', serif;
+}
+
+#upper_nav_bar {
+    background-color: #d6d8dc;
+    border-bottom: 2px solid #313133;
+}
+
+div.upper_nav_bar_logout {
+    justify-content: end;
+}
+
+#navbarNavAltMarkup {
+    justify-content: space-between;
+}
+
+main {
+    text-align: center;
+    height: 1200px;
+}
+
+main button select input {
+    color: inherit;
+    display: block;
+    width: 200px;
+}
+
+div.form_element {
+    margin: 5px auto 25px auto;
+    text-align: center;
+}
+
+.clickable_span {
+    cursor: pointer;
+    color: #313133;
+    font-weight: 700;
+}
+
+.clickable_span:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+div.form_element i {
+    position: absolute; 
+    margin: 9px 13px;
+    opacity: 0.8;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute; 
+    margin: 9px 10px;
+    opacity: 0.8;
+}
+
+footer {
+    background-color: #dddac6;
+    height: 75px;
+    border-top: 2px solid #313133;
+}
+
+/* footer > nav > ul {
+    position:relative;
+    top: 15%; 
+}
+
+footer > nav > ul > li{
+    display: inline-block;
+} */
+
+h1 {
+    font-size: 2.5em;
+    margin-top: 10%;
+}
+
+h2, h3 {
+    font-size: 1.7em;
+    margin-top: 3%;
+}
+
+p {
+    margin: 2% auto 0 auto;
+    text-align: center;
+    width: 60%;
+}
+
+label {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+button, input, select {
+    background-color: inherit;
+    color: inherit;
+
+    font-family: inherit;
+    font-size: 1rem;
+    width: 450px;
+    box-sizing: border-box;
+    text-align: center;
+    
+    padding: 0.2em 0;
+    border: 0.1 solid #313133;
+    border-radius: 0.4em;
+}
+
+button.log_button {
+    width: 5em;
+    height: 2em;
+}
+
+button:hover {
+    background-color: #313133;
+    color: #f7f2f2;
+    transition: 0.7s cubic-bezier(0.33, 1, 0.68, 1);  /* Taken from https://easings.net/ as 'easeOutCubic'. */
+}
+
+button:focus {
+    background-color: #27242f;
+    border-color: #27242f;
+    color: #f7f2f2;
+}
+
+button.navbar-toggler {
+    width: 3em;
+}
+
+#upper_nav_bar_span_id {
+    margin-right: 0.2em;
+}
+
+.navbar-nav > a {
+    width: 6.3em; 
+    text-align: center;
+    border-left: 1px dashed #313133;
+    color: #313133;
+}
+
+.navbar-nav > a:last-child {
+    border-right: 1px dashed #313133;
+}
+
+.navbar-nav > a:hover, .navbar-nav > a:focus {
+    background-color: #27242f;
+    color: #f7f2f2;
+}
+
+@media (max-width: 1200px) {
+    #upper_nav_bar_span_id {
+        display: none;
+    }
+}
+
+@media (max-width: 992px) {
+    .logo_text {
+        display: none;
+    }
+    h2, h3 {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 776px) {
+    .navbar-nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .navbar-nav > a {
+        width: 75%;
+        border-top: 1px dashed #b5b5bc; 
+        border-left: none;
+    }
+    .navbar-nav > a:last-child {
+        border-right: none;
+        border-bottom: 1px dashed #b5b5bc;   
+    }
+    #logOutDiv {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0.8em;
+        margin-bottom: 0.8em;
+    }
+    #logOutButton {
+        width: 75%;
+    }
+    h2, h3 {
+        font-size: 1em;
+    }
+}

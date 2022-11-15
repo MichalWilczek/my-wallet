@@ -5,8 +5,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Your Budget</title>
-        <link rel="stylesheet" href="app.css" />
-        <link rel="stylesheet" href="app.css" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+            crossorigin="anonymous" />
+        <link rel="stylesheet" href="css/app.css" />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -16,65 +20,73 @@
         <style>
             @import url("https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap");
         </style>
-        <script src="js/functions.js"></script>
     </head>
     <body
         onload="
-        showMainPage('main_page_content');
+        showBalance('main_page_content');
         showUserID('upper_nav_bar_span_id');">
-        <nav id="upper_nav_bar">
-            <div class="upper_nav_bar_div">
-                <a href="my_wallet.html">
+        <nav class="navbar navbar-expand-md sticky-top p-1" id="upper_nav_bar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="my_wallet.html">
+                    <img src="img/logo-1.png" alt="Your Budget" height="50" />
+                    <img src="img/logo-2.png" alt="Your Budget" height="50" />
                     <img
-                        class="logo"
-                        src="img/logo-black.png"
-                        alt="Logo sign" />
+                        src="img/logo-3.png"
+                        class="logo_text"
+                        alt="Your Budget"
+                        height="50" />
                 </a>
-            </div>
-            <div class="upper_nav_bar_logout">
                 <button
-                    id="logOutButton"
-                    class="log_button"
-                    onclick="logOut('logOutButton');">
-                    Log out
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-            </div>
-            <div class="upper_nav_bar_userID">
-                <span id="upper_nav_bar_span_id">Hello world</span>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a
+                            class="nav-link"
+                            aria-current="page"
+                            onclick="showBalance('main_page_content');"
+                            >Home</a
+                        >
+                        <a
+                            class="nav-link"
+                            onclick="addIncome('main_page_content');"
+                            >Add Income</a
+                        >
+                        <a
+                            class="nav-link"
+                            onclick="addExpense('main_page_content');"
+                            >Add Expense</a
+                        >
+                        <a
+                            class="nav-link"
+                            onclick="changeSettings('main_page_content');"
+                            >Settings</a
+                        >
+                    </div>
+                    <div id="logOutDiv">
+                        <span id="upper_nav_bar_span_id">Hello world</span>
+                        <button
+                            id="logOutButton"
+                            class="log_button"
+                            onclick="logOut('logOutButton');">
+                            Log out
+                        </button>
+                    </div>
+                </div>
             </div>
         </nav>
 
-        <nav id="main_nav_bar">
-            <button
-                class="main_button"
-                onclick="showMainPage('main_page_content');">
-                Home
-            </button>
-            <button
-                class="main_button"
-                onclick="addIncome('main_page_content');">
-                Add Income
-            </button>
-            <button
-                class="main_button"
-                onclick="addExpense('main_page_content');">
-                Add Expense
-            </button>
-            <button
-                class="main_button"
-                onclick="showBalance('main_page_content');">
-                Show Balance
-            </button>
-            <button
-                class="main_button"
-                onclick="changeSettings('main_page_content');">
-                Settings
-            </button>
-        </nav>
+        <div class="container">
+            <main id="main_page_content"></main>
+        </div>
 
-        <main id="main_page_content">Hello world!</main>
-
-        
         <footer>
             <nav id="footer_nav_bar">
                 <ul>
@@ -82,6 +94,15 @@
                 </ul>
             </nav>
         </footer>
-       
+
+        <script src="js/functions.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
+            integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
+            crossorigin="anonymous"></script>
     </body>
 </html>
