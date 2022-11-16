@@ -111,10 +111,10 @@ function createUserElementwithLabel(
     labelText="User name",
     iconName="fa fa-user icon"
 ) {
-    var userNameLabel = document.createElement("label");
-    userNameLabel.setAttribute("for", elementID);
-    userNameLabel.innerText = labelText
-    form.append(userNameLabel);
+    var inputLabel = document.createElement("label");
+    inputLabel.setAttribute("for", elementID);
+    inputLabel.innerText = labelText
+    form.append(inputLabel);
 
     var div = document.createElement("div");
     div.setAttribute("class", "form_element");
@@ -123,11 +123,11 @@ function createUserElementwithLabel(
     icon.setAttribute("class", iconName);
     div.append(icon);
 
-    var userName = document.createElement("input");
-    userName.setAttribute("type", type);
-    userName.setAttribute("id", elementID);
-    userName.setAttribute("required", true);
-    div.append(userName);
+    var inputContent = document.createElement("input");
+    inputContent.setAttribute("type", type);
+    inputContent.setAttribute("id", elementID);
+    inputContent.setAttribute("required", true);
+    div.append(inputContent);
 
     form.append(div);
     return form;
@@ -218,7 +218,7 @@ function addIncome(elementID) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var header = document.createElement("h3");
+    var header = document.createElement("h2");
     header.innerText = "Please, add income below:"
     document.getElementById(elementID).append(header);
 
@@ -276,7 +276,7 @@ function addExpense(elementID) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var header = document.createElement("h3");
+    var header = document.createElement("h2");
     header.innerText = "Please, add expense below:"
     document.getElementById(elementID).append(header);
 
@@ -350,7 +350,7 @@ function changePassword(elementID) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var header = document.createElement("h3");
+    var header = document.createElement("h2");
     header.innerText = "You can change password below:"
     document.getElementById(elementID).append(header);
 
@@ -376,7 +376,7 @@ function modifyOptions(elementID, optionsObj) {
 
     var divElement = document.createElement("div");
     
-    var headerDelete = document.createElement("h3");
+    var headerDelete = document.createElement("h2");
     headerDelete.innerText = "Delete option below:"
     divElement.append(headerDelete);
 
@@ -401,7 +401,7 @@ function modifyOptions(elementID, optionsObj) {
 
 
     var appendForm = document.createElement("form");
-    var headerAdd = document.createElement("h3");
+    var headerAdd = document.createElement("h2");
     headerAdd.innerText = "Add option below:"
     divElement.append(headerAdd);
 
@@ -433,7 +433,7 @@ function changeSettings(elementID) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var header = document.createElement("h3");
+    var header = document.createElement("h2");
     header.innerText = "Please, select one of the options below:"
     document.getElementById(elementID).append(header);
 
@@ -469,22 +469,3 @@ function changeSettings(elementID) {
     divElement.append(expenseCategoriesEdition);
     document.getElementById(elementID).append(divElement);
 }
-
-
-// // When the user scrolls the page, execute myFunction
-// window.onscroll = function() {myFunction()};
-
-// // Get the navbar
-// var navbar = document.getElementById("navbar");
-
-// // Get the offset position of the navbar
-// var sticky = navbar.offsetTop;
-
-// // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
-// function myFunction() {
-//   if (window.pageYOffset >= sticky) {
-//     navbar.classList.add("sticky")
-//   } else {
-//     navbar.classList.remove("sticky");
-//   }
-// }

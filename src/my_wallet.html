@@ -50,22 +50,30 @@
                     <div class="navbar-nav">
                         <a
                             class="nav-link"
+                            data-bs-toggle="collapse" 
+                            data-bs-target=".navbar-collapse.show"
                             aria-current="page"
                             onclick="showBalance('main_page_content');"
                             >Home</a
                         >
                         <a
                             class="nav-link"
+                            data-bs-toggle="collapse" 
+                            data-bs-target=".navbar-collapse.show"
                             onclick="addIncome('main_page_content');"
                             >Add Income</a
                         >
                         <a
                             class="nav-link"
+                            data-bs-toggle="collapse" 
+                            data-bs-target=".navbar-collapse.show"
                             onclick="addExpense('main_page_content');"
                             >Add Expense</a
                         >
                         <a
                             class="nav-link"
+                            data-bs-toggle="collapse" 
+                            data-bs-target=".navbar-collapse.show"
                             onclick="changeSettings('main_page_content');"
                             >Settings</a
                         >
@@ -88,11 +96,11 @@
         </div>
 
         <footer>
-            <nav id="footer_nav_bar">
-                <ul>
-                    <li>About me</li>
-                </ul>
-            </nav>
+            <nav class="navbar">
+                <div class="container-fluid">
+                  <a class="nav-link p-2" href="#">About me</a>
+                </div>
+              </nav>
         </footer>
 
         <script src="js/functions.js"></script>
