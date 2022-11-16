@@ -12,7 +12,7 @@ body {
 
 #upper_nav_bar {
     background-color: #d5d3d3;
-    border-bottom: 2px solid #313133;
+    border-bottom: 1.5px solid #313133;
 }
 
 div.upper_nav_bar_logout {
@@ -26,6 +26,11 @@ div.upper_nav_bar_logout {
 main {
     text-align: center;
     height: 1200px;
+}
+
+main img {
+    border-radius: 1.5em;
+    opacity: 0.8;
 }
 
 div.form_element {
@@ -59,7 +64,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 footer {
     background-color: #dddac6;
     height: 75px;
-    border-top: 2px solid #313133;
+    border-top: 1.5px solid #313133;
     font-size: 1em;
 }
 
