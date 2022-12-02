@@ -23,13 +23,13 @@ class Options {
         this.options = this.options.filter(e => e !== optionName);
     }
     createElement() {
-        var selectObj = document.createElement("select");
+        let selectObj = document.createElement("select");
         selectObj.setAttribute("name", "category");
         selectObj.setAttribute("id", "income-category-select");
         selectObj.setAttribute("id", `${this.id}-select`);
         selectObj.setAttribute("required", true);
 
-        var baseOption = document.createElement("option");
+        let baseOption = document.createElement("option");
         baseOption.setAttribute("value", this.id);
         baseOption.setAttribute("disabled", true);
         baseOption.setAttribute("selected", true);
@@ -37,14 +37,14 @@ class Options {
         selectObj.append(baseOption);
 
         for (let option of this.options) {
-            var newOption = document.createElement("option");
+            let newOption = document.createElement("option");
             newOption.setAttribute("value", option);
             newOption.innerText = option;
             selectObj.append(newOption);
         }
 
         for (let option of this.defaultOptions) {
-            var newOption = document.createElement("option");
+            let newOption = document.createElement("option");
             newOption.setAttribute("value", option);
             newOption.innerText = option;
             selectObj.append(newOption);
@@ -54,15 +54,15 @@ class Options {
     }
 }
 
-var userIDValue = "mich.wilcz";
-let incomeOptions = new Options(
+let userIDValue = "mich.wilcz";
+const incomeOptions = new Options(
     "income-option", 
     [
         "bank interest", 
         "pay"
     ]
 );
-let paymentOptions = new Options(
+const paymentOptions = new Options(
     "payment-option", 
     [
         "cash",
@@ -70,7 +70,7 @@ let paymentOptions = new Options(
         "debit card",
     ]
 );
-let expenseOptions = new Options(
+const expenseOptions = new Options(
     "expense-option", 
     [
         "appartment",
@@ -100,7 +100,7 @@ function clearBox(elementID) {
 }
 
 function showUserID(elementID) {
-    var spanElement = document.getElementById(elementID);
+    let spanElement = document.getElementById(elementID);
     spanElement.textContent = `Welcome ${userIDValue}`;
 }
 
@@ -111,19 +111,19 @@ function createUserElementwithLabel(
     labelText="User name",
     iconName="fa fa-user icon"
 ) {
-    var inputLabel = document.createElement("label");
+    let inputLabel = document.createElement("label");
     inputLabel.setAttribute("for", elementID);
     inputLabel.innerText = labelText
     form.append(inputLabel);
 
-    var div = document.createElement("div");
+    let div = document.createElement("div");
     div.setAttribute("class", "form_element");
 
-    var icon = document.createElement("i");
+    let icon = document.createElement("i");
     icon.setAttribute("class", iconName);
     div.append(icon);
 
-    var inputContent = document.createElement("input");
+    let inputContent = document.createElement("input");
     inputContent.setAttribute("type", type);
     inputContent.setAttribute("id", elementID);
     inputContent.setAttribute("required", true);
@@ -137,32 +137,34 @@ function logIn(elementID, loginButtonID) {
     document.getElementById(loginButtonID).remove();
     clearBox(elementID);
 
-    var sectionLogin = document.createElement("section");
+    let sectionLogin = document.createElement("section");
     sectionLogin.setAttribute("class", "login_registration");
-    var heading = document.createElement("h2");
+    let heading = document.createElement("h2");
     heading.innerText = "Please, log in";
     sectionLogin.append(heading);
-    var form = document.createElement("form");
+    let form = document.createElement("form");
     form.setAttribute("action", "my_wallet.html");
 
-    var form = createUserElementwithLabel(form, "text", "user-name-login-id", "User name");
-    var form = createUserElementwithLabel(form, "password", "password-login-id", "Password", "fa fa-unlock-alt");
-    var button = document.createElement("button");
+    let loginObj = createUserElementwithLabel(form, "text", "user-name-login-id", "User name");
+    let passwordObj = createUserElementwithLabel(form, "password", "password-login-id", "Password", "fa fa-unlock-alt");
+    let button = document.createElement("button");
     button.innerText = "Log in";
+    form.append(loginObj);
+    form.append(passwordObj);
     form.append(button);
     sectionLogin.append(form);
     
-    var sectionRegister = document.createElement("section"); 
-    var paragraph = document.createElement("p");
-    var span1 = document.createElement("span");
+    let sectionRegister = document.createElement("section"); 
+    let paragraph = document.createElement("p");
+    let span1 = document.createElement("span");
     span1.innerText = "Don't have an account yet? Sign up ";
-    var span2 = document.createElement("span");
+    let span2 = document.createElement("span");
     span2.innerText = "here"
     span2.setAttribute("class", "clickable_span");
     span2.onclick = function () {
         registerUser(elementID);
     }
-    var span3 = document.createElement("span");
+    let span3 = document.createElement("span");
     span3.innerText = "!"
     paragraph.append(span1);
     paragraph.append(span2);
@@ -181,16 +183,16 @@ function logOut(elementID) {
 function registerUser(elementID) {
     clearBox(elementID);
 
-    var sectionRegister = document.createElement("section");
+    let sectionRegister = document.createElement("section");
     sectionRegister.setAttribute("class", "login_registration");
-    var heading = document.createElement("h2");
+    let heading = document.createElement("h2");
     heading.innerText = "Please, register";
     sectionRegister.append(heading);
 
-    var form = document.createElement("form");
+    let form = document.createElement("form");
     form = createUserElementwithLabel(form, "text", "user-name-registration-id", "User name");
     form = createUserElementwithLabel(form, "password", "password-registration-id", "Password", "fa fa-unlock-alt");
-    var button = document.createElement("button");
+    let button = document.createElement("button");
     button.innerText = "Register";
     form.append(button);
     sectionRegister.append(form);
@@ -199,9 +201,9 @@ function registerUser(elementID) {
 
 function showMainPage(elementID) {
     clearBox(elementID);
-    var section = document.createElement("section");
+    let section = document.createElement("section");
 
-    var image = document.createElement("img");
+    let image = document.createElement("img");
     image.setAttribute("class", "background_photo");
     image.setAttribute("src", "img/background-photo.jpg");
     image.setAttribute("alt", "Background photo for quote");
@@ -218,55 +220,55 @@ function addIncome(elementID) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var header = document.createElement("h2");
+    let header = document.createElement("h2");
     header.innerText = "Please, add income below:"
     document.getElementById(elementID).append(header);
 
-    var divElement = document.createElement("div");
-    var form = document.createElement("form");
+    let divElement = document.createElement("div");
+    let form = document.createElement("form");
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var icon = document.createElement("i");
+    let subDiv1 = document.createElement("div");
+    subDiv1.setAttribute("class", "form_element");
+    let icon = document.createElement("i");
     icon.setAttribute("class", "fa fa-money");
-    subDiv.append(icon);
-    var amount = document.createElement("input");
+    subDiv1.append(icon);
+    let amount = document.createElement("input");
     amount.setAttribute("type", "number");
     amount.setAttribute("min", 0);
     amount.setAttribute("step", 0.01);
     amount.setAttribute("placeholder", "amount");
     amount.setAttribute("required", true);
-    subDiv.append(amount);
-    form.append(subDiv);
+    subDiv1.append(amount);
+    form.append(subDiv1);
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var date = document.createElement("input");
+    let subDiv2 = document.createElement("div");
+    subDiv2.setAttribute("class", "form_element");
+    let date = document.createElement("input");
     date.setAttribute("type", "date");
     date.setAttribute("min", "2010-01-01");
     date.setAttribute("required", true);
-    subDiv.append(date);
-    form.append(subDiv);
+    subDiv2.append(date);
+    form.append(subDiv2);
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var category = incomeOptions.createElement();
-    subDiv.append(category);
-    form.append(subDiv);
+    let subDiv3 = document.createElement("div");
+    subDiv3.setAttribute("class", "form_element");
+    let category = incomeOptions.createElement();
+    subDiv3.append(category);
+    form.append(subDiv3);
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var comments = document.createElement("text");
+    let subDiv4 = document.createElement("div");
+    subDiv4.setAttribute("class", "form_element");
+    let comments = document.createElement("text");
     comments.setAttribute("placeholder", "comment (optional)");
-    subDiv.append(comments);
-    form.append(subDiv);
+    subDiv4.append(comments);
+    form.append(subDiv4);
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var button = document.createElement("button");
+    let subDiv5 = document.createElement("div");
+    subDiv5.setAttribute("class", "form_element");
+    let button = document.createElement("button");
     button.innerText = "Add";
-    subDiv.append(button);
-    form.append(subDiv);
+    subDiv5.append(button);
+    form.append(subDiv5);
 
     divElement.append(form);
     document.getElementById(elementID).append(divElement);
@@ -276,61 +278,61 @@ function addExpense(elementID) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var header = document.createElement("h2");
+    let header = document.createElement("h2");
     header.innerText = "Please, add expense below:"
     document.getElementById(elementID).append(header);
 
-    var divElement = document.createElement("div");
-    var form = document.createElement("form");
+    let divElement = document.createElement("div");
+    let form = document.createElement("form");
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var icon = document.createElement("i");
+    let subDiv1 = document.createElement("div");
+    subDiv1.setAttribute("class", "form_element");
+    let icon = document.createElement("i");
     icon.setAttribute("class", "fa fa-money");
-    subDiv.append(icon);
-    var amount = document.createElement("input");
+    subDiv1.append(icon);
+    let amount = document.createElement("input");
     amount.setAttribute("type", "number");
     amount.setAttribute("min", 0);
     amount.setAttribute("step", 0.01);
     amount.setAttribute("placeholder", "amount");
     amount.setAttribute("required", true);
-    subDiv.append(amount);
-    form.append(subDiv);
+    subDiv1.append(amount);
+    form.append(subDiv1);
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var date = document.createElement("input");
+    let subDiv2 = document.createElement("div");
+    subDiv2.setAttribute("class", "form_element");
+    let date = document.createElement("input");
     date.setAttribute("type", "date");
     date.setAttribute("min", "2010-01-01");
     date.setAttribute("required", true);
-    subDiv.append(date);
-    form.append(subDiv);
+    subDiv2.append(date);
+    form.append(subDiv2);
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var paymentMethod = paymentOptions.createElement();
-    subDiv.append(paymentMethod);
-    form.append(subDiv);
+    let subDiv3 = document.createElement("div");
+    subDiv3.setAttribute("class", "form_element");
+    let paymentMethod = paymentOptions.createElement();
+    subDiv3.append(paymentMethod);
+    form.append(subDiv3);
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var category = expenseOptions.createElement();
-    subDiv.append(category);
-    form.append(subDiv);
+    let subDiv4 = document.createElement("div");
+    subDiv4.setAttribute("class", "form_element");
+    let category = expenseOptions.createElement();
+    subDiv4.append(category);
+    form.append(subDiv4);
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var comments = document.createElement("text");
+    let subDiv5 = document.createElement("div");
+    subDiv5.setAttribute("class", "form_element");
+    let comments = document.createElement("text");
     comments.setAttribute("placeholder", "comment (optional)");
-    subDiv.append(comments);
-    form.append(subDiv);
+    subDiv5.append(comments);
+    form.append(subDiv5);
 
-    var subDiv = document.createElement("div");
-    subDiv.setAttribute("class", "form_element");
-    var button = document.createElement("button");
+    let subDiv6 = document.createElement("div");
+    subDiv6.setAttribute("class", "form_element");
+    let button = document.createElement("button");
     button.innerText = "Add";
-    subDiv.append(button);
-    form.append(subDiv);
+    subDiv6.append(button);
+    form.append(subDiv6);
 
     divElement.append(form);
     document.getElementById(elementID).append(divElement);
@@ -340,7 +342,7 @@ function showBalance(elementID) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var header = document.createElement("h2");
+    let header = document.createElement("h2");
     header.innerText = "Wallet balance:"
     document.getElementById(elementID).append(header);
 
@@ -350,19 +352,19 @@ function changePassword(elementID) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var header = document.createElement("h2");
+    let header = document.createElement("h2");
     header.innerText = "You can change password below:"
     document.getElementById(elementID).append(header);
 
-    var divElement = document.createElement("div");
-    var form = document.createElement("form");
+    let divElement = document.createElement("div");
+    let form = document.createElement("form");
     form = createUserElementwithLabel(form, "password", "old-password-change-id", labelText="Old password", "fa fa-unlock-alt");
     form = createUserElementwithLabel(form, "password", "new-password-change-id", labelText="New password", "fa fa-unlock-alt");
     form = createUserElementwithLabel(form, "password", "new2-password-change-id", labelText="Repeated new password", "fa fa-unlock-alt");
 
-    var buttonDiv = document.createElement("div");
+    let buttonDiv = document.createElement("div");
     buttonDiv.setAttribute("class", "form_element");
-    var button = document.createElement("button");
+    let button = document.createElement("button");
     button.innerText = "Submit";
     buttonDiv.append(button);
     form.append(buttonDiv);
@@ -374,57 +376,57 @@ function modifyOptions(elementID, optionsObj) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var divElement = document.createElement("div");
+    let divElement = document.createElement("div");
     
-    var headerDelete = document.createElement("h2");
+    let headerDelete = document.createElement("h2");
     headerDelete.innerText = "Delete option below:"
     divElement.append(headerDelete);
 
-    var deleteForm = document.createElement("form");
-    var formElement = document.createElement("div");
-    formElement.setAttribute("class", "form_element");
-    var selectObj = optionsObj.createElement();
-    formElement.append(selectObj);
-    deleteForm.append(formElement);
-    var formElement = document.createElement("div");
-    formElement.setAttribute("class", "form_element");
-    var deleteButton = document.createElement("button");
+    let deleteForm = document.createElement("form");
+    let formElement1 = document.createElement("div");
+    formElement1.setAttribute("class", "form_element");
+    let selectObj = optionsObj.createElement();
+    formElement1.append(selectObj);
+    deleteForm.append(formElement1);
+    let formElement2 = document.createElement("div");
+    formElement2.setAttribute("class", "form_element");
+    let deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
     deleteButton.onclick = function() {
-        var objToDelete = selectObj.options[selectObj.selectedIndex].text;
+        let objToDelete = selectObj.options[selectObj.selectedIndex].text;
         optionsObj.removeOption(objToDelete);
         alert(optionsObj.options);
     }
-    formElement.append(deleteButton)
-    deleteForm.append(formElement);
+    formElement2.append(deleteButton)
+    deleteForm.append(formElement2);
     divElement.append(deleteForm);
 
 
-    var appendForm = document.createElement("form");
-    var headerAdd = document.createElement("h2");
+    let appendForm = document.createElement("form");
+    let headerAdd = document.createElement("h2");
     headerAdd.innerText = "Add option below:"
     divElement.append(headerAdd);
 
-    var formElement = document.createElement("div");
-    formElement.setAttribute("class", "form_element");
-    var textObj = document.createElement("input");
+    let formElement3 = document.createElement("div");
+    formElement3.setAttribute("class", "form_element");
+    let textObj = document.createElement("input");
     textObj.setAttribute("type", "text");
     textObj.setAttribute("placeholder", "new option");
-    formElement.append(textObj);
-    appendForm.append(formElement);
+    formElement3.append(textObj);
+    appendForm.append(formElement3);
 
-    var formElement = document.createElement("div");
-    formElement.setAttribute("class", "form_element");
-    var appendButton = document.createElement("button");
+    let formElement4 = document.createElement("div");
+    formElement4.setAttribute("class", "form_element");
+    let appendButton = document.createElement("button");
     appendButton.innerText = "Append";
     appendButton.onclick = function() {
-        var objToAdd = textObj.value;
+        let objToAdd = textObj.value;
         optionsObj.addOption(objToAdd);
         // TODO: This piece of code is not working!!! 
         // But why...?
     }
-    formElement.append(appendButton);
-    appendForm.append(formElement);
+    formElement4.append(appendButton);
+    appendForm.append(formElement4);
     divElement.append(appendForm);
     document.getElementById(elementID).append(divElement);
 }
@@ -433,39 +435,39 @@ function changeSettings(elementID) {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
-    var header = document.createElement("h2");
+    let header = document.createElement("h2");
     header.innerText = "Please, select one of the options below:"
     document.getElementById(elementID).append(header);
 
-    var divElement = document.createElement("div");
-    divElement.setAttribute("class", "form_element");
-    var passwordChange = document.createElement("button");
+    let divElement1 = document.createElement("div");
+    divElement1.setAttribute("class", "form_element");
+    let passwordChange = document.createElement("button");
     passwordChange.onclick = function() {changePassword(elementID)};
     passwordChange.textContent = "Change Password";
-    divElement.append(passwordChange);
-    document.getElementById(elementID).append(divElement);
+    divElement1.append(passwordChange);
+    document.getElementById(elementID).append(divElement1);
  
-    var divElement = document.createElement("div");
-    divElement.setAttribute("class", "form_element");
-    var paymentOptionsEdition = document.createElement("button");
+    let divElement2 = document.createElement("div");
+    divElement2.setAttribute("class", "form_element");
+    let paymentOptionsEdition = document.createElement("button");
     paymentOptionsEdition.onclick = function() {modifyOptions(elementID, paymentOptions)};
     paymentOptionsEdition.textContent = "Edit Payment Options";
-    divElement.append(paymentOptionsEdition);
-    document.getElementById(elementID).append(divElement);
+    divElement2.append(paymentOptionsEdition);
+    document.getElementById(elementID).append(divElement2);
  
-    var divElement = document.createElement("div");
-    divElement.setAttribute("class", "form_element");
-    var incomeCategoriesEdition = document.createElement("button");
+    let divElement3 = document.createElement("div");
+    divElement3.setAttribute("class", "form_element");
+    let incomeCategoriesEdition = document.createElement("button");
     incomeCategoriesEdition.onclick = function() {modifyOptions(elementID, incomeOptions)};
     incomeCategoriesEdition.textContent = "Edit Income Categories";
-    divElement.append(incomeCategoriesEdition);
-    document.getElementById(elementID).append(divElement);
+    divElement3.append(incomeCategoriesEdition);
+    document.getElementById(elementID).append(divElement3);
  
-    var divElement = document.createElement("div");
-    divElement.setAttribute("class", "form_element");
-    var expenseCategoriesEdition = document.createElement("button");
+    let divElement4 = document.createElement("div");
+    divElement4.setAttribute("class", "form_element");
+    let expenseCategoriesEdition = document.createElement("button");
     expenseCategoriesEdition.onclick = function() {modifyOptions(elementID, expenseOptions)};
     expenseCategoriesEdition.textContent = "Edit Expense Categories";
-    divElement.append(expenseCategoriesEdition);
-    document.getElementById(elementID).append(divElement);
+    divElement4.append(expenseCategoriesEdition);
+    document.getElementById(elementID).append(divElement4);
 }
