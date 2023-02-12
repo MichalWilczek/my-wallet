@@ -1,3 +1,41 @@
+// THESE FUNCTIONS SHOULD BE IN UTILS.JS BUT THE CODE IS CURRENTLY NOT WORKING, THEN...
+// import { clearBox, createUserElementwithLabel } from './utils.js';
+// ------------------------------------------------------------------------------------
+const clearBox = (elementID) => {
+    const element = document.querySelector(`#${elementID}`);
+    element.innerHTML = "";
+}
+
+const createUserElementwithLabel = (
+    form,
+    type,
+    elementID,
+    name,
+    labelText,
+    iconName
+) => {
+    const inputLabel = document.createElement("label");
+    inputLabel.for = elementID;
+    inputLabel.innerText = labelText
+    form.append(inputLabel);
+
+    const div = document.createElement("div");
+    div.classList.add("form_element");
+    const icon = document.createElement("i");
+    icon.classList.add(...iconName);
+    div.append(icon);
+
+    const inputContent = document.createElement("input");
+    inputContent.type = type;
+    inputContent.id = elementID;
+    inputContent.name = name;
+    inputContent.required = true;
+    div.append(inputContent);
+    form.append(div);
+}
+// HERE, THE UTILS.JS CODE IS ENDING!
+// ------------------------------------------------------------------------------------
+
 class Options {
     constructor(id, optionNames) {
         this.options = [];
@@ -89,118 +127,13 @@ const expenseOptions = new Options(
     ]
 );
 
-const clearBox = (elementID) => {
-    const element = document.querySelector(`#${elementID}`);
-    element.innerHTML = "";
-}
-
 const showUserID = (elementID) => {
     const spanElement = document.querySelector(`#${elementID}`);
     spanElement.textContent = `Welcome ${userIDValue}`;
 }
 
-const createUserElementwithLabel = (
-    form,
-    type, 
-    elementID, 
-    labelText,
-    iconName
-) => {
-    const inputLabel = document.createElement("label");
-    inputLabel.for = elementID;
-    inputLabel.innerText = labelText
-    form.append(inputLabel);
-
-    const div = document.createElement("div");
-    div.classList.add("form_element");
-    const icon = document.createElement("i");
-    icon.classList.add(...iconName);
-    div.append(icon);
-
-    const inputContent = document.createElement("input");
-    inputContent.type = type;
-    inputContent.id = elementID;
-    inputContent.required = true;
-    div.append(inputContent);
-    form.append(div);
-}
-
-const logIn = (elementID, loginButtonID) => {
-    document.querySelector(`#${loginButtonID}`).remove();
-    clearBox(elementID);
-
-    const sectionLogin = document.createElement("section");
-    sectionLogin.classList.add("login_registration");
-
-    const heading = document.createElement("h2");
-    heading.innerText = "Please, log in";
-    sectionLogin.append(heading);
-    const form = document.createElement("form");
-    form.action = "my_wallet.html";
-
-    createUserElementwithLabel(form, "text", "user-name-login-id", "User name", ["fa", "fa-user"]);
-    createUserElementwithLabel(form, "password", "password-login-id", "Password", ["fa", "fa-unlock-alt"]);
-    const button = document.createElement("button");
-    button.innerText = "Log in";
-    form.append(button);
-    sectionLogin.append(form);
-    
-    const sectionRegister = document.createElement("section"); 
-    const paragraph = document.createElement("p");
-    const span1 = document.createElement("span");
-    span1.innerText = "Don't have an account yet? Sign up ";
-    const span2 = document.createElement("span");
-    span2.innerText = "here"
-    span2.classList.add("clickable_span");
-    span2.addEventListener("click", () => registerUser(elementID));
-    const span3 = document.createElement("span");
-    span3.innerText = "!"
-    paragraph.append(span1);
-    paragraph.append(span2);
-    paragraph.append(span3);
-    sectionRegister.append(paragraph);
-    document.querySelector(`#${elementID}`).append(sectionLogin);
-    document.querySelector(`#${elementID}`).append(sectionRegister);
-}
-
 const logOut = (elementID) => {
-    document.querySelector(`#${elementID}`).addEventListener("click", () => (location.href = "welcome.html"));
-}
-
-const registerUser = (elementID) => {
-    clearBox(elementID);
-
-    const sectionRegister = document.createElement("section");
-    sectionRegister.classList.add("login_registration");
-    const heading = document.createElement("h2");
-    heading.innerText = "Please, register";
-    sectionRegister.append(heading);
-
-    const form = document.createElement("form");
-    createUserElementwithLabel(form, "text", "user-name-registration-id", "User name", ["fa", "fa-user-icon"]);
-    createUserElementwithLabel(form, "password", "password-registration-id", "Password", ["fa", "fa-unlock-alt"]);
-    const button = document.createElement("button");
-    button.innerText = "Register";
-    form.append(button);
-    sectionRegister.append(form);
-    document.querySelector(`#${elementID}`).append(sectionRegister);
-}
-
-const showMainPage = (elementID) => {
-    clearBox(elementID);
-    const section = document.createElement("section");
-
-    const image = document.createElement("img");
-    image.classList.add("background_photo");
-    image.src = "img/background-photo.jpg";
-    image.alt = "Background photo for quote";
-    section.append(image);
-
-    header = document.createElement("h2");
-    header.innerHTML = "A budget is more than just a series of numbers on a page; <br> it is an embodiment of our values."
-    section.append(header);
-
-    document.querySelector(`#${elementID}`).append(section);
+    document.querySelector(`#${elementID}`).addEventListener("click", () => (location.href = "index.php"));
 }
 
 const addIncome = (elementID) => {
@@ -343,9 +276,9 @@ const changePassword = (elementID) => {
 
     const divElement = document.createElement("div");
     const form = document.createElement("form");
-    createUserElementwithLabel(form, "password", "old-password-change-id", labelText="Old password", ["fa", "fa-unlock-alt"]);
-    createUserElementwithLabel(form, "password", "new-password-change-id", labelText="New password", ["fa", "fa-unlock-alt"]);
-    createUserElementwithLabel(form, "password", "new2-password-change-id", labelText="Repeated new password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "old-password-change-id", "oldPassword", labelText="Old password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "new-password-change-id", "newPassword1", labelText="New password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "new2-password-change-id", "newPassword2", labelText="Repeated new password", ["fa", "fa-unlock-alt"]);
 
     const buttonDiv = document.createElement("div");
     buttonDiv.classList.add("form_element");

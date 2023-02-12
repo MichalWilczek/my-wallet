@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -65,7 +69,7 @@
               </nav>
         </footer>
 
-        <script src="js/functions.js"></script>
+        <!-- External JS add-ons -->
         <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
             integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
@@ -74,5 +78,34 @@
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
             integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
             crossorigin="anonymous"></script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+        <!-- Internally developed JS scripts -->
+        <script type="text/javascript">
+            <?php 
+            if (isset($_SESSION["registration_errors"])) {
+                $regErrors = $_SESSION["registration_errors"];
+                if (array_key_exists("username", $regErrors)) {
+                    $username = $regErrors["username"];
+                }
+                if (array_key_exists("email", $regErrors)) {
+                    $email = $regErrors["email"];
+                }
+                if (array_key_exists("password", $regErrors)) {
+                    $password = $regErrors["password"];
+                }
+                if (array_key_exists("bot", $regErrors)) {
+                    $bot = $regErrors["bot"];
+                }
+            }
+            ?>
+            const regErrorUsername = <?php echo $username ?>;
+            const regErrorEmail = <?php echo $email ?>;
+            const regErrorPassword = <?php echo $password ?>;
+            const regErrorBot = <?php echo $bot ?>;
+        </script>
+
+        <script src="js/index.js"></script>
+
     </body>
 </html>
