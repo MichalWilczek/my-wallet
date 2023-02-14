@@ -87,7 +87,7 @@ p {
     margin: 2% auto 0 auto;
     text-align: center;
     width: 60%;
-}
+} 
 
 label {
     display: block;
@@ -109,13 +109,6 @@ main button, main input, main select {
     padding: 0.2em 0;
     border: 0.08em solid #313133;
     border-radius: 0.2em;
-}
-
-input[type="password"], input[type="text"], input[type="number"] {
-    /* Padding allows for moving not overwriting icons with text
-       but, then, the placeholder text is not centered...
-    */
-    /* padding-left: 2.1em; */
 }
 
 button.log_button {
@@ -160,6 +153,20 @@ button.navbar-toggler {
     cursor: pointer;
     background-color: #27242f;
     color: #f2efef;
+}
+
+#divMsgID > .msg_div {
+    margin-top: 15px;
+}
+
+#divMsgID .msg_error {
+    color: red;
+    font-weight: 500;
+}
+
+#divMsgID .msg_success {
+    color: green;
+    font-weight: 500;
 }
 
 @media (max-width: 1200px) {

@@ -52,10 +52,6 @@ function registerAccount() {
     $errors = array_merge($errors, checkUserNameInput($username));
     $errors = array_merge($errors, checkEmailInput($email));
     $errors = array_merge($errors, checkPasswordInput($password, filter_input(INPUT_POST, "password2")));
-    // $errors = array_merge($errors, checkReCaptcha(
-    //     "6LfJyl8kAAAAAPnOPOoOhZnpJAMT0oNEhOrNQUMu",
-    //     $_POST["g-recaptcha-response"]
-    // ));
     
     try {
         $dbConnect = connectToDB();
@@ -86,34 +82,31 @@ function registerAccount() {
         $query3->bindValue(":password", password_hash($password, PASSWORD_DEFAULT), PDO::PARAM_STR);
         $query3->bindValue(":email", $email, PDO::PARAM_STR);
         $query3->execute();
+        return $errors;
 
     } catch (Exception $error) {
-        echo "<span style='color:red;'>Server error! Apologies for inconvenience. Please, register at another time.</span>";
-        echo "<br /> Developer info: " . $error;
+        $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
     }
 }
 
 session_start();
+$apiResult = array();
 if (isset($_POST["username"]) && isset($_POST["email"]) && isset($_POST["password1"]) && isset($_POST["password2"])) {
+
     $errors = registerAccount();
-    $_SESSION["registration_errors"] = $errors;
+    if (count($errors) == 0) {
+        $apiResult["registrationSuccessful"] = true;
+        $apiResult["errors"] = [];
+    } else {
+        $apiResult["registrationSuccessful"] = false;
+        $apiResult["errors"] = $errors;
+    }
 } else {
-    $_SESSION["registration_successful"] = "The user was successfully registered.";
-    header("Location: ".dirname(__DIR__, 1)."/index.php");
-    exit();
+    $apiResult["registrationSuccessful"] = false;
+    $apiResult["errors"] = [];
 }
+header("Content-Type: application/json");
+echo json_encode($apiResult);
+exit();
 
-
-
-
-// THE LOGIC BELOW SHOULD BE SOMEHOW INCLUDED IN THE JS SCRIPTS...
-// ---------------------------------------------------------------
-// if (count($errors) == 0) {
-//     echo "The user was successfully saved to the database.";
-//     exit();
-// }
-
-// foreach($errors as $key => $value) {
-//     echo "{$key} => {$value} <br />";
-// }   
 ?>

@@ -75,61 +75,90 @@ const logIn = (elementID, loginButtonID) => {
     document.querySelector(`#${elementID}`).append(sectionRegister);
 }
 
+const getRegistrationDataAPI = async (url, querySelectorObj) => {
+    
+    const res = await axios.postForm(url, document.querySelector(querySelectorObj))
+        .then((res) => {
+
+            try {
+                // Remove the messages from previous round if they exist.
+                const msgFromPrevIteration = document.querySelector("#divMsgID");
+                if(msgFromPrevIteration!==null) {
+                    msgFromPrevIteration.remove()
+                }
+
+                // Put the success/error messages on the screen.
+                const div = document.createElement("div");
+                div.id = "divMsgID";
+                const data = res.data;
+                console.log(data.registrationSuccessful);
+                if (data.registrationSuccessful) {
+                    const divTemp = document.createElement("div");
+                    divTemp.classList.add("msg_div");
+                    const spanSuccess = document.createElement("span");
+                    spanSuccess.classList.add("msg_success");
+                    spanSuccess.textContent = "Your account has been successfully created!";
+                    divTemp.append(spanSuccess);
+                    div.append(divTemp);
+                } else {
+                    for (const [errorType, messsage] of Object.entries(data.errors)) {
+                        const divTemp = document.createElement("div");
+                        divTemp.classList.add("msg_div");
+                        const spanError = document.createElement("span");
+                        spanError.classList.add("msg_error");
+                        spanError.textContent = `${errorType.toUpperCase()}: ${messsage}`;
+                        divTemp.append(spanError);
+                        div.append(divTemp);
+                        }
+                }
+                const section = document.querySelector("#registerSectionID");
+                section.append(div);
+            } catch (e) {
+                console.log("Oh no... ERROR!", e);
+            }
+            
+        })
+        .catch((error) => {
+            console.log("Oh no... ERROR!", error);
+        })
+}
+
+
 const registerUser = (elementID) => {
     clearBox(elementID);
 
     const sectionRegister = document.createElement("section");
+    sectionRegister.id = "registerSectionID";
     sectionRegister.classList.add("login_registration");
     const heading = document.createElement("h2");
     heading.innerText = "Please, register";
     sectionRegister.append(heading);
 
     const form = document.createElement("form");
-    form.method = "post";
-    form.action = "registration.php";
-
+    form.id = "formRegistration";
     createUserElementwithLabel(form, "text", "user-name-registration-id", "username", "User name", ["fa", "fa-user"]);
+
+    const divForm1 = document.createElement("div");
+    const spanError = document.createElement("span");
+    spanError.id = "registrationErrorMessageID";
+    spanError.classList.add("error_message");
+    divForm1.append(spanError);
+    form.append(divForm1);
+
     createUserElementwithLabel(form, "text", "user-name-email-id", "email", "Email", ["fa", "fa-user"]);
-    createUserElementwithLabel(form, "password", "password-registration-id", "password1", "Password", ["fa", "fa-unlock-alt"]);
-    createUserElementwithLabel(form, "password", "password-registration-id", "password2", "Repeated password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "password-registration1-id", "password1", "Password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "password-registration2-id", "password2", "Repeated password", ["fa", "fa-unlock-alt"]);
 
-    const recaptcha = document.createElement("div");
-
-    // Think of adding ReCaptcha element to the registration !!!
-    // recaptcha.classList.add("g-recaptcha");
-    // recaptcha.datasitekey = "6LfJyl8kAAAAALSqi2Lr_wvB5XzKNDvkq714tuN4";
-    // form.append(recaptcha);
     const button = document.createElement("button");
     button.type = "submit";
     button.innerText = "Register";
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        getRegistrationDataAPI("/my-wallet/src/server/registration.php", `#${form.id}`);
+      })
+
     form.append(button);
     sectionRegister.append(form);
-
-
-    // <?php
-    // if (isset($_SESSION["error"])) {
-    //     echo $_SESSION["error"];
-    // }
-    // ?>
-
-
     document.querySelector(`#${elementID}`).append(sectionRegister);
 }
-
-// const showMainPage = (elementID) => {
-//     clearBox(elementID);
-//     const section = document.createElement("section");
-
-//     const image = document.createElement("img");
-//     image.classList.add("background_photo");
-//     image.src = "img/background-photo.jpg";
-//     image.alt = "Background photo for quote";
-//     section.append(image);
-
-//     header = document.createElement("h2");
-//     header.innerHTML = "A budget is more than just a series of numbers on a page; <br> it is an embodiment of our values."
-//     section.append(header);
-
-//     document.querySelector(`#${elementID}`).append(section);
-// }
-
