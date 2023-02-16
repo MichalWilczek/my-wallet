@@ -7,6 +7,18 @@ interface CashFlowAnalyser
     public function getQuery();
 }
 
+class IncomeData {
+    public $userID;
+    public $category;
+    public $amount;
+    public $issueDate;
+    public $comment;
+}
+
+class ExpenseData extends IncomeData {
+    public $paymentMethodID;
+}
+
 
 class IncomeAnalyser implements CashFlowAnalyser {
 	protected $amount;
@@ -29,7 +41,7 @@ class IncomeAnalyser implements CashFlowAnalyser {
     }
 
     function checkAmount() {
-        if (filter_var($this->amount, FILTER_VALIDATE_FLOAT == false)) {
+        if (filter_var($this->amount, FILTER_VALIDATE_FLOAT) == false) {
             $this->inputErrors["amount"] = "The input cash amount must be a number.";
         }
     }
@@ -49,7 +61,7 @@ class IncomeAnalyser implements CashFlowAnalyser {
 
     function getQuery() {
         // VALUES (NULL, :username, :password, :email)
-        return "INSERT INTO incomes VALUES (NULL, ...)";
+        return "INSERT INTO incomes VALUES (NULL, :user_id, :income_category_assigned_to_user, :amount, :date_of_income, :income_comment)";
     }
 }
 
@@ -72,6 +84,11 @@ class ExpenseAnalyser extends IncomeAnalyser {
         if (filter_var($this->paymentOption, FILTER_SANITIZE_STRING) == false) {
             $this->inputErrors["payment_option"] = "The payment option must be a string.";
         }
+    }
+
+    function getQuery() {
+        // VALUES (NULL, :username, :password, :email)
+        return "INSERT INTO incomes VALUES (NULL, )";
     }
 }
 

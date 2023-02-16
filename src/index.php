@@ -1,6 +1,11 @@
 <?php
 session_start();
+if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] == true) {
+    header("Location: user_portal.php");
+    exit();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +33,7 @@ session_start();
     <body>
         <nav class="navbar p-1" id="upper_nav_bar">
             <div class="container-fluid">
-                <a class="navbar-brand" href="welcome.html">
+                <a class="navbar-brand" href="index.php">
                     <img src="img/logo-1.png" alt="Your Budget" height="50" />
                     <img src="img/logo-2.png" alt="Your Budget" height="50" />
                     <img src="img/logo-3.png" class="logo_text" alt="Your Budget" height="50" />

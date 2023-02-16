@@ -95,14 +95,14 @@ if (isset($_POST["username"]) && isset($_POST["email"]) && isset($_POST["passwor
 
     $errors = registerAccount();
     if (count($errors) == 0) {
-        $apiResult["registrationSuccessful"] = true;
+        $apiResult["successful"] = true;
         $apiResult["errors"] = [];
     } else {
-        $apiResult["registrationSuccessful"] = false;
+        $apiResult["successful"] = false;
         $apiResult["errors"] = $errors;
     }
 } else {
-    $apiResult["registrationSuccessful"] = false;
+    $apiResult["successful"] = false;
     $apiResult["errors"] = [];
 }
 header("Content-Type: application/json");

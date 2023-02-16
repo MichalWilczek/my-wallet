@@ -1,6 +1,11 @@
 <?php
 session_start();
+if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] == false) {
+    header("Location: index.php");
+    exit();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +36,7 @@ session_start();
         showUserID('upper_nav_bar_span_id');">
         <nav class="navbar navbar-expand-md sticky-top p-1" id="upper_nav_bar">
             <div class="container-fluid">
-                <a class="navbar-brand" href="my_wallet.html">
+                <a class="navbar-brand" href="user_portal.php">
                     <img src="img/logo-1.png" alt="Your Budget" height="50" />
                     <img src="img/logo-2.png" alt="Your Budget" height="50" />
                     <img
@@ -107,6 +112,7 @@ session_start();
               </nav>
         </footer>
 
+        <script src="js/index.js"></script>
         <script src="js/user_portal.js"></script>
         <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

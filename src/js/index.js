@@ -35,6 +35,76 @@ const createUserElementwithLabel = (
 }
 // HERE, THE UTILS.JS CODE IS ENDING!
 // ------------------------------------------------------------------------------------
+class UserData {
+    constructor(userID, username) {
+        this.userID = userID;
+        this.username = username;
+    }
+}
+
+class QueryAPI {
+    constructor(successMsg, switchPage=false) {
+        this.successMsg = successMsg;
+        this.switchPage = switchPage;
+    }
+
+    _createDivWithMsg = (spanClassName, spanContent) => {
+        const div = document.createElement("div");
+        div.classList.add("msg_div");
+        const span = document.createElement("span");
+        span.classList.add(spanClassName);
+        span.textContent = spanContent;
+        div.append(span);
+        return div;
+    }
+    
+    postForm = async (url, formObj, sectionObj) => {
+        const res = await axios.postForm(url, formObj)
+        .then((res) => {
+            const div = document.createElement("div");
+            div.id = "divMsgID";
+            const data = res.data;
+            if (data.successful) {
+                div.append(
+                    this._createDivWithMsg(
+                        "msg_success",
+                        this.successMsg
+                    )
+                );
+            } else {
+                for (const [errorType, messsage] of Object.entries(data.errors)) {
+                    div.append(
+                        this._createDivWithMsg(
+                            "msg_error",
+                            `${errorType.toUpperCase()}: ${messsage}`
+                        )
+                    );
+                }
+            }
+            sectionObj.append(div);
+        })
+        .then(() => {return res})
+        .catch((error) => {
+            console.log("Oh no... ERROR!", error);
+        });
+    }
+}
+
+const clickLogin = async (form, div) => {
+    loginQuery = new QueryAPI("You have been successfully logged in to your account!");
+    await loginQuery.postForm(
+        "/my-wallet/src/server/login.php", 
+        form,
+        div
+    ).then((res) => {
+        if (res.data.successful) {
+            location.assign("/my-wallet/src/user_portal.php");
+        }
+    })
+    .catch((error) => {
+        console.log("Oh no... ERROR!", error);
+    })
+}
 
 const logIn = (elementID, loginButtonID) => {
     document.querySelector(`#${loginButtonID}`).remove();
@@ -47,16 +117,26 @@ const logIn = (elementID, loginButtonID) => {
     heading.innerText = "Please, log in";
     sectionLogin.append(heading);
     const form = document.createElement("form");
-    form.method = "post";
-    form.action = "login.php";
-
+    form.id = "formLogin";
     createUserElementwithLabel(form, "text", "user-name-login-id", "username", "User name", ["fa", "fa-user"]);
     createUserElementwithLabel(form, "password", "password-login-id", "password", "Password", ["fa", "fa-unlock-alt"]);
     const button = document.createElement("button");
+    button.type = "submit";
     button.innerText = "Log in";
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Remove the messages from previous round if they exist.
+        const msgFromPrevIteration = document.querySelector("#divMsgID");
+        if(msgFromPrevIteration!==null) {
+            msgFromPrevIteration.remove()
+        }
+        clickLogin(form, sectionRegister);
+      }
+    )
     form.append(button);
     sectionLogin.append(form);
-    
+
     const sectionRegister = document.createElement("section"); 
     const paragraph = document.createElement("p");
     const span1 = document.createElement("span");
@@ -75,57 +155,13 @@ const logIn = (elementID, loginButtonID) => {
     document.querySelector(`#${elementID}`).append(sectionRegister);
 }
 
-const getRegistrationDataAPI = async (url, querySelectorObj) => {
-    
-    const res = await axios.postForm(url, document.querySelector(querySelectorObj))
-        .then((res) => {
-
-            try {
-                // Remove the messages from previous round if they exist.
-                const msgFromPrevIteration = document.querySelector("#divMsgID");
-                if(msgFromPrevIteration!==null) {
-                    msgFromPrevIteration.remove()
-                }
-
-                // Put the success/error messages on the screen.
-                const div = document.createElement("div");
-                div.id = "divMsgID";
-                const data = res.data;
-                console.log(data.registrationSuccessful);
-                if (data.registrationSuccessful) {
-                    const divTemp = document.createElement("div");
-                    divTemp.classList.add("msg_div");
-                    const spanSuccess = document.createElement("span");
-                    spanSuccess.classList.add("msg_success");
-                    spanSuccess.textContent = "Your account has been successfully created!";
-                    divTemp.append(spanSuccess);
-                    div.append(divTemp);
-                } else {
-                    for (const [errorType, messsage] of Object.entries(data.errors)) {
-                        const divTemp = document.createElement("div");
-                        divTemp.classList.add("msg_div");
-                        const spanError = document.createElement("span");
-                        spanError.classList.add("msg_error");
-                        spanError.textContent = `${errorType.toUpperCase()}: ${messsage}`;
-                        divTemp.append(spanError);
-                        div.append(divTemp);
-                        }
-                }
-                const section = document.querySelector("#registerSectionID");
-                section.append(div);
-            } catch (e) {
-                console.log("Oh no... ERROR!", e);
-            }
-            
-        })
-        .catch((error) => {
-            console.log("Oh no... ERROR!", error);
-        })
+const logOut = async (elementID) => {
+    document.querySelector(`#${elementID}`)
+    .addEventListener("click", () => (location.assign("/my-wallet/src/server/logout.php")));
 }
 
-
 const registerUser = (elementID) => {
-    clearBox(elementID);
+    clearBox(elementID);    
 
     const sectionRegister = document.createElement("section");
     sectionRegister.id = "registerSectionID";
@@ -135,16 +171,7 @@ const registerUser = (elementID) => {
     sectionRegister.append(heading);
 
     const form = document.createElement("form");
-    form.id = "formRegistration";
     createUserElementwithLabel(form, "text", "user-name-registration-id", "username", "User name", ["fa", "fa-user"]);
-
-    const divForm1 = document.createElement("div");
-    const spanError = document.createElement("span");
-    spanError.id = "registrationErrorMessageID";
-    spanError.classList.add("error_message");
-    divForm1.append(spanError);
-    form.append(divForm1);
-
     createUserElementwithLabel(form, "text", "user-name-email-id", "email", "Email", ["fa", "fa-user"]);
     createUserElementwithLabel(form, "password", "password-registration1-id", "password1", "Password", ["fa", "fa-unlock-alt"]);
     createUserElementwithLabel(form, "password", "password-registration2-id", "password2", "Repeated password", ["fa", "fa-unlock-alt"]);
@@ -152,12 +179,22 @@ const registerUser = (elementID) => {
     const button = document.createElement("button");
     button.type = "submit";
     button.innerText = "Register";
-
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-        getRegistrationDataAPI("/my-wallet/src/server/registration.php", `#${form.id}`);
-      })
 
+        // Remove the messages from previous round if they exist.
+        const msgFromPrevIteration = document.querySelector("#divMsgID");
+        if(msgFromPrevIteration!==null) {
+            msgFromPrevIteration.remove()
+        }
+        registrationQuery = new QueryAPI("Your account has been successfully created!");
+        registrationQuery.postForm(
+            "/my-wallet/src/server/registration.php", 
+            form,
+            sectionRegister
+        );
+      }
+    )
     form.append(button);
     sectionRegister.append(form);
     document.querySelector(`#${elementID}`).append(sectionRegister);
