@@ -32,7 +32,6 @@ if (!isset($_SESSION["userData"]) || $_SESSION["userData"]["successful"] == fals
     </head>
     <body
         onload="
-        getUserData(<?php echo var_dump($_SESSION['userData']) ?>);
         showBalance('main_page_content');
         showUserID('upper_nav_bar_span_id');">
         <nav class="navbar navbar-expand-md sticky-top p-1" id="upper_nav_bar">
