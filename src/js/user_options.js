@@ -1,140 +1,13 @@
-// THESE FUNCTIONS SHOULD BE IN UTILS.JS BUT THE CODE IS CURRENTLY NOT WORKING, THEN...
-// import { clearBox, createUserElementwithLabel } from './utils.js';
-// ------------------------------------------------------------------------------------
-const clearBox = (elementID) => {
-    const element = document.querySelector(`#${elementID}`);
-    element.innerHTML = "";
-}
+/*
+In this module, we put a set of user options such as:
+    - add income
+    - add expense
+    - change settings including
+        - change password
+        - modify income and expense options
+*/
+import { clearBox, createUserElementwithLabel } from './utils.js';
 
-const createUserElementwithLabel = (
-    form,
-    type,
-    elementID,
-    name,
-    labelText,
-    iconName
-) => {
-    const inputLabel = document.createElement("label");
-    inputLabel.for = elementID;
-    inputLabel.innerText = labelText
-    form.append(inputLabel);
-
-    const div = document.createElement("div");
-    div.classList.add("form_element");
-    const icon = document.createElement("i");
-    icon.classList.add(...iconName);
-    div.append(icon);
-
-    const inputContent = document.createElement("input");
-    inputContent.type = type;
-    inputContent.id = elementID;
-    inputContent.name = name;
-    inputContent.required = true;
-    div.append(inputContent);
-    form.append(div);
-}
-// HERE, THE UTILS.JS CODE IS ENDING!
-// ------------------------------------------------------------------------------------
-
-class Options {
-    constructor(id, optionNames) {
-        this.options = [];
-        this.defaultOptions = ["other"];
-        this.id = id;
-        this.addOptions(optionNames);
-    }
-    addOption(optionName) {
-        if (!this.defaultOptions.includes(optionName)) {
-            this.options.push(optionName);
-            this.options.sort();
-        }
-    }
-    addOptions(optionNames) {
-        for (let optionName of optionNames) {
-            this.addOption(optionName);
-        }
-    }
-    removeOption(optionName) {
-        this.options = this.options.filter(
-            existingOption => existingOption !== optionName
-        );
-    }
-    createElement() {
-        const selectObj = document.createElement("select");
-        selectObj.name = "category";
-        selectObj.id = `${this.id}-select`;
-        selectObj.required = true;
-
-        const baseOption = document.createElement("option");
-        baseOption.value = this.id;
-        baseOption.disabled = true;
-        baseOption.selected = true;
-        baseOption.innerText = `--- ${this.id} ---`;
-        selectObj.append(baseOption);
-
-        for (let option of this.options) {
-            const newOption = document.createElement("option");
-            newOption.value = option;
-            newOption.innerText = option;
-            selectObj.append(newOption);
-        }
-        for (let option of this.defaultOptions) {
-            const newOption = document.createElement("option");
-            newOption.value = option;
-            newOption.innerText = option;
-            selectObj.append(newOption);
-        }
-        return selectObj;
-    }
-}
-
-let userIDValue = "mich.wilcz";
-const incomeOptions = new Options(
-    "income-option", 
-    [
-        "bank interest", 
-        "pay"
-    ]
-);
-const paymentOptions = new Options(
-    "payment-option", 
-    [
-        "cash",
-        "credit card",
-        "debit card",
-    ]
-);
-const expenseOptions = new Options(
-    "expense-option", 
-    [
-        "appartment",
-        "books",
-        "children",
-        "clothes",
-        "debts",
-        "donation",
-        "entertainment",
-        "food",
-        "healthcare",
-        "internet",
-        "phone",
-        "savings",
-        "training",
-        "transport",
-        "travel",
-        "tv",
-        "retirement",
-    ]
-);
-
-const showUserID = (elementID) => {
-    const spanElement = document.querySelector(`#${elementID}`);
-    spanElement.textContent = `Welcome ${userIDValue}`;
-}
-
-const logOut = (elementID) => {
-    document.querySelector(`#${elementID}`).addEventListener("click", () => (location.href = "index.php"));
-}
 
 const addIncome = (elementID) => {
     clearBox(elementID);
@@ -256,14 +129,6 @@ const addExpense = (elementID) => {
 
     divElement.append(form);
     document.querySelector(`#${elementID}`).append(divElement);
-}
-
-const showBalance = (elementID) => {
-    clearBox(elementID);
-    window.scrollTo(0, 0);
-    const header = document.createElement("h2");
-    header.innerText = "Wallet balance:"
-    document.querySelector(`#${elementID}`).append(header);
 }
 
 const changePassword = (elementID) => {
@@ -406,3 +271,44 @@ const changeSettings = (elementID) => {
     divElement4.append(expenseCategoriesEdition);
     document.querySelector(`#${elementID}`).append(divElement4);
 }
+
+
+
+// let userIDValue = "mich.wilcz";
+// const incomeOptions = new Options(
+//     "income-option", 
+//     [
+//         "bank interest", 
+//         "pay"
+//     ]
+// );
+// const paymentOptions = new Options(
+//     "payment-option", 
+//     [
+//         "cash",
+//         "credit card",
+//         "debit card",
+//     ]
+// );
+// const expenseOptions = new Options(
+//     "expense-option", 
+//     [
+//         "appartment",
+//         "books",
+//         "children",
+//         "clothes",
+//         "debts",
+//         "donation",
+//         "entertainment",
+//         "food",
+//         "healthcare",
+//         "internet",
+//         "phone",
+//         "savings",
+//         "training",
+//         "transport",
+//         "travel",
+//         "tv",
+//         "retirement",
+//     ]
+// );

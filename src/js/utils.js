@@ -1,3 +1,7 @@
+/*
+This module useful objects to work on HTML format.
+*/
+
 export const clearBox = (elementID) => {
     const element = document.querySelector(`#${elementID}`);
     element.innerHTML = "";

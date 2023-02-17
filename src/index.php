@@ -85,7 +85,12 @@ if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] == true) {
             crossorigin="anonymous"></script>
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
-        <script src="js/index.js"></script>
+        
+        <script type="module" src="js/utils.js"></script>
+        <script type="module" src="js/user_data.js"></script>
+        <script type="module" src="js/api_queries.js"></script>
+        <script type="module" src="js/user_options.js"></script>
+        <script type="module" src="js/index.js"></script>
 
     </body>
 </html>

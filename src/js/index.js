@@ -1,95 +1,29 @@
-// THESE FUNCTIONS SHOULD BE IN UTILS.JS BUT THE CODE IS CURRENTLY NOT WORKING, THEN...
-// import { clearBox, createUserElementwithLabel } from './utils.js';
-// ------------------------------------------------------------------------------------
-const clearBox = (elementID) => {
-    const element = document.querySelector(`#${elementID}`);
-    element.innerHTML = "";
+/*
+This is the main JS interface for the MyWallet app. 
+It serves for: 
+    - registering the user
+    - logging in
+    - plotting the balance
+    - storing temporary data from the session
+*/
+import { clearBox, createUserElementwithLabel } from './utils.js';
+import { UserData } from './user_data.js';
+import { QueryAPI} from './api_queries.js';
+
+// Global session values used by the program.
+const userData = null;
+
+const showUserID = (elementID) => {
+    const spanElement = document.querySelector(`#${elementID}`);
+    spanElement.textContent = `Welcome ${userData.username}`;
 }
 
-const createUserElementwithLabel = (
-    form,
-    type,
-    elementID,
-    name,
-    labelText,
-    iconName
-) => {
-    const inputLabel = document.createElement("label");
-    inputLabel.for = elementID;
-    inputLabel.innerText = labelText
-    form.append(inputLabel);
-
-    const div = document.createElement("div");
-    div.classList.add("form_element");
-    const icon = document.createElement("i");
-    icon.classList.add(...iconName);
-    div.append(icon);
-
-    const inputContent = document.createElement("input");
-    inputContent.type = type;
-    inputContent.id = elementID;
-    inputContent.name = name;
-    inputContent.required = true;
-    div.append(inputContent);
-    form.append(div);
-}
-// HERE, THE UTILS.JS CODE IS ENDING!
-// ------------------------------------------------------------------------------------
-class UserData {
-    constructor(userID, username) {
-        this.userID = userID;
-        this.username = username;
-    }
-}
-
-class QueryAPI {
-    constructor(successMsg, switchPage=false) {
-        this.successMsg = successMsg;
-        this.switchPage = switchPage;
-    }
-
-    _createDivWithMsg = (spanClassName, spanContent) => {
-        const div = document.createElement("div");
-        div.classList.add("msg_div");
-        const span = document.createElement("span");
-        span.classList.add(spanClassName);
-        span.textContent = spanContent;
-        div.append(span);
-        return div;
-    }
-    
-    postForm = async (url, formObj, sectionObj) => {
-        await axios.postForm(
-            url, 
-            formObj
-        ).then((res) => {
-            const div = document.createElement("div");
-            div.id = "divMsgID";
-            const data = res.data;
-            if (data.successful) {
-                div.append(
-                    this._createDivWithMsg(
-                        "msg_success",
-                        this.successMsg
-                    )
-                );
-            } else {
-                for (const [errorType, messsage] of Object.entries(data.errors)) {
-                    div.append(
-                        this._createDivWithMsg(
-                            "msg_error",
-                            `${errorType.toUpperCase()}: ${messsage}`
-                        )
-                    );
-                }
-            }
-            sectionObj.append(div);
-            return data;
-        }
-        ).catch((error) => {
-            console.log("Oh no... ERROR!", error);
-        });
-    }
+const showBalance = (elementID) => {
+    clearBox(elementID);
+    window.scrollTo(0, 0);
+    const header = document.createElement("h2");
+    header.innerText = "Wallet balance:"
+    document.querySelector(`#${elementID}`).append(header);
 }
 
 const clickLogin = async (form, div) => {
@@ -102,6 +36,12 @@ const clickLogin = async (form, div) => {
         alert(res);
         if (res.data.successful) {
             location.assign("/my-wallet/src/user_portal.php");
+            userData = new UserData(
+                userID = res.data.id,
+                username = res.data.userName,
+                incomes = res.data.userData,
+                expenses = res.data.userData
+            );
         }
     }
     ).catch((error) => {
@@ -202,3 +142,11 @@ const registerUser = (elementID) => {
     sectionRegister.append(form);
     document.querySelector(`#${elementID}`).append(sectionRegister);
 }
+
+
+// Global function accessible from the module
+window.logIn = logIn;
+window.registerUser = registerUser;
+window.logOut = logOut;
+window.showBalance = showBalance;
+window.showUserID = showUserID;
