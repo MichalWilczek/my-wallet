@@ -59,8 +59,10 @@ class QueryAPI {
     }
     
     postForm = async (url, formObj, sectionObj) => {
-        const res = await axios.postForm(url, formObj)
-        .then((res) => {
+        const res = await axios.postForm(
+            url, 
+            formObj
+        ).then((res) => {
             const div = document.createElement("div");
             div.id = "divMsgID";
             const data = res.data;
@@ -82,9 +84,9 @@ class QueryAPI {
                 }
             }
             sectionObj.append(div);
-        })
-        .then(() => {return res})
-        .catch((error) => {
+            return data;
+        }
+        ).catch((error) => {
             console.log("Oh no... ERROR!", error);
         });
     }
@@ -97,11 +99,12 @@ const clickLogin = async (form, div) => {
         form,
         div
     ).then((res) => {
+        alert(res);
         if (res.data.successful) {
             location.assign("/my-wallet/src/user_portal.php");
         }
-    })
-    .catch((error) => {
+    }
+    ).catch((error) => {
         console.log("Oh no... ERROR!", error);
     })
 }
