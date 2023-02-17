@@ -59,7 +59,7 @@ class QueryAPI {
     }
     
     postForm = async (url, formObj, sectionObj) => {
-        const res = await axios.postForm(
+        await axios.postForm(
             url, 
             formObj
         ).then((res) => {
