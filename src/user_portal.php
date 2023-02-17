@@ -1,11 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] == false) {
+// if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] == false) {
+if (!isset($_SESSION["userData"]) || $_SESSION["userData"]["successful"] == false) {
     header("Location: index.php");
     exit();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +32,7 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] == false) {
     </head>
     <body
         onload="
+        getUserData(<?php echo var_dump($_SESSION['userData']) ?>);
         showBalance('main_page_content');
         showUserID('upper_nav_bar_span_id');">
         <nav class="navbar navbar-expand-md sticky-top p-1" id="upper_nav_bar">
@@ -120,7 +121,11 @@ if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] == false) {
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
             integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
             crossorigin="anonymous"></script>
-        <script src="js/index.js"></script>
-        <script src="js/user_options.js"></script>
+
+        <script type="module" src="js/utils.js"></script>
+        <script type="module" src="js/user_data.js"></script>
+        <script type="module" src="js/api_queries.js"></script>
+        <script type="module" src="js/user_options.js"></script>
+        <script type="module" src="js/index.js"></script>
     </body>
 </html>

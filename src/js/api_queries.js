@@ -19,10 +19,11 @@ export class QueryAPI {
     }
     
     postForm = async (url, formObj, sectionObj) => {
-        await axios.postForm(
-            url, 
-            formObj
-        ).then((res) => {
+        try {
+            const res = await axios.postForm(
+                url, 
+                formObj
+            )
             const div = document.createElement("div");
             div.id = "divMsgID";
             const data = res.data;
@@ -45,9 +46,9 @@ export class QueryAPI {
             }
             sectionObj.append(div);
             return data;
+        } catch (e) {
+            console.log("An error occurred while sending server request.");
+            console.log("Error: ", e);
         }
-        ).catch((error) => {
-            console.log("Oh no... ERROR!", error);
-        });
     }
 }

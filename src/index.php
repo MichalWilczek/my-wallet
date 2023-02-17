@@ -1,6 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] == true) {
+// if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"] == true) {
+if (isset($_SESSION["userData"]) && $_SESSION["userData"]["successful"] == true) {
     header("Location: user_portal.php");
     exit();
 }

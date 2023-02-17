@@ -48,8 +48,6 @@ function loginToAccount() {
 		$userData = $userQuery->fetch();
 
 		if ($userData && password_verify($password, $userData['password'])) {
-			$_SESSION["logged_in"] = true;
-			$_SESSION["user_id"] = $userData['id'];
 			$tempLoginData = new LoginData(
 				true, 
 				$userData['id'], 
@@ -77,6 +75,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	$loginData->errors["unknown_error"] = "Unexpexted error ocurred. ";
 }
 $apiResult = (array) $loginData;
+$_SESSION["userData"] = $apiResult;
 header("Content-Type: application/json");
 echo json_encode($apiResult);
 exit();

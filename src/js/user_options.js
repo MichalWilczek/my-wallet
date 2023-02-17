@@ -9,6 +9,94 @@ In this module, we put a set of user options such as:
 import { clearBox, createUserElementwithLabel } from './utils.js';
 
 
+const changePassword = (elementID) => {
+    clearBox(elementID);
+    window.scrollTo(0, 0);
+
+    const header = document.createElement("h2");
+    header.innerText = "You can change password below:"
+    document.querySelector(`#${elementID}`).append(header);
+
+    const divElement = document.createElement("div");
+    const form = document.createElement("form");
+    createUserElementwithLabel(form, "password", "old-password-change-id", "oldPassword", labelText="Old password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "new-password-change-id", "newPassword1", labelText="New password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "new2-password-change-id", "newPassword2", labelText="Repeated new password", ["fa", "fa-unlock-alt"]);
+
+    const buttonDiv = document.createElement("div");
+    buttonDiv.classList.add("form_element");
+    const button = document.createElement("button");
+    button.innerText = "Submit";
+    buttonDiv.append(button);
+    form.append(buttonDiv);
+    divElement.append(form);
+    document.querySelector(`#${elementID}`).append(divElement);
+}
+
+const modifyOptions = (elementID, optionsObj) => {
+    clearBox(elementID);
+    window.scrollTo(0, 0);
+
+    const divElement = document.createElement("div");
+    
+    const headerDelete = document.createElement("h2");
+    headerDelete.innerText = "Delete option below:"
+    divElement.append(headerDelete);
+
+    const deleteForm = document.createElement("form");
+    const formElement1 = document.createElement("div");
+    formElement1.classList.add("form_element");
+    const selectObj = optionsObj.createElement();
+    formElement1.append(selectObj);
+    deleteForm.append(formElement1);
+    const formElement2 = document.createElement("div");
+    formElement2.classList.add("form_element");
+    const deleteButton = document.createElement("button");
+    deleteButton.innerText = "Delete";
+    deleteButton.addEventListener(
+        "click", 
+        () => {
+            const objToDelete = selectObj.options[selectObj.selectedIndex].text;
+            optionsObj.removeOption(objToDelete);
+        }
+    );
+    formElement2.append(deleteButton)
+    deleteForm.append(formElement2);
+    divElement.append(deleteForm);
+
+
+    const appendForm = document.createElement("form");
+    const headerAdd = document.createElement("h2");
+    headerAdd.innerText = "Add option below:"
+    divElement.append(headerAdd);
+
+    let formElement3 = document.createElement("div");
+    formElement3.classList.add("form_element");
+    const textObj = document.createElement("input");
+    textObj.type = "text";
+    textObj.placeholder = "new option";
+    formElement3.append(textObj);
+    appendForm.append(formElement3);
+
+    const formElement4 = document.createElement("div");
+    formElement4.classList.add("form_element");
+    const appendButton = document.createElement("button");
+    appendButton.innerText = "Append";
+    appendButton.addEventListener(
+        "click",
+        () => {
+            const objToAdd = textObj.value;
+            optionsObj.addOption(objToAdd);
+            // TODO: This piece of code is not working!!! 
+            // But why...?
+        }
+    )
+    formElement4.append(appendButton);
+    appendForm.append(formElement4);
+    divElement.append(appendForm);
+    document.querySelector(`#${elementID}`).append(divElement);
+}
+
 const addIncome = (elementID) => {
     clearBox(elementID);
     window.scrollTo(0, 0);
@@ -131,94 +219,6 @@ const addExpense = (elementID) => {
     document.querySelector(`#${elementID}`).append(divElement);
 }
 
-const changePassword = (elementID) => {
-    clearBox(elementID);
-    window.scrollTo(0, 0);
-
-    const header = document.createElement("h2");
-    header.innerText = "You can change password below:"
-    document.querySelector(`#${elementID}`).append(header);
-
-    const divElement = document.createElement("div");
-    const form = document.createElement("form");
-    createUserElementwithLabel(form, "password", "old-password-change-id", "oldPassword", labelText="Old password", ["fa", "fa-unlock-alt"]);
-    createUserElementwithLabel(form, "password", "new-password-change-id", "newPassword1", labelText="New password", ["fa", "fa-unlock-alt"]);
-    createUserElementwithLabel(form, "password", "new2-password-change-id", "newPassword2", labelText="Repeated new password", ["fa", "fa-unlock-alt"]);
-
-    const buttonDiv = document.createElement("div");
-    buttonDiv.classList.add("form_element");
-    const button = document.createElement("button");
-    button.innerText = "Submit";
-    buttonDiv.append(button);
-    form.append(buttonDiv);
-    divElement.append(form);
-    document.querySelector(`#${elementID}`).append(divElement);
-}
-
-const modifyOptions = (elementID, optionsObj) => {
-    clearBox(elementID);
-    window.scrollTo(0, 0);
-
-    const divElement = document.createElement("div");
-    
-    const headerDelete = document.createElement("h2");
-    headerDelete.innerText = "Delete option below:"
-    divElement.append(headerDelete);
-
-    const deleteForm = document.createElement("form");
-    const formElement1 = document.createElement("div");
-    formElement1.classList.add("form_element");
-    const selectObj = optionsObj.createElement();
-    formElement1.append(selectObj);
-    deleteForm.append(formElement1);
-    const formElement2 = document.createElement("div");
-    formElement2.classList.add("form_element");
-    const deleteButton = document.createElement("button");
-    deleteButton.innerText = "Delete";
-    deleteButton.addEventListener(
-        "click", 
-        () => {
-            const objToDelete = selectObj.options[selectObj.selectedIndex].text;
-            optionsObj.removeOption(objToDelete);
-        }
-    );
-    formElement2.append(deleteButton)
-    deleteForm.append(formElement2);
-    divElement.append(deleteForm);
-
-
-    const appendForm = document.createElement("form");
-    const headerAdd = document.createElement("h2");
-    headerAdd.innerText = "Add option below:"
-    divElement.append(headerAdd);
-
-    let formElement3 = document.createElement("div");
-    formElement3.classList.add("form_element");
-    const textObj = document.createElement("input");
-    textObj.type = "text";
-    textObj.placeholder = "new option";
-    formElement3.append(textObj);
-    appendForm.append(formElement3);
-
-    const formElement4 = document.createElement("div");
-    formElement4.classList.add("form_element");
-    const appendButton = document.createElement("button");
-    appendButton.innerText = "Append";
-    appendButton.addEventListener(
-        "click",
-        () => {
-            const objToAdd = textObj.value;
-            optionsObj.addOption(objToAdd);
-            // TODO: This piece of code is not working!!! 
-            // But why...?
-        }
-    )
-    formElement4.append(appendButton);
-    appendForm.append(formElement4);
-    divElement.append(appendForm);
-    document.querySelector(`#${elementID}`).append(divElement);
-}
-
 const changeSettings = (elementID) => {
     clearBox(elementID);
     window.scrollTo(0, 0);
@@ -272,6 +272,11 @@ const changeSettings = (elementID) => {
     document.querySelector(`#${elementID}`).append(divElement4);
 }
 
+
+// Global function accessible from the module
+window.addIncome = addIncome;
+window.addExpense = addExpense;
+window.changeSettings = changeSettings;
 
 
 // let userIDValue = "mich.wilcz";

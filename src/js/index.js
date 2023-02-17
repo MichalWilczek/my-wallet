@@ -10,8 +10,18 @@ import { clearBox, createUserElementwithLabel } from './utils.js';
 import { UserData } from './user_data.js';
 import { QueryAPI} from './api_queries.js';
 
+
 // Global session values used by the program.
 const userData = null;
+
+const getUserData = (userData) => {
+    userData = new UserData(
+        userID = res.id,
+        username = res.userName,
+        incomes = res.userData,
+        expenses = res.userData
+    );
+}
 
 const showUserID = (elementID) => {
     const spanElement = document.querySelector(`#${elementID}`);
@@ -27,26 +37,21 @@ const showBalance = (elementID) => {
 }
 
 const clickLogin = async (form, div) => {
-    loginQuery = new QueryAPI("You have been successfully logged in to your account!");
-    await loginQuery.postForm(
+    const loginQuery = new QueryAPI("You have been successfully logged in to your account!");
+    const res = await loginQuery.postForm(
         "/my-wallet/src/server/login.php", 
         form,
         div
-    ).then((res) => {
-        alert(res);
-        if (res.data.successful) {
-            location.assign("/my-wallet/src/user_portal.php");
-            userData = new UserData(
-                userID = res.data.id,
-                username = res.data.userName,
-                incomes = res.data.userData,
-                expenses = res.data.userData
-            );
-        }
+    )
+    if (res.successful) {
+        location.assign("/my-wallet/src/user_portal.php");
+        userData = new UserData(
+            userID = res.id,
+            username = res.userName,
+            incomes = res.userData,
+            expenses = res.userData
+        );
     }
-    ).catch((error) => {
-        console.log("Oh no... ERROR!", error);
-    })
 }
 
 const logIn = (elementID, loginButtonID) => {
@@ -130,7 +135,7 @@ const registerUser = (elementID) => {
         if(msgFromPrevIteration!==null) {
             msgFromPrevIteration.remove()
         }
-        registrationQuery = new QueryAPI("Your account has been successfully created!");
+        const registrationQuery = new QueryAPI("Your account has been successfully created!");
         registrationQuery.postForm(
             "/my-wallet/src/server/registration.php", 
             form,
@@ -143,10 +148,13 @@ const registerUser = (elementID) => {
     document.querySelector(`#${elementID}`).append(sectionRegister);
 }
 
-
 // Global function accessible from the module
 window.logIn = logIn;
 window.registerUser = registerUser;
 window.logOut = logOut;
 window.showBalance = showBalance;
 window.showUserID = showUserID;
+window.addIncome = addIncome;
+window.addExpense = addExpense;
+window.changeSettings = changeSettings;
+window.getUserData = getUserData;
