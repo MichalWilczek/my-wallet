@@ -7,34 +7,17 @@ It serves for:
     - storing temporary data from the session
 */
 import { clearBox, createUserElementwithLabel } from './utils.js';
+import { QueryAPI, getUserData} from './api_queries.js';
 import { UserData } from './user_data.js';
-import { QueryAPI} from './api_queries.js';
 
 
 // Global session values used by the program.
 window.userData = UserData;
 
 
-const getUserData = async () => {
-    try {
-        const res = await axios.post("/my-wallet/src/server/login.php", {});
-        window.userData = new UserData(
-            res.data.id,
-            res.data.userName,
-            res.data.userData,
-            res.data.userData
-        );
-    } catch (e) {
-        console.log(
-            "Unexpected error occured while querying data of the logged in user from server."
-        );
-        console.log("Error: ", e);
-    }
-}
-
 const runUserPortal = async (userElementID, pageContentID) => {
     try {
-        await getUserData();
+        window.userData = await getUserData();
         showUserID(userElementID);
         showBalance(pageContentID);
     } catch (e) {
@@ -175,6 +158,7 @@ window.logIn = logIn;
 window.registerUser = registerUser;
 window.logOut = logOut;
 window.runUserPortal = runUserPortal;
+window.showBalance = showBalance;
 window.addIncome = addIncome;
 window.addExpense = addExpense;
 window.changeSettings = changeSettings;

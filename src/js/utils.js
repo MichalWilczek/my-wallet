@@ -1,13 +1,15 @@
 /*
 This module useful objects to work on HTML format.
 */
+export {clearBox, createUserElementwithLabel}
 
-export const clearBox = (elementID) => {
+
+const clearBox = (elementID) => {
     const element = document.querySelector(`#${elementID}`);
     element.innerHTML = "";
 }
 
-export const createUserElementwithLabel = (
+const createUserElementwithLabel = (
     form,
     type,
     elementID,

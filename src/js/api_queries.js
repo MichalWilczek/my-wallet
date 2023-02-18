@@ -1,8 +1,11 @@
 /*
 This module stores queries for getting data from the server.
 */
+import { UserData } from './user_data.js';
+export {QueryAPI, getUserData}
 
-export class QueryAPI {
+
+class QueryAPI {
     constructor(successMsg, switchPage=false) {
         this.successMsg = successMsg;
         this.switchPage = switchPage;
@@ -53,3 +56,19 @@ export class QueryAPI {
     }
 }
 
+const getUserData = async () => {
+    try {
+        const res = await axios.post("/my-wallet/src/server/login.php", {});
+        return new UserData(
+            res.data.id,
+            res.data.userName,
+            res.data.userData,
+            res.data.userData
+        );
+    } catch (e) {
+        console.log(
+            "Unexpected error occured while querying data of the logged in user from server."
+        );
+        console.log("Error: ", e);
+    }
+}
