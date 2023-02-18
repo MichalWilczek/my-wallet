@@ -1,5 +1,7 @@
 <?php
 require_once("db.php");
+require_once("transactions.php");
+
 
 function checkUserNameInput($username) {
     $errors = [];
@@ -40,43 +42,6 @@ function checkReCaptcha($secret, $recaptchaResonse) {
         $errors["bot"] = "Confirm you are not a bot.";
     }
     return $errors;
-}
-
-function createDefaultCategories($userID, $categoryType) {
-
-    switch ($categoryType) {
-        case "incomeTables":
-            $defaultTable = "incomes_category_default";
-            $userTable = "incomes_category_assigned_to_users";
-            break;
-        case "expenseTables":
-            $defaultTable = "expenses_category_default";
-            $userTable = "expenses_category_assigned_to_users";
-            break;
-        case "paymentTables":
-            $defaultTable = "payment_methods_default";
-            $userTable = "payment_methods_assigned_to_users";
-            break;
-        default: 
-            throw new Exception("The option: ".$categoryType." does not exist.");
-    }
-
-    try {
-        $dbConnect = connectToDB();
-        $query1 = $dbConnect->prepare("SELECT id, name FROM $defaultTable");
-        $query1->execute();
-        $defaultCategories = $query1->fetchAll();;
-        if (!empty($defaultCategories)) {
-            foreach ($defaultCategories as $category) {
-                $query2 = $dbConnect->prepare("INSERT INTO $userTable VALUES (NULL, :user_id, :name)");
-                $query2->bindValue(":user_id", $userID, PDO::PARAM_INT);
-                $query2->bindValue(":name", $category["name"], PDO::PARAM_STR);
-                $query2->execute();
-            }
-        }
-    } catch (Exception $error) {
-        echo "Server error while creating default user categories";
-    }
 }
 
 function findUserID($dbConnect, $username) {
@@ -140,9 +105,9 @@ function registerAccount() {
         if (empty($userID)) {
             throw new Exception("The user could not be created in the database.");
         } else {
-            createDefaultCategories($userID["id"], "incomeTables");
-            createDefaultCategories($userID["id"], "expenseTables");
-            createDefaultCategories($userID["id"], "paymentTables");
+            createDefaultTransactionCategories($dbConnect, $userID["id"], "incomeTables");
+            createDefaultTransactionCategories($dbConnect, $userID["id"], "expenseTables");
+            createDefaultTransactionCategories($dbConnect, $userID["id"], "paymentTables");
         }
         return [];
 
