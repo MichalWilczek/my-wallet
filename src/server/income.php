@@ -1,11 +1,6 @@
 <?php
 require_once("db.php");
 
-interface CashFlowAnalyser
-{
-    public function checkInputErrors();
-    public function getQuery();
-}
 
 class IncomeData {
     public $userID;
@@ -19,8 +14,7 @@ class ExpenseData extends IncomeData {
     public $paymentMethodID;
 }
 
-
-class IncomeAnalyser implements CashFlowAnalyser {
+class IncomeDataChecker {
 	protected $amount;
     protected $date;
     protected $cashFlowOption;
@@ -47,8 +41,7 @@ class IncomeAnalyser implements CashFlowAnalyser {
     }
 
     function checkDate() {
-
-        // ADD A CHECK FOR DATE!!!
+        // TODO: ADD A CHECK FOR DATE!!!
         // $current_date = new DateTime("2021-05-01 14:59:12"); // UTC time ;-)
         // $user_premium_days_left = DateTime::createFromFormat("Y-m-d H:i:s", $_SESSION["premiumdays"]);
     }
@@ -59,13 +52,13 @@ class IncomeAnalyser implements CashFlowAnalyser {
         }
     }
 
-    function getQuery() {
-        // VALUES (NULL, :username, :password, :email)
-        return "INSERT INTO incomes VALUES (NULL, :user_id, :income_category_assigned_to_user, :amount, :date_of_income, :income_comment)";
-    }
+    // function insertCashData() {
+    //     // VALUES (NULL, :username, :password, :email)
+    //     return "INSERT INTO incomes VALUES (NULL, :user_id, :income_category_assigned_to_user, :amount, :date_of_income, :income_comment)";
+    // }
 }
 
-class ExpenseAnalyser extends IncomeAnalyser {
+class ExpenseDataChecker extends IncomeDataChecker {
 
     private $cashFlowOptionName = "expense";
     protected $paymentOption;
@@ -86,25 +79,15 @@ class ExpenseAnalyser extends IncomeAnalyser {
         }
     }
 
-    function getQuery() {
-        // VALUES (NULL, :username, :password, :email)
-        return "INSERT INTO incomes VALUES (NULL, )";
-    }
+    // function insertCashData() {
+    //     // VALUES (NULL, :username, :password, :email)
+    //     return "INSERT INTO incomes VALUES (NULL, )";
+    // }
 }
-
-class CashFlowInsertion {
-
-    private $cashFlowAnalyser;
-
-    function __construct($cashflowAnalyser) {
-        $this->$cashflowAnalyser;
-    }
-}
-
-
 
 
 function addIncome() {
+
     $errors = [];
 
     $amount = filter_input(INPUT_POST, "amount");
