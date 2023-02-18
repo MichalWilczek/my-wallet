@@ -1,7 +1,6 @@
 <?php
 session_start();
-// if (!isset($_SESSION["logged_in"]) || $_SESSION["logged_in"] == false) {
-if (!isset($_SESSION["userData"]) || $_SESSION["userData"]["successful"] == false) {
+if (!isset($_SESSION["userData"])) {
     header("Location: index.php");
     exit();
 }
@@ -31,9 +30,7 @@ if (!isset($_SESSION["userData"]) || $_SESSION["userData"]["successful"] == fals
         </style>
     </head>
     <body
-        onload="
-        showBalance('main_page_content');
-        showUserID('upper_nav_bar_span_id');">
+        onload="runUserPortal('upper_nav_bar_span_id', 'main_page_content');">
         <nav class="navbar navbar-expand-md sticky-top p-1" id="upper_nav_bar">
             <div class="container-fluid">
                 <a class="navbar-brand" href="user_portal.php">
@@ -120,7 +117,8 @@ if (!isset($_SESSION["userData"]) || $_SESSION["userData"]["successful"] == fals
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
             integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
             crossorigin="anonymous"></script>
-
+        <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+        
         <script type="module" src="js/utils.js"></script>
         <script type="module" src="js/user_data.js"></script>
         <script type="module" src="js/api_queries.js"></script>

@@ -21,6 +21,8 @@ class LoginData {
 	}
 }
 
+// TO BE ADDED IN NEXT STEPS!
+
 // function getUserData() {
 // 	$userData = [];
 // 	// $userData['incomes'] = getIncomeData();
@@ -51,9 +53,9 @@ function loginToAccount() {
 			$tempLoginData = new LoginData(
 				true, 
 				$userData['id'], 
-				$username,
-				// getUserData()
+				$username
 			);
+			$_SESSION["userData"] = $tempLoginData;
 			return $tempLoginData;
 		} else {
 			$tempLoginData = new LoginData(false);
@@ -68,14 +70,20 @@ function loginToAccount() {
 }
 
 session_start();
-if (isset($_POST["username"]) && isset($_POST["password"])) {
-	$loginData = loginToAccount();
+if (isset($_SESSION["userData"])) {
+	$sessionUserData = $_SESSION["userData"];
+	if ($sessionUserData->successful ) {
+		$apiResult = (array) $sessionUserData;
+	}
 } else {
-	$loginData = new LoginData(false);
-	$loginData->errors["unknown_error"] = "Unexpexted error ocurred. ";
+	if (isset($_POST["username"]) && isset($_POST["password"])) {
+		$loginData = loginToAccount();
+	} else {
+		$loginData = new LoginData(false);
+		$loginData->errors["unknown_error"] = "Unexpexted error ocurred. ";
+	}
+	$apiResult = (array) $loginData;
 }
-$apiResult = (array) $loginData;
-$_SESSION["userData"] = $apiResult;
 header("Content-Type: application/json");
 echo json_encode($apiResult);
 exit();

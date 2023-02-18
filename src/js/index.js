@@ -12,20 +12,42 @@ import { QueryAPI} from './api_queries.js';
 
 
 // Global session values used by the program.
-const userData = null;
+window.userData = UserData;
 
-const getUserData = (userData) => {
-    userData = new UserData(
-        userID = res.id,
-        username = res.userName,
-        incomes = res.userData,
-        expenses = res.userData
-    );
+
+const getUserData = async () => {
+    try {
+        const res = await axios.post("/my-wallet/src/server/login.php", {});
+        window.userData = new UserData(
+            res.data.id,
+            res.data.userName,
+            res.data.userData,
+            res.data.userData
+        );
+    } catch (e) {
+        console.log(
+            "Unexpected error occured while querying data of the logged in user from server."
+        );
+        console.log("Error: ", e);
+    }
+}
+
+const runUserPortal = async (userElementID, pageContentID) => {
+    try {
+        await getUserData();
+        showUserID(userElementID);
+        showBalance(pageContentID);
+    } catch (e) {
+        console.log(
+            "Unexpected error occured while ploting the user webpage."
+        );
+        console.log("Error: ", e);
+    }
 }
 
 const showUserID = (elementID) => {
     const spanElement = document.querySelector(`#${elementID}`);
-    spanElement.textContent = `Welcome ${userData.username}`;
+    spanElement.textContent = `Welcome ${window.userData.username}`;
 }
 
 const showBalance = (elementID) => {
@@ -45,7 +67,7 @@ const clickLogin = async (form, div) => {
     )
     if (res.successful) {
         location.assign("/my-wallet/src/user_portal.php");
-        userData = new UserData(
+        window.userData = new UserData(
             userID = res.id,
             username = res.userName,
             incomes = res.userData,
@@ -152,9 +174,7 @@ const registerUser = (elementID) => {
 window.logIn = logIn;
 window.registerUser = registerUser;
 window.logOut = logOut;
-window.showBalance = showBalance;
-window.showUserID = showUserID;
+window.runUserPortal = runUserPortal;
 window.addIncome = addIncome;
 window.addExpense = addExpense;
 window.changeSettings = changeSettings;
-window.getUserData = getUserData;

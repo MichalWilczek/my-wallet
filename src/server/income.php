@@ -99,9 +99,6 @@ class CashFlowInsertion {
     function __construct($cashflowAnalyser) {
         $this->$cashflowAnalyser;
     }
-
-    function 
-
 }
 
 
