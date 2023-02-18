@@ -43,4 +43,26 @@ function createDefaultTransactionCategories($dbConnect, $userID, $categoryType) 
     }
 }
 
+function getTransactionOptionsForUser($dbConnect, $userID, $categoryType) {
+    
+    $tableData = getCategoryTypeData($categoryType);
+    $userTable = $tableData['userTableName'];
+
+    try {
+        $query = $dbConnect->prepare("SELECT name FROM $userTable WHERE user_id = :user_id");
+        $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+        $query->execute();
+        $categories = $query->fetchAll();
+        
+        $results = [];
+        foreach($categories as $category) {
+            array_push($results, $category["name"]);
+        }
+        return $results;
+        
+    } catch (Exception $error) {
+        echo "Server error while creating default user categories";
+    }
+}
+
 ?>

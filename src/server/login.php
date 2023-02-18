@@ -1,5 +1,7 @@
 <?php
 require_once("db.php");
+require_once("transactions.php");
+
 
 class LoginData {
 	public $successful;
@@ -23,20 +25,25 @@ class LoginData {
 
 // TO BE ADDED IN NEXT STEPS!
 
-// function getUserData() {
-// 	$userData = [];
-// 	// $userData['incomes'] = getIncomeData();
-// 	// $userData['expenses'] = getExpenseData();
-// 	return $userData;
-// }
+function getUserData($dbConnect, $userID) {
+	$userData = [];
+	$userData['incomes'] = getIncomeData($dbConnect, $userID);
+	$userData['expenses'] = getExpenseData($dbConnect, $userID);
+	return $userData;
+}
 
-// function getIncomeData() {
+function getIncomeData($dbConnect, $userID) {
+	$incomeData = [];
+	$incomeData["income_options"] = getTransactionOptionsForUser($dbConnect, $userID, "incomeTables");
+	return $incomeData;
+}
 
-// }
-
-// function getExpenseData() {
-
-// }
+function getExpenseData($dbConnect, $userID) {
+	$expenseData = [];
+	$expenseData["expense_options"] = getTransactionOptionsForUser($dbConnect, $userID, "expenseTables");
+	$expenseData["payment_options"] = getTransactionOptionsForUser($dbConnect, $userID, "paymentTables");
+	return $expenseData;
+}
 
 function loginToAccount() {
 
@@ -53,7 +60,8 @@ function loginToAccount() {
 			$tempLoginData = new LoginData(
 				true, 
 				$userData['id'], 
-				$username
+				$username,
+				getUserData($dbConnect, $userData['id'])
 			);
 			$_SESSION["userData"] = $tempLoginData;
 			return $tempLoginData;
