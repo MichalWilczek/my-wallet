@@ -20,6 +20,7 @@ function getCategoryTypeData($categoryType) {
     }
     return $data;
 }
+
 function createDefaultTransactionCategories($dbConnect, $userID, $categoryType) {
 
     $tableData = getCategoryTypeData($categoryType);
@@ -37,7 +38,7 @@ function createDefaultTransactionCategories($dbConnect, $userID, $categoryType) 
                 $query2->bindValue(":name", $category["name"], PDO::PARAM_STR);
                 $query2->execute();
             }
-        }
+        } 
     } catch (Exception $error) {
         echo "Server error while creating default user categories";
     }
@@ -65,32 +66,65 @@ function getTransactionOptionsForUser($dbConnect, $userID, $categoryType) {
     }
 }
 
-function modifyTransactionOptionsForUser($dbConnect, $userID, $categoryType, $oldCategoryName, $newCategoryName=null) {
+function getTransactionOptionIDAssignedToUser($dbConnect, $userID, $categoryType, $transactionName) {
     
     $tableData = getCategoryTypeData($categoryType);
     $userTable = $tableData['userTableName'];
 
     try {
-        if (is_null($newCategoryName)) {
-            $query = $dbConnect->prepare("DELETE FROM $userTable WHERE user_id = :user_id AND name = :old_name");
-        } else {
-            $query = $dbConnect->prepare("UPDATE $userTable SET name = :name WHERE user_id = :user_id AND name = :old_name");
-            $query->bindValue(":name", $newCategoryName, PDO::PARAM_STR);
-        }
+        $query = $dbConnect->prepare("SELECT id FROM $userTable WHERE user_id = :user_id AND name = :transactionName");
         $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
-        $query->bindValue(":old_name", $oldCategoryName, PDO::PARAM_STR);
+        $query->bindValue(":transactionName", $transactionName, PDO::PARAM_STR);
         $query->execute();
-        $categories = $query->fetchAll();
-        
-        $results = [];
-        foreach($categories as $category) {
-            array_push($results, $category["name"]);
-        }
-        return $results;
+        $result = $query->fetch();
+        return $result["id"];
         
     } catch (Exception $error) {
-        echo "Server error while modifying transaction options for the user";
+        echo "Server error while modifying transaction options for the user \n \n";
     }
 }
 
-?>
+// function modifyTransactionOptionsForUser($dbConnect, $userID, $categoryType, $oldCategoryName, $newCategoryName=null) {
+    
+//     $tableData = getCategoryTypeData($categoryType);
+//     $userTable = $tableData['userTableName'];
+
+//     try {
+//         if (is_null($newCategoryName)) {
+//             $query = $dbConnect->prepare("DELETE FROM $userTable WHERE user_id = :user_id AND name = :old_name");
+//         } else {
+//             $query = $dbConnect->prepare("UPDATE $userTable SET name = :name WHERE user_id = :user_id AND name = :old_name");
+//             $query->bindValue(":name", ucfirst($newCategoryName), PDO::PARAM_STR);
+//         }
+//         $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+//         $query->bindValue(":old_name", ucfirst($oldCategoryName), PDO::PARAM_STR);
+//         $query->execute();
+//         return true;
+        
+//     } catch (Exception $error) {
+//         echo "Server error while modifying transaction options for the user";
+//         return false;
+//     }
+// }
+
+// function modifyPassword($dbConnect, $userID, $newPassword) {
+
+//     try {
+//         $query = $dbConnect->prepare("SELECT password FROM users WHERE user_id = :user_id");
+//         $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+//         $query->execute();
+//         $userData = $query->fetch();
+
+//         if (password_verify($userData["password"], $newPassword)) {
+//             $query = $dbConnect->prepare("UPDATE users SET password = :password WHERE user_id = :user_id");
+//             $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+//             $query->execute();
+//         } else {
+
+//         }
+        
+//     } catch (Exception $error) {
+//         echo "Server error while modifying the user password";
+//     }
+// }
+// ?>

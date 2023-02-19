@@ -7,7 +7,17 @@ In this module, we put a set of user options such as:
         - modify income and expense options
 */
 import { clearBox, createUserElementwithLabel } from './utils.js';
+import { QueryAPI } from './api_queries.js';
 
+
+const clickAddTransaction = async (form, div) => {
+    const transactionQuery = new QueryAPI("You have successfully added a transaction!");
+    const res = await transactionQuery.postForm(
+        "/my-wallet/src/server/transaction_input.php", 
+        form,
+        div
+    )
+}
 
 const changePassword = (elementID) => {
     clearBox(elementID);
@@ -118,6 +128,7 @@ const addIncome = (elementID) => {
     amount.min = 0;
     amount.step = 0.01;
     amount.placeholder = "amount";
+    amount.name = "amount";
     amount.required = true;
     subDiv1.append(amount);
     form.append(subDiv1);
@@ -128,6 +139,7 @@ const addIncome = (elementID) => {
     date.type = "date";
     date.min = "2010-01-01";
     date.required = true;
+    date.name = "date";
     subDiv2.append(date);
     form.append(subDiv2);
 
@@ -139,8 +151,10 @@ const addIncome = (elementID) => {
 
     const subDiv4 = document.createElement("div");
     subDiv4.classList.add("form_element");
-    const comments = document.createElement("text");
+    const comments = document.createElement("input");
+    comments.type = "text";
     comments.placeholder = "comment (optional)";
+    comments.name = "comment";
     subDiv4.append(comments);
     form.append(subDiv4);
 
@@ -150,6 +164,19 @@ const addIncome = (elementID) => {
     button.innerText = "Add";
     subDiv5.append(button);
     form.append(subDiv5);
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Remove the messages from previous round if they exist.
+        const msgFromPrevIteration = document.querySelector("#divMsgID");
+        if(msgFromPrevIteration!==null) {
+            msgFromPrevIteration.remove()
+        }
+        const tempOption = document.querySelector(`#${window.userData.incomeOptions.id}_base_option`);
+        tempOption.disabled = false;
+        clickAddTransaction(form, divElement);
+        tempOption.disabled = true;
+    })
 
     divElement.append(form);
     document.querySelector(`#${elementID}`).append(divElement);
@@ -176,6 +203,7 @@ const addExpense = (elementID) => {
     amount.min = 0;
     amount.step = 0.01;
     amount.placeholder = "amount";
+    amount.name = "amount"
     amount.required = true;
     subDiv1.append(amount);
     form.append(subDiv1);
@@ -184,6 +212,7 @@ const addExpense = (elementID) => {
     subDiv2.classList.add("form_element");
     const date = document.createElement("input");
     date.type = "date";
+    date.name = "date";
     date.min = "2010-01-01";
     date.required = true;
     subDiv2.append(date);
@@ -203,8 +232,10 @@ const addExpense = (elementID) => {
 
     const subDiv5 = document.createElement("div");
     subDiv5.classList.add("form_element");
-    const comments = document.createElement("text");
+    const comments = document.createElement("input");
+    comments.type = "text";
     comments.placeholder = "comment (optional)";
+    comments.name = "comment";
     subDiv5.append(comments);
     form.append(subDiv5);
 
@@ -213,6 +244,22 @@ const addExpense = (elementID) => {
     const button = document.createElement("button");
     button.innerText = "Add";
     subDiv6.append(button);
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Remove the messages from previous round if they exist.
+        const msgFromPrevIteration = document.querySelector("#divMsgID");
+        if(msgFromPrevIteration!==null) {
+            msgFromPrevIteration.remove()
+        }
+        const tempExpOption = document.querySelector(`#${window.userData.expenseOptions.id}_base_option`);
+        const tempPayOption = document.querySelector(`#${window.userData.paymentOptions.id}_base_option`);
+        tempExpOption.disabled = false;
+        tempPayOption.disabled = false;
+        clickAddTransaction(form, divElement);
+        tempExpOption.disabled = true;
+        tempPayOption.disabled = true;
+    })
     form.append(subDiv6);
 
     divElement.append(form);

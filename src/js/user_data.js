@@ -77,11 +77,12 @@ class Options {
     }
     createElement() {
         const selectObj = document.createElement("select");
-        selectObj.name = "category";
-        selectObj.id = `${this.id}-select`;
+        selectObj.name = this.id;
+        selectObj.id = `${this.id}`;
         selectObj.required = true;
 
         const baseOption = document.createElement("option");
+        baseOption.id = `${this.id}_base_option`
         baseOption.value = this.id;
         baseOption.disabled = true;
         baseOption.selected = true;

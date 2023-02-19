@@ -1,47 +1,8 @@
 <?php
 require_once("db.php");
+require_once("user_data.php");
 require_once("transactions.php");
 
-
-class LoginData {
-	public $successful;
-	public $errors = [];
-	public $id;
-	public $userName;
-	public $userData = [];
-
-	function __construct(
-		$loginSuccessful, 
-		$userID = null, 
-		$userName = null,
-		$userData = []
-	) {
-		$this->successful = $loginSuccessful;
-		$this->id = $userID;
-		$this->userName = $userName;
-		$this->userData = $userData;
-	}
-}
-
-function getUserData($dbConnect, $userID) {
-	$userData = [];
-	$userData['incomes'] = getIncomeData($dbConnect, $userID);
-	$userData['expenses'] = getExpenseData($dbConnect, $userID);
-	return $userData;
-}
-
-function getIncomeData($dbConnect, $userID) {
-	$incomeData = [];
-	$incomeData["incomeOptions"] = getTransactionOptionsForUser($dbConnect, $userID, "incomeTables");
-	return $incomeData;
-}
-
-function getExpenseData($dbConnect, $userID) {
-	$expenseData = [];
-	$expenseData["expenseOptions"] = getTransactionOptionsForUser($dbConnect, $userID, "expenseTables");
-	$expenseData["paymentOptions"] = getTransactionOptionsForUser($dbConnect, $userID, "paymentTables");
-	return $expenseData;
-}
 
 function loginToAccount() {
 
@@ -55,7 +16,7 @@ function loginToAccount() {
 		$userData = $userQuery->fetch();
 
 		if ($userData && password_verify($password, $userData['password'])) {
-			$tempLoginData = new LoginData(
+			$tempLoginData = new UserData(
 				true, 
 				$userData['id'], 
 				$username,
@@ -64,12 +25,12 @@ function loginToAccount() {
 			$_SESSION["userData"] = $tempLoginData;
 			return $tempLoginData;
 		} else {
-			$tempLoginData = new LoginData(false);
+			$tempLoginData = new UserData(false);
 			$tempLoginData->errors["login_attempt"] = "Username or password are incorrect.";
 			return $tempLoginData;
 		}
 	} catch (Exception $error) {
-		$tempLoginData = new LoginData(false);
+		$tempLoginData = new UserData(false);
 		$tempLoginData->errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
 		return $tempLoginData;
 	}
@@ -78,14 +39,14 @@ function loginToAccount() {
 session_start();
 if (isset($_SESSION["userData"])) {
 	$sessionUserData = $_SESSION["userData"];
-	if ($sessionUserData->successful ) {
+	if ($sessionUserData->successful) {
 		$apiResult = (array) $sessionUserData;
 	}
 } else {
 	if (isset($_POST["username"]) && isset($_POST["password"])) {
 		$loginData = loginToAccount();
 	} else {
-		$loginData = new LoginData(false);
+		$loginData = new UserData(false);
 		$loginData->errors["unknown_error"] = "Unexpexted error ocurred. ";
 	}
 	$apiResult = (array) $loginData;
