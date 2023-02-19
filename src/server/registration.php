@@ -59,12 +59,6 @@ function registerAccount() {
     $email = filter_input(INPUT_POST, "email");
     $password = filter_input(INPUT_POST, "password1");
     $repeatedPassword = filter_input(INPUT_POST, "password2");
-
-    // $username = "heyhey";
-    // $email = "heyhey@gmail.com";
-    // $password = "qwerty123";
-    // $repeatedPassword = "qwerty123";
-
     $errors = array_merge($errors, checkUserNameInput($username));
     $errors = array_merge($errors, checkEmailInput($email));
     $errors = array_merge($errors, checkPasswordInput($password, $repeatedPassword));
@@ -118,12 +112,6 @@ function registerAccount() {
 }
 
 session_start();
-
-// $_POST["username"] = "";
-// $_POST["email"] = "";
-// $_POST["password1"] = "";
-// $_POST["password2"] = "";
-
 $apiResult = array();
 if (isset($_POST["username"]) && isset($_POST["email"]) && isset($_POST["password1"]) && isset($_POST["password2"])) {
     $errors = registerAccount();

@@ -81,10 +81,6 @@ class IncomeOperator implements TransactionOperator {
     function validateType() {
 
         $this->type = filter_input(INPUT_POST, "{$this->typeName}-option");
-
-        // echo "Expense option: ".$this->type."\n \n";
-        // echo "Expense name: ".$this->typeName."\n \n";
-
         if ($this->type == "{$this->typeName}-option") {
             $this->inputErrors["{$this->typeName}_option"] = "You did not specify the {$this->typeName} option.";
         }
@@ -123,12 +119,6 @@ class ExpenseOperator extends IncomeOperator {
         try {
             $expenseCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "expenseTables", $this->type);
             $paymentOptionID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "paymentTables", $this->paymentOption);
-
-            // echo "User ID: ".$userID."\n \n";
-            // echo "Expense name: ".$this->type."\n \n";
-            // echo "Expense category ID: ".$expenseCategoryID."\n \n";
-            // echo "Payment category ID: ".$paymentOptionID."\n \n";
-
             $query = $dbConnect->prepare("INSERT INTO expenses VALUES (NULL, :user_id, :expense_category_assigned_to_user_id, :payment_method_assigned_to_user_id, :amount, :date_of_expense, :expense_comment)");
             $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
             $query->bindValue(":expense_category_assigned_to_user_id", $expenseCategoryID, PDO::PARAM_INT);
@@ -146,9 +136,6 @@ class ExpenseOperator extends IncomeOperator {
     }
 
     function validatePaymentOption() {
-
-        // echo "Expense option: ".$this->type."\n \n";
-        // echo "Expense name: ".$this->typeName."\n \n";
         $this->paymentOption = filter_input(INPUT_POST, "payment-option");
         if ($this->paymentOption == "payment-option") {
             $this->inputErrors["payment_option"] = "You did not specify the payment option.";
