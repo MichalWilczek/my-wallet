@@ -23,8 +23,6 @@ class LoginData {
 	}
 }
 
-// TO BE ADDED IN NEXT STEPS!
-
 function getUserData($dbConnect, $userID) {
 	$userData = [];
 	$userData['incomes'] = getIncomeData($dbConnect, $userID);
@@ -34,14 +32,14 @@ function getUserData($dbConnect, $userID) {
 
 function getIncomeData($dbConnect, $userID) {
 	$incomeData = [];
-	$incomeData["income_options"] = getTransactionOptionsForUser($dbConnect, $userID, "incomeTables");
+	$incomeData["incomeOptions"] = getTransactionOptionsForUser($dbConnect, $userID, "incomeTables");
 	return $incomeData;
 }
 
 function getExpenseData($dbConnect, $userID) {
 	$expenseData = [];
-	$expenseData["expense_options"] = getTransactionOptionsForUser($dbConnect, $userID, "expenseTables");
-	$expenseData["payment_options"] = getTransactionOptionsForUser($dbConnect, $userID, "paymentTables");
+	$expenseData["expenseOptions"] = getTransactionOptionsForUser($dbConnect, $userID, "expenseTables");
+	$expenseData["paymentOptions"] = getTransactionOptionsForUser($dbConnect, $userID, "paymentTables");
 	return $expenseData;
 }
 

@@ -88,8 +88,8 @@ if (isset($_SESSION["userData"])) {
         <script type="module" src="js/utils.js"></script>
         <script type="module" src="js/user_data.js"></script>
         <script type="module" src="js/api_queries.js"></script>
-        <script type="module" src="js/user_options.js"></script>
         <script type="module" src="js/index.js"></script>
+        <script type="module" src="js/user_options.js"></script>
 
     </body>
 </html>

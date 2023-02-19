@@ -3,8 +3,36 @@ This module stores objects to operate on:
     - general user data received from the server
     - options for income and expense settings
 */
+export {getUserData, readUserDataFromAPI, UserData, Options}
 
-export class UserData {
+
+const getUserData = async () => {
+    try {
+        const res = await axios.post("/my-wallet/src/server/login.php", {});
+        const userData = readUserDataFromAPI(res.data);
+        return userData;
+    } catch (e) {
+        console.log(
+            "Unexpected error occured while querying data of the logged in user from server."
+        );
+        console.log("Error: ", e);
+    }
+}
+
+const readUserDataFromAPI = (dictAPI) => {
+    const userData = new UserData(
+        dictAPI.id,
+        dictAPI.userName,
+        dictAPI.userData,
+        dictAPI.userData
+    );
+    userData.setExpenseOptions(dictAPI.userData.expenses.expenseOptions);
+    userData.setPaymentOptions(dictAPI.userData.expenses.paymentOptions);
+    userData.setIncomeOptions(dictAPI.userData.incomes.incomeOptions);
+    return userData;
+}
+
+class UserData {
     incomeOptions = null;
     expenseOptions = null;
     paymentOptions = null
@@ -22,23 +50,20 @@ export class UserData {
     setExpenseOptions(expenseOptions) {
         this.expenseOptions = new Options("expense-option", expenseOptions);
     }
-    setpaymentOptions(paymentOptions) {
+    setPaymentOptions(paymentOptions) {
         this.paymentOptions = new Options("payment-option", paymentOptions);
     }
 }
 
-export class Options {
+class Options {
     constructor(id, optionNames) {
         this.options = [];
-        this.defaultOptions = ["other"];
         this.id = id;
         this.addOptions(optionNames);
     }
     addOption(optionName) {
-        if (!this.defaultOptions.includes(optionName)) {
-            this.options.push(optionName);
-            this.options.sort();
-        }
+        this.options.push(optionName);
+        this.options.sort();
     }
     addOptions(optionNames) {
         for (let optionName of optionNames) {
@@ -64,12 +89,6 @@ export class Options {
         selectObj.append(baseOption);
 
         for (let option of this.options) {
-            const newOption = document.createElement("option");
-            newOption.value = option;
-            newOption.innerText = option;
-            selectObj.append(newOption);
-        }
-        for (let option of this.defaultOptions) {
             const newOption = document.createElement("option");
             newOption.value = option;
             newOption.innerText = option;

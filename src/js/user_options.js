@@ -133,7 +133,7 @@ const addIncome = (elementID) => {
 
     const subDiv3 = document.createElement("div");
     subDiv3.classList.add("form_element");
-    const category = incomeOptions.createElement();
+    const category = window.userData.incomeOptions.createElement();
     subDiv3.append(category);
     form.append(subDiv3);
 
@@ -191,13 +191,13 @@ const addExpense = (elementID) => {
 
     const subDiv3 = document.createElement("div");
     subDiv3.classList.add("form_element");
-    const paymentMethod = paymentOptions.createElement();
+    const paymentMethod = window.userData.paymentOptions.createElement();
     subDiv3.append(paymentMethod);
     form.append(subDiv3);
 
     const subDiv4 = document.createElement("div");
     subDiv4.classList.add("form_element");
-    const category = expenseOptions.createElement();
+    const category = window.userData.expenseOptions.createElement();
     subDiv4.append(category);
     form.append(subDiv4);
 
@@ -243,7 +243,7 @@ const changeSettings = (elementID) => {
     const paymentOptionsEdition = document.createElement("button");
     paymentOptionsEdition.addEventListener(
         "click",
-        () => {modifyOptions(elementID, paymentOptions)}
+        () => {modifyOptions(elementID, window.userData.incomeOptions)}
     );
     paymentOptionsEdition.textContent = "Edit Payment Options";
     divElement2.append(paymentOptionsEdition);
@@ -254,7 +254,7 @@ const changeSettings = (elementID) => {
     const incomeCategoriesEdition = document.createElement("button");
     incomeCategoriesEdition.addEventListener(
         "click",
-        () => {modifyOptions(elementID, incomeOptions)}
+        () => {modifyOptions(elementID, window.userData.incomeOptions)}
     );
     incomeCategoriesEdition.textContent = "Edit Income Categories";
     divElement3.append(incomeCategoriesEdition);
@@ -265,7 +265,7 @@ const changeSettings = (elementID) => {
     const expenseCategoriesEdition = document.createElement("button");
     expenseCategoriesEdition.addEventListener(
         "click",
-        () => {modifyOptions(elementID, expenseOptions)}
+        () => {modifyOptions(elementID, window.userData.expenseOptions)}
     );
     expenseCategoriesEdition.textContent = "Edit Expense Categories";
     divElement4.append(expenseCategoriesEdition);
@@ -277,43 +277,3 @@ const changeSettings = (elementID) => {
 window.addIncome = addIncome;
 window.addExpense = addExpense;
 window.changeSettings = changeSettings;
-
-
-// let userIDValue = "mich.wilcz";
-// const incomeOptions = new Options(
-//     "income-option", 
-//     [
-//         "bank interest", 
-//         "pay"
-//     ]
-// );
-// const paymentOptions = new Options(
-//     "payment-option", 
-//     [
-//         "cash",
-//         "credit card",
-//         "debit card",
-//     ]
-// );
-// const expenseOptions = new Options(
-//     "expense-option", 
-//     [
-//         "appartment",
-//         "books",
-//         "children",
-//         "clothes",
-//         "debts",
-//         "donation",
-//         "entertainment",
-//         "food",
-//         "healthcare",
-//         "internet",
-//         "phone",
-//         "savings",
-//         "training",
-//         "transport",
-//         "travel",
-//         "tv",
-//         "retirement",
-//     ]
-// );

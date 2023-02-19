@@ -7,8 +7,8 @@ It serves for:
     - storing temporary data from the session
 */
 import { clearBox, createUserElementwithLabel } from './utils.js';
-import { QueryAPI, getUserData} from './api_queries.js';
-import { UserData } from './user_data.js';
+import { QueryAPI} from './api_queries.js';
+import { UserData, readUserDataFromAPI, getUserData} from './user_data.js';
 
 
 // Global session values used by the program.
@@ -50,12 +50,7 @@ const clickLogin = async (form, div) => {
     )
     if (res.successful) {
         location.assign("/my-wallet/src/user_portal.php");
-        window.userData = new UserData(
-            userID = res.id,
-            username = res.userName,
-            incomes = res.userData,
-            expenses = res.userData
-        );
+        window.userData = readUserDataFromAPI(res);
     }
 }
 
@@ -159,6 +154,3 @@ window.registerUser = registerUser;
 window.logOut = logOut;
 window.runUserPortal = runUserPortal;
 window.showBalance = showBalance;
-window.addIncome = addIncome;
-window.addExpense = addExpense;
-window.changeSettings = changeSettings;

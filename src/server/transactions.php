@@ -61,7 +61,35 @@ function getTransactionOptionsForUser($dbConnect, $userID, $categoryType) {
         return $results;
         
     } catch (Exception $error) {
-        echo "Server error while creating default user categories";
+        echo "Server error while getting transaction options for the user";
+    }
+}
+
+function modifyTransactionOptionsForUser($dbConnect, $userID, $categoryType, $oldCategoryName, $newCategoryName=null) {
+    
+    $tableData = getCategoryTypeData($categoryType);
+    $userTable = $tableData['userTableName'];
+
+    try {
+        if (is_null($newCategoryName)) {
+            $query = $dbConnect->prepare("DELETE FROM $userTable WHERE user_id = :user_id AND name = :old_name");
+        } else {
+            $query = $dbConnect->prepare("UPDATE $userTable SET name = :name WHERE user_id = :user_id AND name = :old_name");
+            $query->bindValue(":name", $newCategoryName, PDO::PARAM_STR);
+        }
+        $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+        $query->bindValue(":old_name", $oldCategoryName, PDO::PARAM_STR);
+        $query->execute();
+        $categories = $query->fetchAll();
+        
+        $results = [];
+        foreach($categories as $category) {
+            array_push($results, $category["name"]);
+        }
+        return $results;
+        
+    } catch (Exception $error) {
+        echo "Server error while modifying transaction options for the user";
     }
 }
 
