@@ -9,7 +9,16 @@ export {getUserData, readUserDataFromAPI, UserData, Options}
 const getUserData = async () => {
     try {
         const res = await axios.post("/my-wallet/src/server/login.php", {});
-        const userData = readUserDataFromAPI(res.data);
+        const dictAPI = res.data;
+        const userData = new UserData(
+            dictAPI.id,
+            dictAPI.userName,
+            dictAPI.userData.incomeData.incomes,
+            dictAPI.userData.expenseData.expenses,
+            dictAPI.userData.incomeData.incomeOptions,
+            dictAPI.userData.expenseData.expenseOptions,
+            dictAPI.userData.expenseData.paymentOptions
+        );
         return userData;
     } catch (e) {
         console.log(
@@ -19,29 +28,36 @@ const getUserData = async () => {
     }
 }
 
-const readUserDataFromAPI = (dictAPI) => {
-    const userData = new UserData(
-        dictAPI.id,
-        dictAPI.userName,
-        dictAPI.userData.incomes,
-        dictAPI.userData.expenses
-    );
-    userData.setExpenseOptions(dictAPI.userData.expenseData.expenseOptions);
-    userData.setPaymentOptions(dictAPI.userData.expenseData.paymentOptions);
-    userData.setIncomeOptions(dictAPI.userData.incomeData.incomeOptions);
-    return userData;
-}
-
 class UserData {
-    incomeOptions = new Options("income-option", []);
-    expenseOptions = new Options("expense-option", []);
-    paymentOptions = new Options("payment-option", []);
 
-    constructor(userID, username, incomes=[], expenses=[]) {
+    constructor(
+        userID, 
+        username, 
+        incomes=[], 
+        expenses=[],
+        incomeOptions=new Options("income-option", []),
+        expenseOptions=new Options("expense-option", []),
+        paymentOptions=new Options("payment-option", [])
+    ) {
         this.userID = userID;
         this.username = username;
-        this.incomes = incomes;
-        this.expenses = expenses;
+        this.incomeOptions = incomeOptions;
+        this.expenseOptions = expenseOptions;
+        this.paymentOptions = paymentOptions;
+        this.incomes = this._aggregateTransactionData(incomes);
+        this.expenses = this._aggregateTransactionData(expenses);
+    }
+
+    _aggregateTransactionData(transactions) {
+        const transactionData = [];
+        for (const [_, element] of Object.entries(transactions)) {
+            const transactionRow = [];
+            for (const [count, value] of Object.entries(element)) {
+                transactionRow[count] = value;
+            }
+            transactionData.push(transactionRow);
+        }
+        return transactionData;
     }
 
     setIncomeOptions(incomeOptions) {
@@ -55,11 +71,45 @@ class UserData {
     }
 
     showIncomes() {
+        const mainDiv = document.createElement("div");
 
+        // Initialize the empty data set
+        const incomesToShow = [];
+        for (incomeOption of this.incomeOptions) {
+            incomesToShow[incomeOption] = [];
+        }
+        // Assign incomes to specific categories
+        for (income of this.incomes) {
+            let incomeCategory = income.category;
+            delete income.category;
+            incomesToShow[incomeCategory] = income;
+        }
+       
+        const table = document.createElement("table");
+        
+        // TODO: Create table with assigned incomes!
+        const tbl = document.createElement('table');
+        for (let i = 0; i < 3; i++) {
+            const tr = tbl.insertRow();
+            for (let j = 0; j < 2; j++) {
+              if (i === 2 && j === 1) {
+                break;
+              } else {
+                const td = tr.insertCell();
+                td.appendChild(document.createTextNode(`Cell I${i}/J${j}`));
+                td.style.border = '1px solid black';
+                if (i === 1 && j === 1) {
+                  td.setAttribute('rowSpan', '2');
+                }
+              }
+            }
+          }
+        mainDiv.append(tbl);
+        return mainDiv;
     }
-
+    
     showExpenses() {
-
+        // TODO: Create a table with expenses!!!
     }
 }
 

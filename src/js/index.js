@@ -39,6 +39,12 @@ const showBalance = (elementID) => {
     const header = document.createElement("h2");
     header.innerText = "Wallet balance:"
     document.querySelector(`#${elementID}`).append(header);
+
+    const incomeObj = window.userData.showIncomes();
+    document.querySelector(`#${elementID}`).append(incomeObj);
+
+    const expenseObj = window.userData.showExpenses();
+    document.querySelector(`#${elementID}`).append(expenseObj);
 }
 
 const clickLogin = async (form, div) => {
