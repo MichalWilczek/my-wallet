@@ -19,23 +19,46 @@ class UserData {
 	}
 }
 
-function getUserData($dbConnect, $userID) {
+function handleDates($dateFrom=null, $dateTo=null) {
+	$dates = [];
+
+	// Set first day of the current month
+	if (is_null($dateFrom)) {
+		$dates["from"] = date("Y-m")."-01";
+	} else {
+		$dates["from"] = $dateFrom;
+	}
+
+	// Set current day
+	if (is_null($dateTo)) {
+		$dates["to"] = date("Y-m-d");
+	} else {
+		$dates["to"] = $dateTo;
+	}
+
+	return $dates;
+}
+
+function getUserData($dbConnect, $userID, $dateFrom=null, $dateTo=null) {
+	$dates = handleDates($dateFrom, $dateTo);
 	$userData = [];
-	$userData['incomes'] = getIncomeData($dbConnect, $userID);
-	$userData['expenses'] = getExpenseData($dbConnect, $userID);
+	$userData['incomeData'] = getIncomeData($dbConnect, $userID, $dates["from"], $dates["to"]);
+	$userData['expenseData'] = getExpenseData($dbConnect, $userID, $dates["from"], $dates["to"]);
 	return $userData;
 }
 
-function getIncomeData($dbConnect, $userID) {
+function getIncomeData($dbConnect, $userID, $dateFrom, $dateTo) {
 	$incomeData = [];
 	$incomeData["incomeOptions"] = getTransactionOptionsForUser($dbConnect, $userID, "incomeTables");
+	$incomeData["incomes"] = getUserIncomeTransactions($dbConnect, $userID, $dateFrom, $dateTo);
 	return $incomeData;
 }
 
-function getExpenseData($dbConnect, $userID) {
+function getExpenseData($dbConnect, $userID, $dateFrom, $dateTo) {
 	$expenseData = [];
 	$expenseData["expenseOptions"] = getTransactionOptionsForUser($dbConnect, $userID, "expenseTables");
 	$expenseData["paymentOptions"] = getTransactionOptionsForUser($dbConnect, $userID, "paymentTables");
+	$expenseData["expenses"] = getUserExpenseTransactions($dbConnect, $userID, $dateFrom, $dateTo);
 	return $expenseData;
 }
 

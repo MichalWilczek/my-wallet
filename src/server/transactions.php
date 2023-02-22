@@ -229,17 +229,28 @@ function getUserExpenseTransactions($dbConnect, $userID, $dateFrom, $dateTo) {
 
 // session_start();
 // require_once("db.php");
-// // $apiResult = getUserIncomeTransactions(
-// //     connectToDB(),
-// //     60,
-// //     '2023-02-10',
-// //     '2023-02-17'
-// // );
+// require_once("user_data.php");
+// $apiResult = getUserIncomeTransactions(
+//     connectToDB(),
+//     60,
+//     '2023-02-10',
+//     '2023-02-17'
+// );
 // $apiResult = getUserExpenseTransactions(
 //     connectToDB(),
 //     60,
 //     '2023-02-10',
 //     '2023-02-17'
+// );
+// $dates = handleDates();
+// echo $dates["from"];
+// echo $dates["to"];
+
+// $apiResult = getUserExpenseTransactions(
+//     connectToDB(),
+//     60,
+//     $dates["from"],
+//     $dates["to"]
 // );
 
 // header("Content-Type: application/json");

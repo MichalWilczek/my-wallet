@@ -23,21 +23,21 @@ const readUserDataFromAPI = (dictAPI) => {
     const userData = new UserData(
         dictAPI.id,
         dictAPI.userName,
-        dictAPI.userData,
-        dictAPI.userData
+        dictAPI.userData.incomes,
+        dictAPI.userData.expenses
     );
-    userData.setExpenseOptions(dictAPI.userData.expenses.expenseOptions);
-    userData.setPaymentOptions(dictAPI.userData.expenses.paymentOptions);
-    userData.setIncomeOptions(dictAPI.userData.incomes.incomeOptions);
+    userData.setExpenseOptions(dictAPI.userData.expenseData.expenseOptions);
+    userData.setPaymentOptions(dictAPI.userData.expenseData.paymentOptions);
+    userData.setIncomeOptions(dictAPI.userData.incomeData.incomeOptions);
     return userData;
 }
 
 class UserData {
-    incomeOptions = null;
-    expenseOptions = null;
-    paymentOptions = null
+    incomeOptions = new Options("income-option", []);
+    expenseOptions = new Options("expense-option", []);
+    paymentOptions = new Options("payment-option", []);
 
-    constructor(userID, username, incomes, expenses) {
+    constructor(userID, username, incomes=[], expenses=[]) {
         this.userID = userID;
         this.username = username;
         this.incomes = incomes;
@@ -52,6 +52,14 @@ class UserData {
     }
     setPaymentOptions(paymentOptions) {
         this.paymentOptions = new Options("payment-option", paymentOptions);
+    }
+
+    showIncomes() {
+
+    }
+
+    showExpenses() {
+
     }
 }
 
