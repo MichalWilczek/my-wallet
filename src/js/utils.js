@@ -1,8 +1,12 @@
 /*
 This module useful objects to work on HTML format.
 */
-export {clearBox, createUserElementwithLabel}
+export {clearBox, createUserElementwithLabel, capitalizeFirstLetter}
 
+
+const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 const clearBox = (elementID) => {
     const element = document.querySelector(`#${elementID}`);

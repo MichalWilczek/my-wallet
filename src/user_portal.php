@@ -118,6 +118,7 @@ if (!isset($_SESSION["userData"])) {
             integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
             crossorigin="anonymous"></script>
         <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-2.18.2.min.js"></script>
         
         <script type="module" src="js/utils.js"></script>
         <script type="module" src="js/user_data.js"></script>

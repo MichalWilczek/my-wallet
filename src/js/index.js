@@ -8,7 +8,7 @@ It serves for:
 */
 import { clearBox, createUserElementwithLabel } from './utils.js';
 import { QueryAPI} from './api_queries.js';
-import { UserData, readUserDataFromAPI, getUserData} from './user_data.js';
+import { UserData, getUserData} from './user_data.js';
 
 
 // Global session values used by the program.
@@ -36,27 +36,47 @@ const showUserID = (elementID) => {
 const showBalance = (elementID) => {
     clearBox(elementID);
     window.scrollTo(0, 0);
+    const balanceDiv = document.querySelector(`#${elementID}`);
+
     const header = document.createElement("h2");
-    header.innerText = "Wallet balance:"
-    document.querySelector(`#${elementID}`).append(header);
+    header.innerText = "Wallet balance:";
+    balanceDiv.append(header);
+    balanceDiv.append(document.createElement("hr"));
+    window.userData.showIncomeExpenseSummaryChart(balanceDiv);
 
-    const incomeObj = window.userData.showIncomes();
-    document.querySelector(`#${elementID}`).append(incomeObj);
+    const incomeHeader = document.createElement("h3");
+    incomeHeader.innerText = "Income summary: ";
+    balanceDiv.append(incomeHeader);
+    balanceDiv.append(document.createElement("hr"));
+    window.userData.showIncomes(balanceDiv);
+    balanceDiv.append(document.createElement("hr"));
 
-    const expenseObj = window.userData.showExpenses();
-    document.querySelector(`#${elementID}`).append(expenseObj);
+    const expenseHeader = document.createElement("h3");
+    expenseHeader.innerText = "Expense summary: ";
+    balanceDiv.append(expenseHeader);
+    balanceDiv.append(document.createElement("hr"));
+    window.userData.showExpenses(balanceDiv);
+    balanceDiv.append(document.createElement("hr"));
 }
 
 const clickLogin = async (form, div) => {
     const loginQuery = new QueryAPI("You have been successfully logged in to your account!");
-    const res = await loginQuery.postForm(
+    const data = await loginQuery.postForm(
         "/my-wallet/src/server/login.php", 
         form,
         div
     )
-    if (res.successful) {
+    if (data.successful) {
         location.assign("/my-wallet/src/user_portal.php");
-        window.userData = readUserDataFromAPI(res);
+        window.userData = new UserData(
+            data.id,
+            data.userName,
+            data.userData.incomeData.incomes,
+            data.userData.expenseData.expenses,
+            data.userData.incomeData.incomeOptions,
+            data.userData.expenseData.expenseOptions,
+            data.userData.expenseData.paymentOptions
+        );
     }
 }
 

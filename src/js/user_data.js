@@ -3,7 +3,10 @@ This module stores objects to operate on:
     - general user data received from the server
     - options for income and expense settings
 */
-export {getUserData, readUserDataFromAPI, UserData, Options}
+import { capitalizeFirstLetter} from './utils.js';
+// import { config, actions } from './pie_chart.js'
+
+export { getUserData, UserData, Options }
 
 
 const getUserData = async () => {
@@ -30,34 +33,125 @@ const getUserData = async () => {
 
 class UserData {
 
+    GRAPH_LAYOUT = {
+        height: 400,
+        width: 400,
+        plot_bgcolor: '#f2efef',
+        paper_bgcolor: '#f2efef',
+        font: {
+            family: 'Arapey',
+            size: 14
+        }
+    }
+
     constructor(
         userID, 
         username, 
         incomes=[], 
         expenses=[],
-        incomeOptions=new Options("income-option", []),
-        expenseOptions=new Options("expense-option", []),
-        paymentOptions=new Options("payment-option", [])
+        incomeOptions=[],
+        expenseOptions=[],
+        paymentOptions=[]
     ) {
         this.userID = userID;
         this.username = username;
-        this.incomeOptions = incomeOptions;
-        this.expenseOptions = expenseOptions;
-        this.paymentOptions = paymentOptions;
-        this.incomes = this._aggregateTransactionData(incomes);
-        this.expenses = this._aggregateTransactionData(expenses);
+        this.incomeOptions = new Options("income-option", incomeOptions);
+        this.expenseOptions = new Options("expense-option", expenseOptions);
+        this.paymentOptions = new Options("payment-option", paymentOptions);
+        this.incomes = this._aggregateTransactionData(incomes, incomeOptions);
+        this.expenses = this._aggregateTransactionData(expenses, expenseOptions);
     }
 
-    _aggregateTransactionData(transactions) {
-        const transactionData = [];
+    _aggregateTransactionData(transactions, transactionOptions) {
+
+        // Initialize the empty data set
+        const transactionContainer = [];
+        for (let option of transactionOptions) {
+            transactionContainer[option] = [];
+        }
+
         for (const [_, element] of Object.entries(transactions)) {
             const transactionRow = [];
             for (const [count, value] of Object.entries(element)) {
                 transactionRow[count] = value;
             }
-            transactionData.push(transactionRow);
+            const tempCategory = transactionRow.category;
+            delete transactionRow.category;
+            transactionContainer[tempCategory].push(transactionRow);
         }
-        return transactionData;
+        return transactionContainer;
+    }
+
+    _summarizeTransactions(transactions) {
+        const transactionsSummary = [];
+        for (const [categoryTransactionName, categoryTransactions] of Object.entries(transactions)) {
+            const catTransactionName = capitalizeFirstLetter(categoryTransactionName);
+            let sum = 0;
+            for (let catTransaction of categoryTransactions) {
+                sum += parseFloat(catTransaction["amount"]);
+            }
+            if (sum > 0) {
+                transactionsSummary[catTransactionName] = sum.toFixed(2);
+            }
+        }
+        return transactionsSummary;
+    }
+
+    _createTable(transactions, transactionType) {
+
+        // All income data
+        const divAll = document.createElement("div");
+
+        // Different categories
+        for (const [categoryTransactionName, categoryTransactions] of Object.entries(transactions)) {
+            const catTransactionName = capitalizeFirstLetter(categoryTransactionName);
+            
+            // Add sum of for the category (only if transactions exist...)
+            let sum = 0;
+            for (let catTransaction of categoryTransactions) {
+                sum += parseFloat(catTransaction["amount"]);
+            }
+            if (sum > 0) {
+                const categorySummary = document.createElement("div");
+                categorySummary.classList.add("transaction_category")
+                const catSummarySpan = document.createElement("span");
+                catSummarySpan.textContent = `${catTransactionName}: ${sum.toFixed(2)}`;
+                categorySummary.append(catSummarySpan);
+                categorySummary.append(document.createElement("hr"));
+                divAll.append(categorySummary);
+            }
+            
+            // Add category elements
+            for (let catTransaction of categoryTransactions) {
+                const divRow = document.createElement("div");
+                divRow.id = `${transactionType}_${catTransaction["id"]}`;
+
+                const divDate = document.createElement("div");
+                divDate.classList.add("transaction_row");
+                const spanDate = document.createElement("span");
+                spanDate.textContent = catTransaction["issue_date"];
+                divDate.append(spanDate);
+                divRow.append(divDate);
+
+                const divAmount = document.createElement("div");
+                divAmount.classList.add("transaction_row");
+                const spanAmount = document.createElement("span");
+                spanAmount.textContent = catTransaction["amount"];
+                divAmount.append(spanAmount);
+                divRow.append(divAmount);
+
+                const divComment = document.createElement("div");
+                divComment.classList.add("transaction_row");
+                divComment.style = "width: 200px;"
+                const spanComment = document.createElement("span");
+                spanComment.textContent = catTransaction["comment"];
+                divComment.append(spanComment);
+                divRow.append(divComment);
+
+                divAll.append(divRow);
+            }
+        }
+        return divAll;
     }
 
     setIncomeOptions(incomeOptions) {
@@ -70,46 +164,64 @@ class UserData {
         this.paymentOptions = new Options("payment-option", paymentOptions);
     }
 
-    showIncomes() {
-        const mainDiv = document.createElement("div");
+    showIncomeExpenseSummaryChart(sectionDiv, idAddName="") {
+        const div = document.createElement("div");
+        div.id = `total_summary_chart_${idAddName}`;
+        div.classList.add("chart_local");
+        sectionDiv.append(div);
 
-        // Initialize the empty data set
-        const incomesToShow = [];
-        for (incomeOption of this.incomeOptions) {
-            incomesToShow[incomeOption] = [];
+        let totalIncome = 0;
+        const incomeSummary = this._summarizeTransactions(this.incomes);
+        for (const [_, value] of Object.entries(incomeSummary)) {
+            totalIncome += parseFloat(value);
         }
-        // Assign incomes to specific categories
-        for (income of this.incomes) {
-            let incomeCategory = income.category;
-            delete income.category;
-            incomesToShow[incomeCategory] = income;
+
+        let totalExpense = 0;
+        const expenseSummary = this._summarizeTransactions(this.expenses);
+        for (const [_, value] of Object.entries(expenseSummary)) {
+            totalExpense += parseFloat(value);
         }
-       
-        const table = document.createElement("table");
         
-        // TODO: Create table with assigned incomes!
-        const tbl = document.createElement('table');
-        for (let i = 0; i < 3; i++) {
-            const tr = tbl.insertRow();
-            for (let j = 0; j < 2; j++) {
-              if (i === 2 && j === 1) {
-                break;
-              } else {
-                const td = tr.insertCell();
-                td.appendChild(document.createTextNode(`Cell I${i}/J${j}`));
-                td.style.border = '1px solid black';
-                if (i === 1 && j === 1) {
-                  td.setAttribute('rowSpan', '2');
-                }
-              }
-            }
-          }
-        mainDiv.append(tbl);
-        return mainDiv;
+        const data = [{
+            x: ['Total income', 'Total expenses'],
+            y: [totalIncome, totalExpense],
+            type: 'bar'
+        }];
+        
+        const layout = this.GRAPH_LAYOUT;
+        Plotly.newPlot(div.id, data, layout);
+    }
+
+    showPieChart(sectionDiv, transactions, idAddName="") {
+        const div = document.createElement("div");
+        div.id = `balance_chart_${idAddName}`;
+        div.classList.add("chart_local");
+        sectionDiv.append(div);
+
+        const transactionsSummary = this._summarizeTransactions(transactions);
+        const data = [{
+            type: "pie",
+            values: Object.values(transactionsSummary),
+            labels: Object.keys(transactionsSummary),
+            textinfo: "label+percent",
+            textposition: "outside",
+            automargin: true
+        }]
+          
+        const layout = this.GRAPH_LAYOUT;
+        layout["showlegend"] = true;
+        layout["margin"] = {"t": 0, "b": 0, "l": 0, "r": 0};
+        Plotly.newPlot(div.id, data, layout);
+    }
+
+    showIncomes(sectionDiv) {
+        this.showPieChart(sectionDiv, this.incomes, "incomes");
+        sectionDiv.append(this._createTable(this.incomes, "incomes"));
     }
     
-    showExpenses() {
-        // TODO: Create a table with expenses!!!
+    showExpenses(sectionDiv) {
+        this.showPieChart(sectionDiv, this.expenses, "expenses");
+        sectionDiv.append(this._createTable(this.expenses, "expenses"));
     }
 }
 

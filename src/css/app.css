@@ -7,7 +7,7 @@ html {
 body {
     background-color: #f2efef;
     color: #000000;
-    font-family: 'Arapey', 'Open Sans', serif;
+    font-family: 'Arapey', 'Open Sans', 'serif';
 }
 
 #upper_nav_bar {
@@ -25,7 +25,7 @@ div.upper_nav_bar_logout {
 
 main {
     text-align: center;
-    height: 1200px;
+    min-height: 1200px;
 }
 
 main img {
@@ -36,6 +36,38 @@ main img {
 div.form_element {
     margin: 5px auto 25px auto;
     text-align: center;
+}
+
+div.chart_local {
+    text-align: center;
+}
+
+div.transaction_category {
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+hr {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    border-top: 2px solid black;
+}
+
+div.transaction_category hr {
+    width: 50%;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border-top: 1px solid black;
+}
+
+div.transaction_row {
+    display: inline-block;
+    text-align: left;
+    height: 15px;
+    width: 100px;
 }
 
 .clickable_span {
