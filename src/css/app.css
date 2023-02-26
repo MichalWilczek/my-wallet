@@ -38,10 +38,6 @@ div.form_element {
     text-align: center;
 }
 
-div.chart_local {
-    text-align: center;
-}
-
 div.transaction_category {
     font-size: 1.2em;
     text-align: center;
@@ -66,7 +62,9 @@ div.transaction_category hr {
 div.transaction_row {
     display: inline-block;
     text-align: left;
-    height: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 20px;
     width: 100px;
 }
 

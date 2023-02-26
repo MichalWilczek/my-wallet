@@ -1,11 +1,9 @@
 /*
 This module stores objects to operate on: 
-    - general user data received from the server
+    - user data received from the server
     - options for income and expense settings
 */
 import { capitalizeFirstLetter} from './utils.js';
-// import { config, actions } from './pie_chart.js'
-
 export { getUserData, UserData, Options }
 
 
@@ -32,17 +30,6 @@ const getUserData = async () => {
 }
 
 class UserData {
-
-    GRAPH_LAYOUT = {
-        height: 400,
-        width: 400,
-        plot_bgcolor: '#f2efef',
-        paper_bgcolor: '#f2efef',
-        font: {
-            family: 'Arapey',
-            size: 14
-        }
-    }
 
     constructor(
         userID, 
@@ -166,7 +153,7 @@ class UserData {
 
     showIncomeExpenseSummaryChart(sectionDiv, idAddName="") {
         const div = document.createElement("div");
-        div.id = `total_summary_chart_${idAddName}`;
+        div.id = `total_summary_chart${idAddName}`;
         div.classList.add("chart_local");
         sectionDiv.append(div);
 
@@ -182,19 +169,40 @@ class UserData {
             totalExpense += parseFloat(value);
         }
         
-        const data = [{
-            x: ['Total income', 'Total expenses'],
-            y: [totalIncome, totalExpense],
-            type: 'bar'
-        }];
+        const data = [
+            {
+                x: ['Total income'],
+                y: [totalIncome],
+                type: 'bar'
+            },
+            {
+                x: ['Total expenses'],
+                y: [totalExpense],
+                type: 'bar'
+            },
+        ];
         
-        const layout = this.GRAPH_LAYOUT;
+        const layout = {
+            showlegend: false,
+            colorway: ['green', 'red'],
+            height: 400,
+            width: 400,
+            plot_bgcolor: '#f2efef',
+            paper_bgcolor: '#f2efef',
+            font: {
+                family: 'Arapey',
+                size: 14
+            }
+        };
         Plotly.newPlot(div.id, data, layout);
+        // Center plotly graph...
+        const divPlotly = document.querySelector(`#${div.id} .user-select-none.svg-container`);
+        divPlotly.style.margin = "auto";
     }
 
     showPieChart(sectionDiv, transactions, idAddName="") {
         const div = document.createElement("div");
-        div.id = `balance_chart_${idAddName}`;
+        div.id = `balance_chart${idAddName}`;
         div.classList.add("chart_local");
         sectionDiv.append(div);
 
@@ -208,19 +216,28 @@ class UserData {
             automargin: true
         }]
           
-        const layout = this.GRAPH_LAYOUT;
-        layout["showlegend"] = true;
-        layout["margin"] = {"t": 0, "b": 0, "l": 0, "r": 0};
+        const layout = {
+            showlegend: false,
+            height: 300,
+            width: 300,
+            plot_bgcolor: '#f2efef',
+            paper_bgcolor: '#f2efef',
+            margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
+            font: { family: 'Arapey', size: 14 }
+        };
         Plotly.newPlot(div.id, data, layout);
+        // Center plotly graph...
+        const divPlotly = document.querySelector(`#${div.id} .user-select-none.svg-container`);
+        divPlotly.style.margin = "auto";
     }
 
     showIncomes(sectionDiv) {
-        this.showPieChart(sectionDiv, this.incomes, "incomes");
+        this.showPieChart(sectionDiv, this.incomes, "_incomes");
         sectionDiv.append(this._createTable(this.incomes, "incomes"));
     }
     
     showExpenses(sectionDiv) {
-        this.showPieChart(sectionDiv, this.expenses, "expenses");
+        this.showPieChart(sectionDiv, this.expenses, "_expenses");
         sectionDiv.append(this._createTable(this.expenses, "expenses"));
     }
 }
