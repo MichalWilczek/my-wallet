@@ -38,9 +38,6 @@ function loginToAccount() {
 	}
 }
 
-// $dateFrom = "2023-02-01";
-// $dateTo = "2023-02-28";
-
 session_start();
 
 if (isset($_SESSION["userID"]) && isset($_SESSION["loggedInUsername"])) {
@@ -55,12 +52,6 @@ if (isset($_SESSION["userID"]) && isset($_SESSION["loggedInUsername"])) {
 	} else {
 		$dateTo = null;
 	}
-
-	// $dateFrom = "2023-02-01";
-	// $dateTo = "2023-02-28";
-
-	// echo gettype($dateFrom)."\n \n";
-	// echo $dateTo."\n \n";
 
 	try {
 		$dbConnect = connectToDB();

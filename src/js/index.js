@@ -55,11 +55,13 @@ const showBalanceSheet = (elementID) => {
     balanceDiv.append(document.createElement("hr"));
 
     showBalance(undefined, balanceDiv);
+    // showBalance(window.userData, balanceDiv);
 }
 
 const showBalance = (userData=null, sectionDiv=null) => {
 
     if (userData !== null) {
+    // if (userData === null) {
         window.userData = userData;
     }
 
@@ -74,22 +76,28 @@ const showBalance = (userData=null, sectionDiv=null) => {
     if (sectionDiv !== null) {
         sectionDiv.append(balanceDiv);
     }
-    window.userData.showIncomeExpenseSummaryChart(balanceDiv);
 
-    const incomeHeader = document.createElement("h3");
-    incomeHeader.innerText = "Income summary";
-    balanceDiv.append(incomeHeader);
-    balanceDiv.append(document.createElement("hr"));
-    window.userData.showIncomes(balanceDiv);
-    balanceDiv.append(document.createElement("hr"));
+    const balanceSummary = window.userData.showIncomeExpenseSummaryChart(balanceDiv);
 
-    const expenseHeader = document.createElement("h3");
-    expenseHeader.innerText = "Expense summary";
-    balanceDiv.append(expenseHeader);
-    balanceDiv.append(document.createElement("hr"));
-    window.userData.showExpenses(balanceDiv);
-    balanceDiv.append(document.createElement("hr"));  
-    return balanceDiv;  
+    if (balanceSummary['totalIncome'] > 0) {
+        const incomeHeader = document.createElement("h3");
+        incomeHeader.innerText = "Income summary";
+        balanceDiv.append(incomeHeader);
+        balanceDiv.append(document.createElement("hr"));
+        window.userData.showIncomes(balanceDiv);
+        balanceDiv.append(document.createElement("hr"));
+    }
+
+    if (balanceSummary['totalExpense'] > 0) {
+        const expenseHeader = document.createElement("h3");
+        expenseHeader.innerText = "Expense summary";
+        balanceDiv.append(expenseHeader);
+        balanceDiv.append(document.createElement("hr"));
+        window.userData.showExpenses(balanceDiv);
+        balanceDiv.append(document.createElement("hr"));  
+    }
+
+    return balanceDiv; 
 }
 
 const clickLogin = async (form, div) => {

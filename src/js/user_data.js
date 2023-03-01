@@ -11,8 +11,12 @@ const getUserData = async (dateFrom=null, dateTo=null) => {
 
     try {
         const params = new URLSearchParams();
-        params.append('dateFrom', dateFrom);
-        params.append('dateTo', dateTo);  
+        if (dateFrom !== null) {
+            params.append('dateFrom', dateFrom);
+        }
+        if (dateTo !== null) {
+            params.append('dateTo', dateTo);  
+        }
         const res = await axios.post(
             "/my-wallet/src/server/login.php", 
             params
@@ -189,6 +193,15 @@ class UserData {
             totalExpense += parseFloat(value);
         }
 
+        if (totalIncome === 0 && totalExpense === 0) {
+            const msg = "There are no transactions to show for the chosen period.";
+            spanInfo.textContent = msg;
+            return {
+                totalIncome: totalIncome,
+                totalExpense: totalExpense
+            }
+        } 
+        
         if (totalIncome >= totalExpense) {
             spanInfo.textContent = "Bravo! You manage your finances very well in the specified period!";
             spanInfo.style.color = "green";
@@ -224,6 +237,10 @@ class UserData {
         // Center plotly graph...
         const divPlotly = document.querySelector(`#${div.id} .user-select-none.svg-container`);
         divPlotly.style.margin = "auto";
+        return {
+            totalIncome: totalIncome,
+            totalExpense: totalExpense
+        }
     }
 
     showPieChart(sectionDiv, transactions, idAddName="") {

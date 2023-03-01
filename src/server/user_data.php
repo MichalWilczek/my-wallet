@@ -23,14 +23,14 @@ function handleDates($dateFrom=null, $dateTo=null) {
 	$dates = [];
 
 	// Set first day of the current month
-	if (is_null($dateFrom)) {
+	if (is_null($dateFrom) || $dateFrom == "") {
 		$dates["from"] = date("Y-m")."-01";
 	} else {
 		$dates["from"] = $dateFrom;
 	}
 
 	// Set current day
-	if (is_null($dateTo)) {
+	if (is_null($dateTo) || $dateTo == "") {
 		$dates["to"] = date("Y-m-d");
 	} else {
 		$dates["to"] = $dateTo;
