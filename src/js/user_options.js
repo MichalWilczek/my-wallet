@@ -7,11 +7,11 @@ In this module, we put a set of user options such as:
         - modify income and expense options
 */
 import { clearBox, createUserElementwithLabel } from './utils.js';
-import { QueryAPI } from './api_queries.js';
+import { FormAPI } from './form_api.js';
 
 
 const clickAddTransaction = async (form, div) => {
-    const transactionQuery = new QueryAPI("You have successfully added a transaction!");
+    const transactionQuery = new FormAPI("You have successfully added a transaction!");
     const res = await transactionQuery.postForm(
         "/my-wallet/src/server/transaction_input.php", 
         form,

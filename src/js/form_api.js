@@ -1,10 +1,10 @@
 /*
 This module stores queries for getting data from the server.
 */
-export {QueryAPI}
+export {FormAPI}
 
 
-class QueryAPI {
+class FormAPI {
     constructor(successMsg, switchPage=false) {
         this.successMsg = successMsg;
         this.switchPage = switchPage;

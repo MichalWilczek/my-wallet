@@ -7,19 +7,25 @@ It serves for:
     - storing temporary data from the session
 */
 import { clearBox, createUserElementwithLabel } from './utils.js';
-import { QueryAPI} from './api_queries.js';
+import { FormAPI } from './form_api.js';
 import { UserData, getUserData} from './user_data.js';
+import { BalanceOptions } from './period_options.js';
+export { showBalance }
 
 
 // Global session values used by the program.
 window.userData = UserData;
 
-
-const runUserPortal = async (userElementID, pageContentID) => {
+const runUserPortal = async (
+    userElementID='upper_nav_bar_span_id', 
+    pageContentID='main_page_content',
+    dateFrom=null,
+    dateTo=null
+) => {
     try {
-        window.userData = await getUserData();
+        window.userData = await getUserData(dateFrom, dateTo);
         showUserID(userElementID);
-        showBalance(pageContentID);
+        showBalanceSheet(pageContentID);
     } catch (e) {
         console.log(
             "Unexpected error occured while ploting the user webpage."
@@ -33,34 +39,61 @@ const showUserID = (elementID) => {
     spanElement.textContent = `Welcome ${window.userData.username}`;
 }
 
-const showBalance = (elementID) => {
+const showBalanceSheet = (elementID) => {
     clearBox(elementID);
     window.scrollTo(0, 0);
-    const balanceDiv = document.querySelector(`#${elementID}`);
 
+    const balanceDiv = document.querySelector(`#${elementID}`);
     const header = document.createElement("h2");
-    header.innerText = "Wallet balance:";
+    header.innerText = "Wallet balance";
+
+    const optionsElement = new BalanceOptions().createSelectOption();
+    const divPeriod = document.createElement('div');
+    divPeriod.append(optionsElement);
+    balanceDiv.append(divPeriod);
     balanceDiv.append(header);
     balanceDiv.append(document.createElement("hr"));
+
+    showBalance(undefined, balanceDiv);
+}
+
+const showBalance = (userData=null, sectionDiv=null) => {
+
+    if (userData !== null) {
+        window.userData = userData;
+    }
+
+    const mainDivNameID = "balance_summary_div_id";
+    let balanceDiv = document.querySelector(`#${mainDivNameID}`);
+    if (balanceDiv === null) {
+        balanceDiv = document.createElement("div");
+        balanceDiv.id = mainDivNameID;
+    } else {
+        clearBox(mainDivNameID);
+    }
+    if (sectionDiv !== null) {
+        sectionDiv.append(balanceDiv);
+    }
     window.userData.showIncomeExpenseSummaryChart(balanceDiv);
 
     const incomeHeader = document.createElement("h3");
-    incomeHeader.innerText = "Income summary: ";
+    incomeHeader.innerText = "Income summary";
     balanceDiv.append(incomeHeader);
     balanceDiv.append(document.createElement("hr"));
     window.userData.showIncomes(balanceDiv);
     balanceDiv.append(document.createElement("hr"));
 
     const expenseHeader = document.createElement("h3");
-    expenseHeader.innerText = "Expense summary: ";
+    expenseHeader.innerText = "Expense summary";
     balanceDiv.append(expenseHeader);
     balanceDiv.append(document.createElement("hr"));
     window.userData.showExpenses(balanceDiv);
-    balanceDiv.append(document.createElement("hr"));
+    balanceDiv.append(document.createElement("hr"));  
+    return balanceDiv;  
 }
 
 const clickLogin = async (form, div) => {
-    const loginQuery = new QueryAPI("You have been successfully logged in to your account!");
+    const loginQuery = new FormAPI("You have been successfully logged in to your account!");
     const data = await loginQuery.postForm(
         "/my-wallet/src/server/login.php", 
         form,
@@ -161,7 +194,7 @@ const registerUser = (elementID) => {
         if(msgFromPrevIteration!==null) {
             msgFromPrevIteration.remove()
         }
-        const registrationQuery = new QueryAPI("Your account has been successfully created!");
+        const registrationQuery = new FormAPI("Your account has been successfully created!");
         registrationQuery.postForm(
             "/my-wallet/src/server/registration.php", 
             form,

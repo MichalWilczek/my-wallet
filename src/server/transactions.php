@@ -169,7 +169,7 @@ function getUserExpenseTransactions($dbConnect, $userID, $dateFrom, $dateTo) {
                     "issue_date" => $row["date_of_expense"],
                     "category" => $row["expense_category"],
                     "payment_method" => $row["payment_method"],
-                    "comment" => "expense_comment"
+                    "comment" => $row["expense_comment"]
                 ]
             );
         }

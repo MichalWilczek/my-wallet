@@ -23,7 +23,8 @@ function loginToAccount() {
 				$username,
 				getUserData($dbConnect, $userData['id'])
 			);
-			$_SESSION["userData"] = $tempLoginData;
+			$_SESSION["userID"] = $userData['id'];
+			$_SESSION["loggedInUsername"] = $username;
 			return $tempLoginData;
 		} else {
 			$tempLoginData = new UserData(false);
@@ -37,12 +38,45 @@ function loginToAccount() {
 	}
 }
 
+// $dateFrom = "2023-02-01";
+// $dateTo = "2023-02-28";
+
 session_start();
-if (isset($_SESSION["userData"])) {
-	$sessionUserData = $_SESSION["userData"];
-	if ($sessionUserData->successful) {
-		$apiResult = (array) $sessionUserData;
+
+if (isset($_SESSION["userID"]) && isset($_SESSION["loggedInUsername"])) {
+	
+	if (isset($_POST["dateFrom"])) {
+		$dateFrom = filter_input(INPUT_POST, "dateFrom");
+	} else {
+		$dateFrom = null;
 	}
+	if (isset($_POST["dateTo"])) {
+		$dateTo = filter_input(INPUT_POST, "dateTo");
+	} else {
+		$dateTo = null;
+	}
+
+	// $dateFrom = "2023-02-01";
+	// $dateTo = "2023-02-28";
+
+	// echo gettype($dateFrom)."\n \n";
+	// echo $dateTo."\n \n";
+
+	try {
+		$dbConnect = connectToDB();
+		$userData = getUserData($dbConnect, $_SESSION["userID"], $dateFrom, $dateTo);
+		$sessionUserData = new UserData(
+			true, 
+			$_SESSION["userID"], 
+			$_SESSION["loggedInUsername"],
+			$userData
+		);
+	} catch (Exception $error) {
+		$sessionUserData = new UserData(false);
+		$sessionUserData->errors["unknown_error"] = "Unexpexted error ocurred. ";
+	}
+	$apiResult = (array) $sessionUserData;
+
 } else {
 	if (isset($_POST["username"]) && isset($_POST["password"])) {
 		$loginData = loginToAccount();

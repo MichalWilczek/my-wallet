@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION["userData"])) {
+if (isset($_SESSION["userID"]) && isset($_SESSION["loggedInUsername"])) {
     header("Location: user_portal.php");
     exit();
 }
@@ -87,9 +87,10 @@ if (isset($_SESSION["userData"])) {
         
         <script type="module" src="js/utils.js"></script>
         <script type="module" src="js/user_data.js"></script>
-        <script type="module" src="js/api_queries.js"></script>
+        <script type="module" src="js/form_api.js"></script>
         <script type="module" src="js/index.js"></script>
         <script type="module" src="js/user_options.js"></script>
+        <script type="module" src="js/period_options.js"></script>
 
     </body>
 </html>

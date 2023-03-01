@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION["userData"])) {
+if (!isset($_SESSION["userID"]) && !isset($_SESSION["loggedInUsername"])) {
     header("Location: index.php");
     exit();
 }
@@ -30,7 +30,7 @@ if (!isset($_SESSION["userData"])) {
         </style>
     </head>
     <body
-        onload="runUserPortal('upper_nav_bar_span_id', 'main_page_content');">
+        onload="runUserPortal();">
         <nav class="navbar navbar-expand-md sticky-top p-1" id="upper_nav_bar">
             <div class="container-fluid">
                 <a class="navbar-brand" href="user_portal.php">
@@ -59,7 +59,7 @@ if (!isset($_SESSION["userData"])) {
                             data-bs-toggle="collapse" 
                             data-bs-target=".navbar-collapse.show"
                             aria-current="page"
-                            onclick="showBalance('main_page_content');"
+                            onclick="runUserPortal();"
                             >Home</a
                         >
                         <a
@@ -122,9 +122,10 @@ if (!isset($_SESSION["userData"])) {
         
         <script type="module" src="js/utils.js"></script>
         <script type="module" src="js/user_data.js"></script>
-        <script type="module" src="js/api_queries.js"></script>
+        <script type="module" src="js/form_api.js"></script>
         <script type="module" src="js/index.js"></script>
         <script type="module" src="js/user_options.js"></script>
+        <script type="module" src="js/period_options.js"></script>
         
     </body>
 </html>

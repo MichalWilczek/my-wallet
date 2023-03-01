@@ -171,12 +171,9 @@ $result = [
 ];
 
 session_start();
-if (isset($_SESSION["userData"])) {
-    $sessionUserData = $_SESSION["userData"];
+if (isset($_SESSION["userID"]) && isset($_SESSION["loggedInUsername"])) {
     try {
-        if ($sessionUserData->successful) {
-            $result = addTransaction($sessionUserData->id);
-        }
+        $result = addTransaction($_SESSION["userID"]);
     } catch (Exception $error) {
         $result["errors"]["transaction_error"] = "Failed to add transaction.";
     }

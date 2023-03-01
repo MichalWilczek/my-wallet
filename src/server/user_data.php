@@ -42,6 +42,10 @@ function handleDates($dateFrom=null, $dateTo=null) {
 function getUserData($dbConnect, $userID, $dateFrom=null, $dateTo=null) {
 	$dates = handleDates($dateFrom, $dateTo);
 	$userData = [];
+	$userData['dates'] = [
+		'from' => $dates["from"],
+		'to' => $dates["to"]
+	];
 	$userData['incomeData'] = getIncomeData($dbConnect, $userID, $dates["from"], $dates["to"]);
 	$userData['expenseData'] = getExpenseData($dbConnect, $userID, $dates["from"], $dates["to"]);
 	return $userData;

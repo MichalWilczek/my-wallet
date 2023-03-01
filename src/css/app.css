@@ -60,11 +60,13 @@ div.transaction_category hr {
 }
 
 div.transaction_row {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+div.transaction_cell {
     display: inline-block;
     text-align: left;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    height: 20px;
     width: 100px;
 }
 

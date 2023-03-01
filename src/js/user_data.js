@@ -7,20 +7,31 @@ import { capitalizeFirstLetter} from './utils.js';
 export { getUserData, UserData, Options }
 
 
-const getUserData = async () => {
+const getUserData = async (dateFrom=null, dateTo=null) => {
+
     try {
-        const res = await axios.post("/my-wallet/src/server/login.php", {});
-        const dictAPI = res.data;
-        const userData = new UserData(
-            dictAPI.id,
-            dictAPI.userName,
-            dictAPI.userData.incomeData.incomes,
-            dictAPI.userData.expenseData.expenses,
-            dictAPI.userData.incomeData.incomeOptions,
-            dictAPI.userData.expenseData.expenseOptions,
-            dictAPI.userData.expenseData.paymentOptions
+        const params = new URLSearchParams();
+        params.append('dateFrom', dateFrom);
+        params.append('dateTo', dateTo);  
+        const res = await axios.post(
+            "/my-wallet/src/server/login.php", 
+            params
         );
-        return userData;
+        const dictAPI = res.data;
+        if (dictAPI.successful) {
+            const userData = new UserData(
+                dictAPI.id,
+                dictAPI.userName,
+                dictAPI.userData.incomeData.incomes,
+                dictAPI.userData.expenseData.expenses,
+                dictAPI.userData.incomeData.incomeOptions,
+                dictAPI.userData.expenseData.expenseOptions,
+                dictAPI.userData.expenseData.paymentOptions
+            );
+            return userData;
+        } else {
+            throw new Exception(`User data from: '${dateFrom}' to: '${dateTo}' where not successfully queried from the server.`);
+        }
     } catch (e) {
         console.log(
             "Unexpected error occured while querying data of the logged in user from server."
@@ -111,24 +122,25 @@ class UserData {
             // Add category elements
             for (let catTransaction of categoryTransactions) {
                 const divRow = document.createElement("div");
+                divRow.classList.add("transaction_row");
                 divRow.id = `${transactionType}_${catTransaction["id"]}`;
 
                 const divDate = document.createElement("div");
-                divDate.classList.add("transaction_row");
+                divDate.classList.add("transaction_cell");
                 const spanDate = document.createElement("span");
                 spanDate.textContent = catTransaction["issue_date"];
                 divDate.append(spanDate);
                 divRow.append(divDate);
 
                 const divAmount = document.createElement("div");
-                divAmount.classList.add("transaction_row");
+                divAmount.classList.add("transaction_cell");
                 const spanAmount = document.createElement("span");
                 spanAmount.textContent = catTransaction["amount"];
                 divAmount.append(spanAmount);
                 divRow.append(divAmount);
 
                 const divComment = document.createElement("div");
-                divComment.classList.add("transaction_row");
+                divComment.classList.add("transaction_cell");
                 divComment.style = "width: 200px;"
                 const spanComment = document.createElement("span");
                 spanComment.textContent = catTransaction["comment"];
@@ -152,10 +164,18 @@ class UserData {
     }
 
     showIncomeExpenseSummaryChart(sectionDiv, idAddName="") {
+        const mainDiv = document.createElement('div');
+
+        const mainInfoDiv = document.createElement('div');
+        const spanInfo = document.createElement('span');
+        mainInfoDiv.append(spanInfo);
+        
         const div = document.createElement("div");
         div.id = `total_summary_chart${idAddName}`;
         div.classList.add("chart_local");
-        sectionDiv.append(div);
+        mainDiv.append(div);
+        mainDiv.append(mainInfoDiv);
+        sectionDiv.append(mainDiv);
 
         let totalIncome = 0;
         const incomeSummary = this._summarizeTransactions(this.incomes);
@@ -167,6 +187,14 @@ class UserData {
         const expenseSummary = this._summarizeTransactions(this.expenses);
         for (const [_, value] of Object.entries(expenseSummary)) {
             totalExpense += parseFloat(value);
+        }
+
+        if (totalIncome >= totalExpense) {
+            spanInfo.textContent = "Bravo! You manage your finances very well in the specified period!";
+            spanInfo.style.color = "green";
+        } else {
+            spanInfo.textContent = "Oh no... you are in debt in the specified period!";
+            spanInfo.style.color = "red";
         }
         
         const data = [
@@ -185,14 +213,12 @@ class UserData {
         const layout = {
             showlegend: false,
             colorway: ['green', 'red'],
-            height: 400,
+            height: 300,
             width: 400,
             plot_bgcolor: '#f2efef',
             paper_bgcolor: '#f2efef',
-            font: {
-                family: 'Arapey',
-                size: 14
-            }
+            margin: { "t": 15, "b": 30 },
+            font: { family: 'Arapey', size: 14 }
         };
         Plotly.newPlot(div.id, data, layout);
         // Center plotly graph...
@@ -219,7 +245,7 @@ class UserData {
         const layout = {
             showlegend: false,
             height: 300,
-            width: 300,
+            width: 400,
             plot_bgcolor: '#f2efef',
             paper_bgcolor: '#f2efef',
             margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
