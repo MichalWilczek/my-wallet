@@ -55,13 +55,11 @@ const showBalanceSheet = (elementID) => {
     balanceDiv.append(document.createElement("hr"));
 
     showBalance(undefined, balanceDiv);
-    // showBalance(window.userData, balanceDiv);
 }
 
 const showBalance = (userData=null, sectionDiv=null) => {
 
     if (userData !== null) {
-    // if (userData === null) {
         window.userData = userData;
     }
 
