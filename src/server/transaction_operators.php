@@ -4,21 +4,8 @@ require_once("user_data.php");
 require_once("transactions.php");
 
 
-interface TransactionOperator {
-
-    // Operations for input data validation
-    function validateInputForAddingTransaction();
-    function validateInputForDeletingTransaction();
-    function validateInputForModifyingTransaction();
-    
-    // Operations in database
-    function saveTransactionToDB($dbConnect, $userID);
-    function deleteTransactionInDB($dbConnect, $userID, $transactionID);
-    function modifyTransactionInDB($dbConnect, $userID, $transactionID);
-}
-
-class IncomeOperator implements TransactionOperator {
-	protected $amount;
+class IncomeDataValidator {
+    protected $amount;
     protected $date;
     protected $type;
     protected $comment;
@@ -29,55 +16,24 @@ class IncomeOperator implements TransactionOperator {
     function __construct() {
         $this->typeName = "income";
     }
-    function validateInputForAddingTransaction() {
-        $this->validateAmount();
-        $this->validateDate();
-        $this->validateType();
-        $this->validateComment();
+
+    function getAmount() {
+        return $this->amount;
+    }
+    function getDate() {
+        return $this->date;
+    }
+    function getType() {
+        return $this->type;
+    }
+    function getComment() {
+        return $this->comment;
+    }
+    function getTransactionID() {
+        return $this->transactionID;
+    }
+    function getErrors() {
         return $this->inputErrors;
-    }
-    function validateInputForDeletingTransaction() {
-        $this->validateTransactionID();
-        return $this->inputErrors;
-    }
-    function validateInputForModifyingTransaction() {
-
-    }
-
-    function saveTransactionToDB($dbConnect, $userID) {
-
-        try {
-            $incomeCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "incomeTables", $this->type);
-            $query = $dbConnect->prepare("INSERT INTO incomes VALUES (NULL, :user_id, :income_category_assigned_to_user_id, :amount, :date_of_income, :income_comment)");
-            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
-            $query->bindValue(":income_category_assigned_to_user_id", $incomeCategoryID, PDO::PARAM_INT);
-            $query->bindValue(":amount", $this->amount);
-            $query->bindValue(":date_of_income", $this->date, PDO::PARAM_STR);
-            $query->bindValue(":income_comment", $this->comment, PDO::PARAM_STR);
-            $query->execute();
-            return [];
-
-        } catch (Exception $error) {
-            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
-            return $errors;
-        }
-    }
-
-    function deleteTransactionInDB($dbConnect, $userID, $transactionID) {
-        try {
-            $query = $dbConnect->prepare("DELETE FROM incomes WHERE id=:transactionID AND user_id=:userID");
-            $query->bindValue(":transactionID", $transactionID, PDO::PARAM_INT);
-            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
-            $query->execute();
-            return [];
-        } catch (Exception $error) {
-            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, delete income transaction at another time.";
-            return $errors;
-        }
-    }
-
-    function modifyTransactionInDB($dbConnect, $userID, $transactionID) {
-
     }
 
     function validateAmount() {
@@ -97,7 +53,6 @@ class IncomeOperator implements TransactionOperator {
     }
 
     function validateType() {
-
         $this->type = filter_input(INPUT_POST, "{$this->typeName}-option");
         if ($this->type == "{$this->typeName}-option") {
             $this->inputErrors["{$this->typeName}_option"] = "You did not specify the {$this->typeName} option.";
@@ -125,53 +80,16 @@ class IncomeOperator implements TransactionOperator {
     }
 }
 
-class ExpenseOperator extends IncomeOperator {
-
+class ExpenseDataValidator extends IncomeDataValidator {
+    
     protected $paymentOption;
 
     function __construct() {
         $this->typeName = "expense";
     }
 
-    function validateInputForAddingTransaction() {
-        parent::validateInputForAddingTransaction();
-        $this->validatePaymentOption();
-        return $this->inputErrors;
-    }
-
-    function saveTransactionToDB($dbConnect, $userID) {
-
-        try {
-            $expenseCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "expenseTables", $this->type);
-            $paymentOptionID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "paymentTables", $this->paymentOption);
-            $query = $dbConnect->prepare("INSERT INTO expenses VALUES (NULL, :user_id, :expense_category_assigned_to_user_id, :payment_method_assigned_to_user_id, :amount, :date_of_expense, :expense_comment)");
-            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
-            $query->bindValue(":expense_category_assigned_to_user_id", $expenseCategoryID, PDO::PARAM_INT);
-            $query->bindValue(":payment_method_assigned_to_user_id", $paymentOptionID, PDO::PARAM_INT);
-            $query->bindValue(":amount", $this->amount);
-            $query->bindValue(":date_of_expense", $this->date, PDO::PARAM_STR);
-            $query->bindValue(":expense_comment", $this->comment, PDO::PARAM_STR);
-            $query->execute();
-            return [];
-
-        } catch (Exception $error) {
-            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
-            return $errors;
-        }
-    }
-    
-    function deleteTransactionInDB($dbConnect, $userID, $transactionID) {
-        try {
-            $query = $dbConnect->prepare("DELETE FROM expenses WHERE id=:transactionID AND user_id=:userID");
-            $query->bindValue(":transactionID", $transactionID, PDO::PARAM_INT);
-            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
-            $query->execute();
-            return [];
-
-        } catch (Exception $error) {
-            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, delete expense transaction at another time.";
-            return $errors;
-        }
+    function getPaymentOption() {
+        return $this->paymentOption;
     }
 
     function validatePaymentOption() {
@@ -181,6 +99,187 @@ class ExpenseOperator extends IncomeOperator {
         }
         if (filter_var($this->paymentOption, FILTER_SANITIZE_STRING) == false) {
             $this->inputErrors["payment_option"] = "The payment option must be a string.";
+        }
+    }
+}
+
+interface TransactionOperator {
+    function validateInput();
+    function runOperationInDb($dbConnect, $userID);
+}
+
+class IncomeTransactionAddition implements TransactionOperator {
+
+    private $validator;
+
+    function __construct() {
+        $this->validator = new IncomeDataValidator();
+    }
+
+    function validateInput() {
+        $this->validator->validateAmount();
+        $this->validator->validateDate();
+        $this->validator->validateType();
+        $this->validator->validateComment();
+        return $this->validator->getErrors();
+    }
+    function runOperationInDb($dbConnect, $userID) {
+        try {
+            $incomeCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "incomeTables", $this->validator->getType());
+            $query = $dbConnect->prepare("INSERT INTO incomes VALUES (NULL, :user_id, :income_category_assigned_to_user_id, :amount, :date_of_income, :income_comment)");
+            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+            $query->bindValue(":income_category_assigned_to_user_id", $incomeCategoryID, PDO::PARAM_INT);
+            $query->bindValue(":amount", $this->validator->getAmount());
+            $query->bindValue(":date_of_income", $this->validator->getDate(), PDO::PARAM_STR);
+            $query->bindValue(":income_comment", $this->validator->getComment(), PDO::PARAM_STR);
+            $query->execute();
+            return [];
+        } catch (Exception $error) {
+            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
+            return $errors;
+        }
+    }
+}
+
+class ExpenseTransactionAddition extends IncomeTransactionAddition {
+
+    private $validator;
+
+    function __construct() {
+        $this->validator = new ExpenseDataValidator();
+    }
+
+    function validateInput() {
+        parent::validateInput();
+        $this->validator->validatePaymentOption();
+        return $this->validator->getErrors();
+    }
+    function runOperationInDb($dbConnect, $userID) {
+        try {
+            $expenseCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "expenseTables", $this->validator->getType());
+            $paymentOptionID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "paymentTables", $this->validator->getPaymentOption());
+            $query = $dbConnect->prepare("INSERT INTO expenses VALUES (NULL, :user_id, :expense_category_assigned_to_user_id, :payment_method_assigned_to_user_id, :amount, :date_of_expense, :expense_comment)");
+            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+            $query->bindValue(":expense_category_assigned_to_user_id", $expenseCategoryID, PDO::PARAM_INT);
+            $query->bindValue(":payment_method_assigned_to_user_id", $paymentOptionID, PDO::PARAM_INT);
+            $query->bindValue(":amount", $this->validator->getAmount());
+            $query->bindValue(":date_of_expense", $this->validator->getDate(), PDO::PARAM_STR);
+            $query->bindValue(":expense_comment", $this->validator->getComment(), PDO::PARAM_STR);
+            $query->execute();
+            return [];
+        } catch (Exception $error) {
+            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
+            return $errors;
+        }
+    }
+}
+
+class IncomeTransactionDeletion implements TransactionOperator {
+    private $validator;
+
+    function __construct() {
+        $this->validator = new IncomeDataValidator();
+    }
+
+    function validateInput() {
+        $this->validator->validateTransactionID();
+        return $this->validator->getErrors();
+    }
+
+    function _getQuery($dbConnect) {
+        $query = $dbConnect->prepare("DELETE FROM incomes WHERE id=:transactionID AND user_id=:userID");
+        return $query;
+    }
+
+    function runOperationInDb($dbConnect, $userID) {
+        try {
+            $query = $this->_getQuery($dbConnect);
+            $query->bindValue(":transactionID", $this->validator->getTransactionID(), PDO::PARAM_INT);
+            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+            $query->execute();
+            return [];
+        } catch (Exception $error) {
+            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, delete transaction at another time.";
+            return $errors;
+        }
+    }
+}
+
+class ExpenseTransactionDeletion extends IncomeTransactionDeletion {
+    private $validator;
+
+    function __construct() {
+        $this->validator = new ExpenseDataValidator();
+    }
+
+    function _getQuery($dbConnect) {
+        $query = $dbConnect->prepare("DELETE FROM expenses WHERE id=:transactionID AND user_id=:userID");
+        return $query;
+    }
+}
+
+class IncomeTransactionModification implements TransactionOperator {
+    private $validator;
+
+    function __construct() {
+        $this->validator = new IncomeDataValidator();
+    }
+
+    function validateInput() {
+        $this->validator->validateAmount();
+        $this->validator->validateDate();
+        $this->validator->validateType();
+        $this->validator->validateComment();
+        $this->validator->validateTransactionID();
+    }
+    function runOperationInDb($dbConnect, $userID) {
+        try {
+            $incomeCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "incomeTables", $this->validator->getType());
+            $query = $dbConnect->prepare("UPDATE incomes SET user_id=:user_id, income_category_assigned_to_user_id=:income_category_assigned_to_user_id, amount=:amount, date_of_income=:date_of_income, income_comment=:income_comment WHERE id=:id");
+            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+            $query->bindValue(":income_category_assigned_to_user_id", $incomeCategoryID, PDO::PARAM_INT);
+            $query->bindValue(":amount", $this->validator->getAmount());
+            $query->bindValue(":date_of_income", $this->validator->getDate(), PDO::PARAM_STR);
+            $query->bindValue(":income_comment", $this->validator->getComment(), PDO::PARAM_STR);
+            $query->bindValue(":id", $this->validator->getTransactionID(), PDO::PARAM_INT);
+            $query->execute();
+            return [];
+        } catch (Exception $error) {
+            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
+            return $errors;
+        }
+    }
+}
+
+class ExpenseTransactionModification extends IncomeTransactionModification {
+    private $validator;
+
+    function __construct() {
+        $this->validator = new ExpenseDataValidator();
+    }
+
+    function validateInput() {
+        parent::validateInput();
+        $this->validator->validatePaymentOption();
+        return $this->validator->getErrors();
+    }
+    function runOperationInDb($dbConnect, $userID) {
+        try {
+            $expenseCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "expenseTables", $this->validator->getType());
+            $paymentOptionID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "paymentTables", $this->validator->getPaymentOption());
+            $query = $dbConnect->prepare("UPDATE expenses SET user_id=:user_id, expense_category_assigned_to_user_id=:expense_category_assigned_to_user_id, payment_method_assigned_to_user_id=:payment_method_assigned_to_user_id, amount=:amount, date_of_expense=:date_of_expense, expense_comment:expense_comment WHERE id=:id");
+            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+            $query->bindValue(":expense_category_assigned_to_user_id", $expenseCategoryID, PDO::PARAM_INT);
+            $query->bindValue(":payment_method_assigned_to_user_id", $paymentOptionID, PDO::PARAM_INT);
+            $query->bindValue(":amount", $this->validator->getAmount());
+            $query->bindValue(":date_of_expense", $this->validator->getDate(), PDO::PARAM_STR);
+            $query->bindValue(":expense_comment", $this->validator->getComment(), PDO::PARAM_STR);
+            $query->bindValue(":id", $this->validator->getTransactionID(), PDO::PARAM_INT);
+            $query->execute();
+            return [];
+        } catch (Exception $error) {
+            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
+            return $errors;
         }
     }
 }

@@ -5,7 +5,6 @@ require_once("transactions.php");
 
 
 function loginToAccount() {
-
 	$username = filter_input(INPUT_POST, 'username');
 	$password = filter_input(INPUT_POST, 'password');
 	try {
@@ -41,7 +40,6 @@ function loginToAccount() {
 session_start();
 
 if (isset($_SESSION["userID"]) && isset($_SESSION["loggedInUsername"])) {
-	
 	if (isset($_POST["dateFrom"])) {
 		$dateFrom = filter_input(INPUT_POST, "dateFrom");
 	} else {
