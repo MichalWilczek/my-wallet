@@ -7,7 +7,7 @@ export { BalanceOptions }
 
 
 class BalanceOptions {
-    
+
     constructor () {
         this.options = [
             new CurrentMonthOption(),
@@ -165,17 +165,16 @@ class CustomDatesOption extends PeriodOption {
     
         const bodyDiv = document.createElement("div");
         bodyDiv.classList.add("modal-body");
-        const today = new Date();
         const dateFromInput = this._setDateInput(
             bodyDiv, 
             "From",
             // Default date 30 days prior to today
-            new Date(new Date().setDate(today.getDate() - 30)).toISOString().slice(0,10)
+            new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().slice(0,10)
         );
         const dateToInput = this._setDateInput(
             bodyDiv, 
             "To", 
-            today.toISOString().slice(0,10)
+            new Date().toISOString().slice(0,10)
         );
         contentDiv.append(bodyDiv);
     
