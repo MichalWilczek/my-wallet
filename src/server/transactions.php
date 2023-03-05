@@ -180,8 +180,6 @@ function getUserExpenseTransactions($dbConnect, $userID, $dateFrom, $dateTo) {
     }
 }
 
-
-
 // function modifyTransactionOptionsForUser($dbConnect, $userID, $categoryType, $oldCategoryName, $newCategoryName=null) {
     
 //     $tableData = getCategoryTypeData($categoryType);

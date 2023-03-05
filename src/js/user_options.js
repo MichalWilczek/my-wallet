@@ -13,7 +13,7 @@ import { FormAPI } from './form_api.js';
 const clickAddTransaction = async (form, div) => {
     const transactionQuery = new FormAPI("You have successfully added a transaction!");
     const res = await transactionQuery.postForm(
-        "/my-wallet/src/server/transaction_input.php", 
+        "/my-wallet/src/server/transaction_add.php", 
         form,
         div
     )
@@ -29,9 +29,9 @@ const changePassword = (elementID) => {
 
     const divElement = document.createElement("div");
     const form = document.createElement("form");
-    createUserElementwithLabel(form, "password", "old-password-change-id", "oldPassword", labelText="Old password", ["fa", "fa-unlock-alt"]);
-    createUserElementwithLabel(form, "password", "new-password-change-id", "newPassword1", labelText="New password", ["fa", "fa-unlock-alt"]);
-    createUserElementwithLabel(form, "password", "new2-password-change-id", "newPassword2", labelText="Repeated new password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "old-password-change-id", "oldPassword", "Old password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "new-password-change-id", "newPassword1", "New password", ["fa", "fa-unlock-alt"]);
+    createUserElementwithLabel(form, "password", "new2-password-change-id", "newPassword2", "Repeated new password", ["fa", "fa-unlock-alt"]);
 
     const buttonDiv = document.createElement("div");
     buttonDiv.classList.add("form_element");

@@ -145,11 +145,33 @@ class UserData {
 
                 const divComment = document.createElement("div");
                 divComment.classList.add("transaction_cell");
-                divComment.style = "width: 200px;"
+                divComment.style = "width: 200px;";
                 const spanComment = document.createElement("span");
                 spanComment.textContent = catTransaction["comment"];
                 divComment.append(spanComment);
                 divRow.append(divComment);
+
+                const divDeleteTransaction = document.createElement("div");
+                divDeleteTransaction.classList.add("transaction_cell");
+                divDeleteTransaction.style = "width: 35px;";
+                const iconDelete = document.createElement("i");
+                iconDelete.classList.add("fa", "fa-eraser");
+                divDeleteTransaction.append(iconDelete);
+                divDeleteTransaction.addEventListener("click", () => {
+                    
+                })
+                divRow.append(divDeleteTransaction);
+
+                const divModifyTransaction = document.createElement("div");
+                divModifyTransaction.classList.add("transaction_cell");
+                divModifyTransaction.style = "width: 35px;";
+                const iconModify = document.createElement("i");
+                iconModify.classList.add("fa", "fa-pencil-square-o");
+                divModifyTransaction.append(iconModify);
+                divModifyTransaction.addEventListener("click", () => {
+
+                })
+                divRow.append(divModifyTransaction);
 
                 divAll.append(divRow);
             }

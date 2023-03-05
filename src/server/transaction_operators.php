@@ -4,23 +4,17 @@ require_once("user_data.php");
 require_once("transactions.php");
 
 
-function getTransactionOperator() {
-    if (isset($_POST["amount"]) && isset($_POST["date"])) {
-        if (isset($_POST["income-option"])) {
-            return new IncomeOperator();
-        }
-        if (isset($_POST["expense-option"]) && isset($_POST["payment-option"])) {
-            return new ExpenseOperator();
-        }
-        throw new Exception("Object for checking transaction data cannot be set due to missing post input data.");
-    } else {
-        throw new Exception("Object for checking transaction data cannot be set due to missing post input data.");
-    }
-}
-
 interface TransactionOperator {
-    function validateInput();
+
+    // Operations for input data validation
+    function validateInputForAddingTransaction();
+    function validateInputForDeletingTransaction();
+    function validateInputForModifyingTransaction();
+    
+    // Operations in database
     function saveTransactionToDB($dbConnect, $userID);
+    function deleteTransactionInDB($dbConnect, $userID, $transactionID);
+    function modifyTransactionInDB($dbConnect, $userID, $transactionID);
 }
 
 class IncomeOperator implements TransactionOperator {
@@ -29,18 +23,25 @@ class IncomeOperator implements TransactionOperator {
     protected $type;
     protected $comment;
     protected $typeName;
+    protected $transactionID;
     protected $inputErrors = [];
 
     function __construct() {
         $this->typeName = "income";
     }
-
-    function validateInput() {
+    function validateInputForAddingTransaction() {
         $this->validateAmount();
         $this->validateDate();
         $this->validateType();
         $this->validateComment();
         return $this->inputErrors;
+    }
+    function validateInputForDeletingTransaction() {
+        $this->validateTransactionID();
+        return $this->inputErrors;
+    }
+    function validateInputForModifyingTransaction() {
+
     }
 
     function saveTransactionToDB($dbConnect, $userID) {
@@ -60,6 +61,23 @@ class IncomeOperator implements TransactionOperator {
             $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
             return $errors;
         }
+    }
+
+    function deleteTransactionInDB($dbConnect, $userID, $transactionID) {
+        try {
+            $query = $dbConnect->prepare("DELETE FROM incomes WHERE id=:transactionID AND user_id=:userID");
+            $query->bindValue(":transactionID", $transactionID, PDO::PARAM_INT);
+            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+            $query->execute();
+            return [];
+        } catch (Exception $error) {
+            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, delete income transaction at another time.";
+            return $errors;
+        }
+    }
+
+    function modifyTransactionInDB($dbConnect, $userID, $transactionID) {
+
     }
 
     function validateAmount() {
@@ -98,6 +116,13 @@ class IncomeOperator implements TransactionOperator {
             $this->inputErrors['comment'] = 'The comment input must be a string.';
         }
     }
+
+    function validateTransactionID() {
+        $this->transactionID = filter_input(INPUT_POST, "transaction_id");
+        if (filter_var($this->transactionID, FILTER_VALIDATE_INT) == false) {
+            $this->inputErrors["transaction_id"] = "The transaction_id must be an integer.";
+        }
+    }
 }
 
 class ExpenseOperator extends IncomeOperator {
@@ -108,8 +133,8 @@ class ExpenseOperator extends IncomeOperator {
         $this->typeName = "expense";
     }
 
-    function validateInput() {
-        parent::validateInput();
+    function validateInputForAddingTransaction() {
+        parent::validateInputForAddingTransaction();
         $this->validatePaymentOption();
         return $this->inputErrors;
     }
@@ -134,6 +159,20 @@ class ExpenseOperator extends IncomeOperator {
             return $errors;
         }
     }
+    
+    function deleteTransactionInDB($dbConnect, $userID, $transactionID) {
+        try {
+            $query = $dbConnect->prepare("DELETE FROM expenses WHERE id=:transactionID AND user_id=:userID");
+            $query->bindValue(":transactionID", $transactionID, PDO::PARAM_INT);
+            $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
+            $query->execute();
+            return [];
+
+        } catch (Exception $error) {
+            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, delete expense transaction at another time.";
+            return $errors;
+        }
+    }
 
     function validatePaymentOption() {
         $this->paymentOption = filter_input(INPUT_POST, "payment-option");
@@ -145,43 +184,4 @@ class ExpenseOperator extends IncomeOperator {
         }
     }
 }
-
-function addTransaction ($userID) {
-    $transactionOperator = getTransactionOperator();
-    $errors = $transactionOperator->validateInput();
-    
-    if (count($errors) == 0) {
-        $dbConnect = connectToDB();
-        $errors = $transactionOperator->saveTransactionToDB($dbConnect, $userID);
-        if (count($errors) == 0) {
-            $result["successful"] = true;
-        } else {
-            $result["successful"] = false;
-        }
-    } else {
-        $result["successful"] = false;
-    }
-    $result["errors"] = $errors;
-    return $result;
-}
-
-$result = [
-    "successful" => false,
-    "errors" => []
-];
-
-session_start();
-if (isset($_SESSION["userID"]) && isset($_SESSION["loggedInUsername"])) {
-    try {
-        $result = addTransaction($_SESSION["userID"]);
-    } catch (Exception $error) {
-        $result["errors"]["transaction_error"] = "Failed to add transaction.";
-    }
-} else {
-    $result["errors"]["server_error"] = "No user logged in.";
-}
-header("Content-Type: application/json");
-echo json_encode($result);
-exit();
-
 ?>
