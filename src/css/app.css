@@ -146,6 +146,44 @@ main button, main input, main select {
     border-radius: 0.2em;
 }
 
+.modal.custom input {
+    width: 10em;
+    height: 1.6em;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 0.2em 0;
+    border: 0.08em solid #313133;
+    border-radius: 0.2em;
+}
+
+.modal.custom button {
+    width: 5em;
+    height: 1.6em;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 0.2em 0;
+    border: 0.08em solid #313133;
+    border-radius: 0.2em;
+}
+
+.modal.custom div {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.modal.custom div.date-label-modal {
+    display: inline-block;
+    width: 30%;
+    text-align: center;
+}
+
+.modal.custom div.date-input-modal {
+    display: inline-block;
+    width: 70%;
+}
+
+
+
 button.log_button {
     border: 0.08em solid #313133;
     border-radius: 0.2em;

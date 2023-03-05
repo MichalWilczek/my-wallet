@@ -110,22 +110,30 @@ class PreviousMonthOption extends PeriodOption {
 
 class CustomDatesOption extends PeriodOption {
 
+    MODAL_DIV_NAME = "modal_div_custom_dates";
+
     constructor(periodName="Custom dates") {
         super(periodName);
     }
 
-    _setDateInput (form, labelText) {
+    _setDateInput (form, labelText, defaultDate) {
         const div = document.createElement("div");
-        const inputLabel = document.createElement("label");
-        inputLabel.innerText = labelText
-        div.append(inputLabel);
-
+        const divLabel = document.createElement("div");
+        divLabel.classList.add("date-label-modal");
+        divLabel.textContent = labelText;
+        div.append(divLabel);
+        
+        const divDate = document.createElement("div");
+        divDate.classList.add("date-input-modal");
         const inputContent = document.createElement("input");
         inputContent.type = "date";
         inputContent.name = "dateTo";
         inputContent.min = "2010-01-01";
+        inputContent.value = defaultDate;
         inputContent.required = true;
-        div.append(inputContent);
+        divDate.append(inputContent);
+        div.append(divDate);
+
         form.append(div);
         return inputContent;
     }
@@ -137,8 +145,9 @@ class CustomDatesOption extends PeriodOption {
 
     _createModalElementForPeriodOptions() {
         const mainDiv = document.createElement("div");
+        mainDiv.id = this.MODAL_DIV_NAME;
         document.body.append(mainDiv);
-        mainDiv.classList.add("modal", "fade");
+        mainDiv.classList.add("modal", "fade", "custom");
         mainDiv.role = "dialog";
     
         const dialogDiv = document.createElement("div");
@@ -156,42 +165,53 @@ class CustomDatesOption extends PeriodOption {
     
         const bodyDiv = document.createElement("div");
         bodyDiv.classList.add("modal-body");
-        const form = document.createElement("form");
-        form.method = "post";
-        form.id = "custom_period_form";
-        const dateFromInput = this._setDateInput(form, "From");
-        const dateToInput = this._setDateInput(form, "To");
-        bodyDiv.append(form);
+        const today = new Date();
+        const dateFromInput = this._setDateInput(
+            bodyDiv, 
+            "From",
+            // Default date 30 days prior to today
+            new Date(new Date().setDate(today.getDate() - 30)).toISOString().slice(0,10)
+        );
+        const dateToInput = this._setDateInput(
+            bodyDiv, 
+            "To", 
+            today.toISOString().slice(0,10)
+        );
         contentDiv.append(bodyDiv);
     
         const footerDiv = document.createElement("div");
         footerDiv.classList.add("modal-footer");
+
+        // Add submit button
+        const submitButton = document.createElement("button");
+        submitButton.type = "submit";
+        submitButton.innerText = "Submit";
+        submitButton.addEventListener("click", () => {
+            submitButton.dataset.dismiss = "modal";
+            this._showBalanceFromModal(dateFromInput.value, dateToInput.value);
+        })
+        footerDiv.append(submitButton);
+
+        // Add close button
         const closeButton = document.createElement("button");
         closeButton.type = "button";
         closeButton.dataset.dismiss = "modal";
         closeButton.innerText = "Close";
         footerDiv.append(closeButton);
-
-        const submitButton = document.createElement("button");
-        submitButton.type = "submit";
-        submitButton.value = "Submit";
-        // submitButton.form = "custom_period_form";
-        submitButton.addEventListener("submit", () => {
-            submitButton.dataset.dismiss = "modal";
-            this._showBalanceFromModal(dateFromInput.value, dateToInput.value);
-        })
-        footerDiv.append(submitButton);
         
         contentDiv.append(footerDiv);
     }
 
     createOptionElement() {
         const newOption = super.createOptionElement();
-        this._createModalElementForPeriodOptions();
+        const modalDiv = document.querySelector(`#${this.MODAL_DIV_NAME}`);
+        if (modalDiv === null) {
+            this._createModalElementForPeriodOptions();
+        }
         return newOption;
       }
 
-    async showBalance() {
+    showBalance() {
         // Show a popup window to select dates and run showBalanceFromModal()
         $(".modal").modal("show");
     }

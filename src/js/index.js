@@ -50,8 +50,8 @@ const showBalanceSheet = (elementID) => {
     const optionsElement = new BalanceOptions().createSelectOption();
     const divPeriod = document.createElement('div');
     divPeriod.append(optionsElement);
-    balanceDiv.append(divPeriod);
     balanceDiv.append(header);
+    balanceDiv.append(divPeriod);
     balanceDiv.append(document.createElement("hr"));
 
     showBalance(undefined, balanceDiv);

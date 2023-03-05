@@ -139,6 +139,7 @@ const addIncome = (elementID) => {
     date.type = "date";
     date.min = "2010-01-01";
     date.required = true;
+    date.value = new Date().toISOString().slice(0,10);
     date.name = "date";
     subDiv2.append(date);
     form.append(subDiv2);
@@ -214,6 +215,7 @@ const addExpense = (elementID) => {
     date.type = "date";
     date.name = "date";
     date.min = "2010-01-01";
+    date.value = new Date().toISOString().slice(0,10);
     date.required = true;
     subDiv2.append(date);
     form.append(subDiv2);
