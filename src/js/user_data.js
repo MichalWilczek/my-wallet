@@ -3,25 +3,21 @@ This module stores objects to operate on:
     - user data received from the server
     - options for income and expense settings
 */
+import { API } from './api.js';
 import { capitalizeFirstLetter} from './utils.js';
 export { getUserData, UserData, Options }
 
 
 const getUserData = async (dateFrom=null, dateTo=null) => {
-
     try {
-        const params = new URLSearchParams();
-        if (dateFrom !== null) {
-            params.append('dateFrom', dateFrom);
-        }
-        if (dateTo !== null) {
-            params.append('dateTo', dateTo);  
-        }
-        const res = await axios.post(
-            "/my-wallet/src/server/login.php", 
-            params
+        const queryAPI = new API();
+        const dictAPI = await queryAPI.postDict(
+            "/my-wallet/src/server/login.php",
+            {
+                'dateFrom': dateFrom,
+                'dateTo': dateTo
+            }
         );
-        const dictAPI = res.data;
         if (dictAPI.successful) {
             const userData = new UserData(
                 dictAPI.id,
@@ -158,7 +154,7 @@ class UserData {
                 iconDelete.classList.add("fa", "fa-eraser");
                 divDeleteTransaction.append(iconDelete);
                 divDeleteTransaction.addEventListener("click", () => {
-                    
+
                 })
                 divRow.append(divDeleteTransaction);
 

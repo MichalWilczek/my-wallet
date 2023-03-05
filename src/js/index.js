@@ -7,7 +7,7 @@ It serves for:
     - storing temporary data from the session
 */
 import { clearBox, createUserElementwithLabel } from './utils.js';
-import { FormAPI } from './form_api.js';
+import { API } from './api.js';
 import { UserData, getUserData} from './user_data.js';
 import { BalanceOptions } from './period_options.js';
 export { showBalance }
@@ -99,12 +99,12 @@ const showBalance = (userData=null, sectionDiv=null) => {
 }
 
 const clickLogin = async (form, div) => {
-    const loginQuery = new FormAPI("You have been successfully logged in to your account!");
+    const loginQuery = new API("You have been successfully logged in to your account!");
     const data = await loginQuery.postForm(
         "/my-wallet/src/server/login.php", 
-        form,
-        div
+        form
     )
+    loginQuery.generateOutputMessage(data, div);
     if (data.successful) {
         location.assign("/my-wallet/src/user_portal.php");
         window.userData = new UserData(
@@ -200,12 +200,12 @@ const registerUser = (elementID) => {
         if(msgFromPrevIteration!==null) {
             msgFromPrevIteration.remove()
         }
-        const registrationQuery = new FormAPI("Your account has been successfully created!");
-        registrationQuery.postForm(
+        const registrationQuery = new API("Your account has been successfully created!");
+        const results = registrationQuery.postForm(
             "/my-wallet/src/server/registration.php", 
-            form,
-            sectionRegister
+            form
         );
+        registrationQuery.generateOutputMessage(results, sectionRegister);
       }
     )
     form.append(button);

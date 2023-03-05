@@ -7,16 +7,17 @@ In this module, we put a set of user options such as:
         - modify income and expense options
 */
 import { clearBox, createUserElementwithLabel } from './utils.js';
-import { FormAPI } from './form_api.js';
+import { API } from './api.js';
 
 
-const clickAddTransaction = async (form, div) => {
-    const transactionQuery = new FormAPI("You have successfully added a transaction!");
+const clickAddTransaction = async (form, div, transactionDict) => {
+    const transactionQuery = new API("You have successfully added a transaction!");
     const res = await transactionQuery.postForm(
-        "/my-wallet/src/server/transaction_add.php", 
-        form,
-        div
-    )
+        "/my-wallet/src/server/transaction_operation.php", 
+        form, 
+        transactionDict
+    );
+    transactionQuery.generateOutputMessage(res, div);
 }
 
 const changePassword = (elementID) => {
@@ -175,7 +176,7 @@ const addIncome = (elementID) => {
         }
         const tempOption = document.querySelector(`#${window.userData.incomeOptions.id}_base_option`);
         tempOption.disabled = false;
-        clickAddTransaction(form, divElement);
+        clickAddTransaction(form, divElement, {'procedure': 'add', 'transaction_type': 'income'});
         tempOption.disabled = true;
     })
 
@@ -258,7 +259,7 @@ const addExpense = (elementID) => {
         const tempPayOption = document.querySelector(`#${window.userData.paymentOptions.id}_base_option`);
         tempExpOption.disabled = false;
         tempPayOption.disabled = false;
-        clickAddTransaction(form, divElement);
+        clickAddTransaction(form, divElement, {'procedure': 'add', 'transaction_type': 'expense'});
         tempExpOption.disabled = true;
         tempPayOption.disabled = true;
     })

@@ -6,7 +6,7 @@ function factoryTransactionOperations() {
 
     // Check if POST messages are not set and throw an error.
     if (!isset($_POST["transaction_type"]) || !isset($_POST["procedure"])) {
-        throw new Exception();
+        throw new Exception("Elements 'transaction_type' and 'procedure' must be included in the query.");
     }
 
     if ($_POST["procedure"] == "add" && $_POST["transaction_type"] == "income") {
@@ -29,7 +29,7 @@ function factoryTransactionOperations() {
     }
 
     // All other cases should throw an exception.
-    throw new Exception();
+    throw new Exception("procedure: ${$_POST['procedure']}, transaction_type: {$_POST['transaction_type']} do not correspond to acceptable values.");
 }
 
 function runTransaction($userID) {

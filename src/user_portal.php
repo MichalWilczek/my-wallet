@@ -125,7 +125,7 @@ if (!isset($_SESSION["userID"]) && !isset($_SESSION["loggedInUsername"])) {
         <!-- Custom scripts -->
         <script type="module" src="js/utils.js"></script>
         <script type="module" src="js/user_data.js"></script>
-        <script type="module" src="js/form_api.js"></script>
+        <script type="module" src="js/api.js"></script>
         <script type="module" src="js/index.js"></script>
         <script type="module" src="js/user_options.js"></script>
         <script type="module" src="js/period_options.js"></script>
