@@ -2,7 +2,7 @@
 This module exports FormAPI class which stores queries for getting data from the server.
 */
 import { UserData} from './user_data.js';
-export { deleteTransaction, getUserData, API }
+export { getUserData, API }
 
 
 const getUserData = async (dateFrom=null, dateTo=null) => {
@@ -32,29 +32,6 @@ const getUserData = async (dateFrom=null, dateTo=null) => {
     } catch (e) {
         console.log(
             "Unexpected error occured while querying data of the logged in user from server."
-        );
-        console.log("Error: ", e);
-    }
-}
-
-const deleteTransaction = async (transactionType, transactionID) => {
-    try {
-        const queryAPI = new API();
-        const dictAPI = await queryAPI.postDict(
-            "/my-wallet/src/server/transaction_operation.php",
-            {
-                'procedure': 'delete', 
-                'transaction_type': transactionType,
-                'transaction_id': transactionID
-            }
-        );
-        if (dictAPI.successful) {
-            return
-        } 
-        throw new Exception("Transaction could not be deleted");
-    } catch (e) {
-        console.log(
-            "Unexpected error occured while deleting transaction record of the logged in user from server."
         );
         console.log("Error: ", e);
     }

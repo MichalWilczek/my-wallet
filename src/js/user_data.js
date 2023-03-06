@@ -5,21 +5,28 @@ This module stores objects to operate on:
 */
 import { showBalance } from './balance.js';
 import { getUserData } from './api.js';
-import { deleteTransaction } from './api.js';
+import { API } from './api.js';
 import { capitalizeFirstLetter} from './utils.js';
 export { UserData }
 
 
 const deleteUserTransaction = async (transactionType, transactionID) => {
-    await deleteTransaction(transactionType, transactionID);
+    const transactionQuery = new API();
+    await transactionQuery.postDict(
+        "/my-wallet/src/server/transaction_operation.php", 
+        {
+            'procedure': 'delete', 
+            'transaction_type': transactionType,
+            'transaction_id': transactionID
+        }
+    );
     window.userData = await getUserData(window.userDateFrom, window.userDateTo);
     showBalance(window.userData);
 }
 
-const modifyUserTransaction = async () => {
+const modifyUserTransaction = async (transactionType, transactionID) => {
 
 }
-
 
 class UserData {
 
@@ -148,7 +155,7 @@ class UserData {
                 iconModify.classList.add("fa", "fa-pencil-square-o");
                 divModifyTransaction.append(iconModify);
                 divModifyTransaction.addEventListener("click", () => {
-
+                    modifyUserTransaction(transactionType, catTransaction["id"]);
                 })
                 divRow.append(divModifyTransaction);
 
