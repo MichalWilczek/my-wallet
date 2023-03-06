@@ -16,6 +16,10 @@ const deleteUserTransaction = async (transactionType, transactionID) => {
     showBalance(window.userData);
 }
 
+const modifyUserTransaction = async () => {
+
+}
+
 
 class UserData {
 
@@ -129,6 +133,7 @@ class UserData {
                 divDeleteTransaction.style = "width: 35px;";
                 const iconDelete = document.createElement("i");
                 iconDelete.classList.add("fa", "fa-eraser");
+                iconDelete.style = "cursor: pointer;"
                 divDeleteTransaction.append(iconDelete);
                 divDeleteTransaction.addEventListener("click", () => {
                     deleteUserTransaction(transactionType, catTransaction["id"]);
@@ -139,6 +144,7 @@ class UserData {
                 divModifyTransaction.classList.add("transaction_cell");
                 divModifyTransaction.style = "width: 35px;";
                 const iconModify = document.createElement("i");
+                iconModify.style = "cursor: pointer;"
                 iconModify.classList.add("fa", "fa-pencil-square-o");
                 divModifyTransaction.append(iconModify);
                 divModifyTransaction.addEventListener("click", () => {
