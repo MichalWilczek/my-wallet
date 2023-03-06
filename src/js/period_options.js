@@ -71,9 +71,9 @@ class CurrentYearOption extends PeriodOption {
 
     async showPeriodBalance() {
         const today = new Date();
-        const from = new Date(today.getFullYear(), 0, 2).toISOString().slice(0,10);
-        const to = new Date(today.getFullYear(), 12, 1).toISOString().slice(0,10);
-        const userData = await getUserData(from,  to);
+        window.userDateFrom = new Date(today.getFullYear(), 0, 2).toISOString().slice(0,10);
+        window.userDateTo = new Date(today.getFullYear(), 12, 1).toISOString().slice(0,10);
+        const userData = await getUserData(window.userDateFrom, window.userDateTo);
         showBalance(userData);
     }
 }
@@ -86,9 +86,9 @@ class CurrentMonthOption extends PeriodOption {
 
     async showPeriodBalance() {
         const today = new Date();
-        const from = new Date(today.getFullYear(), today.getMonth(), 2).toISOString().slice(0,10);
-        const to = new Date(today.getFullYear(), today.getMonth() + 1, 1).toISOString().slice(0,10);
-        const userData = await getUserData(from,  to);
+        window.userDateFrom = new Date(today.getFullYear(), today.getMonth(), 2).toISOString().slice(0,10);
+        window.userDateTo = new Date(today.getFullYear(), today.getMonth() + 1, 1).toISOString().slice(0,10);
+        const userData = await getUserData(window.userDateFrom, window.userDateTo);
         showBalance(userData);
     }
 }
@@ -101,9 +101,9 @@ class PreviousMonthOption extends PeriodOption {
 
     async showPeriodBalance() {
         const today = new Date();
-        const from = new Date(today.getFullYear(), today.getMonth() - 1, 2).toISOString().slice(0,10);
-        const to = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0,10);
-        const userData = await getUserData(from,  to);
+        window.userDateFrom = new Date(today.getFullYear(), today.getMonth() - 1, 2).toISOString().slice(0,10);
+        window.userDateTo = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0,10);
+        const userData = await getUserData(window.userDateFrom, window.userDateTo);
         showBalance(userData);
     }
 }
@@ -187,6 +187,8 @@ class CustomDatesOption extends PeriodOption {
         submitButton.innerText = "Submit";
         submitButton.addEventListener("click", () => {
             submitButton.dataset.dismiss = "modal";
+            window.userDateFrom = dateFromInput.value;
+            window.userDateTo = dateToInput.value;
             this._showPeriodBalanceFromModal(dateFromInput.value, dateToInput.value);
         })
         footerDiv.append(submitButton);
