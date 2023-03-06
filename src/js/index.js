@@ -6,15 +6,12 @@ It serves for:
     - plotting the balance
     - storing temporary data from the session
 */
+import { API, getUserData } from './api.js';
+import { UserData} from './user_data.js';
+import { showBalanceSheet } from './balance.js';
 import { clearBox, createUserElementwithLabel } from './utils.js';
-import { API } from './api.js';
-import { UserData, getUserData} from './user_data.js';
-import { BalanceOptions } from './period_options.js';
-export { showBalance }
+export { runUserPortal, showUserID, logIn, logOut, registerUser }
 
-
-// Global session values used by the program.
-window.userData = UserData;
 
 const runUserPortal = async (
     userElementID='upper_nav_bar_span_id', 
@@ -37,65 +34,6 @@ const runUserPortal = async (
 const showUserID = (elementID) => {
     const spanElement = document.querySelector(`#${elementID}`);
     spanElement.textContent = `Welcome ${window.userData.username}`;
-}
-
-const showBalanceSheet = (elementID) => {
-    clearBox(elementID);
-    window.scrollTo(0, 0);
-
-    const balanceDiv = document.querySelector(`#${elementID}`);
-    const header = document.createElement("h2");
-    header.innerText = "Wallet balance";
-
-    const optionsElement = new BalanceOptions().createSelectOption();
-    const divPeriod = document.createElement('div');
-    divPeriod.append(optionsElement);
-    balanceDiv.append(header);
-    balanceDiv.append(divPeriod);
-    balanceDiv.append(document.createElement("hr"));
-
-    showBalance(undefined, balanceDiv);
-}
-
-const showBalance = (userData=null, sectionDiv=null) => {
-
-    if (userData !== null) {
-        window.userData = userData;
-    }
-
-    const mainDivNameID = "balance_summary_div_id";
-    let balanceDiv = document.querySelector(`#${mainDivNameID}`);
-    if (balanceDiv === null) {
-        balanceDiv = document.createElement("div");
-        balanceDiv.id = mainDivNameID;
-    } else {
-        clearBox(mainDivNameID);
-    }
-    if (sectionDiv !== null) {
-        sectionDiv.append(balanceDiv);
-    }
-
-    const balanceSummary = window.userData.showIncomeExpenseSummaryChart(balanceDiv);
-
-    if (balanceSummary['totalIncome'] > 0) {
-        const incomeHeader = document.createElement("h3");
-        incomeHeader.innerText = "Income summary";
-        balanceDiv.append(incomeHeader);
-        balanceDiv.append(document.createElement("hr"));
-        window.userData.showIncomes(balanceDiv);
-        balanceDiv.append(document.createElement("hr"));
-    }
-
-    if (balanceSummary['totalExpense'] > 0) {
-        const expenseHeader = document.createElement("h3");
-        expenseHeader.innerText = "Expense summary";
-        balanceDiv.append(expenseHeader);
-        balanceDiv.append(document.createElement("hr"));
-        window.userData.showExpenses(balanceDiv);
-        balanceDiv.append(document.createElement("hr"));  
-    }
-
-    return balanceDiv; 
 }
 
 const clickLogin = async (form, div) => {
@@ -212,10 +150,3 @@ const registerUser = (elementID) => {
     sectionRegister.append(form);
     document.querySelector(`#${elementID}`).append(sectionRegister);
 }
-
-// Global function accessible from the module
-window.logIn = logIn;
-window.registerUser = registerUser;
-window.logOut = logOut;
-window.runUserPortal = runUserPortal;
-window.showBalance = showBalance;

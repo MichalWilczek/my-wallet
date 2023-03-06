@@ -85,12 +85,14 @@ if (isset($_SESSION["userID"]) && isset($_SESSION["loggedInUsername"])) {
         <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
         
         <!-- Custom scripts -->
-        <script type="module" src="js/utils.js"></script>
-        <script type="module" src="js/user_data.js"></script>
+        <script type="module" src="js/globals.js"></script>
         <script type="module" src="js/api.js"></script>
+        <script type="module" src="js/balance.js"></script>
         <script type="module" src="js/index.js"></script>
-        <script type="module" src="js/user_options.js"></script>
         <script type="module" src="js/period_options.js"></script>
+        <script type="module" src="js/user_data.js"></script>
+        <script type="module" src="js/user_options.js"></script>
+        <script type="module" src="js/utils.js"></script>
 
     </body>
 </html>

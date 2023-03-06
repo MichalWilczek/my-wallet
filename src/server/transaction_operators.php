@@ -196,22 +196,18 @@ class IncomeTransactionDeletion implements TransactionOperator {
     }
 
     function _getQuery($dbConnect) {
-        $query = $dbConnect->prepare("DELETE FROM incomes WHERE id=:transactionID AND user_id=:userID");
+        $query = $dbConnect->prepare("DELETE FROM incomes WHERE id=:transaction_id AND user_id=:user_id");
         return $query;
     }
 
     function runOperationInDb($dbConnect, $userID) {
         try {
             $query = $this->_getQuery($dbConnect);
-            $query->bindValue(":transactionID", $this->validator->getTransactionID(), PDO::PARAM_INT);
+            $query->bindValue(":transaction_id", $this->validator->getTransactionID(), PDO::PARAM_INT);
             $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
             $query->execute();
             return [];
         } catch (Exception $error) {
-            $errors["db_connection"] = "Server error while deleting transaction record! Apologies for inconvenience. Please, delete transaction at another time.";
-            $errors["db_connection"] = "Server error while deleting transaction record! Apologies for inconvenience. Please, delete transaction at another time.";
-            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, delete transaction at another time.";
-            $errors["db_connection"] = "Server error while deleting transaction record! Apologies for inconvenience. Please, delete transaction at another time.";
             $errors["db_connection"] = "Server error while deleting transaction record! Apologies for inconvenience. Please, delete transaction at another time.";
             return $errors;
         }
@@ -226,7 +222,7 @@ class ExpenseTransactionDeletion extends IncomeTransactionDeletion {
     }
 
     function _getQuery($dbConnect) {
-        $query = $dbConnect->prepare("DELETE FROM expenses WHERE id=:transactionID AND user_id=:userID");
+        $query = $dbConnect->prepare("DELETE FROM expenses WHERE id=:transaction_id AND user_id=:user_id");
         return $query;
     }
 }

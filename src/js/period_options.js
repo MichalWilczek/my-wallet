@@ -1,8 +1,8 @@
 /*
 TODO: ADD DOCUMENTATION
 */
-import { showBalance } from './index.js'
-import { getUserData} from './user_data.js';
+import { getUserData } from './api.js';
+import { showBalance } from './balance.js';
 export { BalanceOptions }
 
 
@@ -32,7 +32,7 @@ class BalanceOptions {
         selectObj.addEventListener("change", () => {
             const option = selectObj.options[selectObj.selectedIndex];
             const optionObj = this._getOptionObj(option.value);
-            optionObj.showBalance();
+            optionObj.showPeriodBalance();
         })
         for (let option of this.options) {
             selectObj.append(option.createOptionElement());
@@ -51,8 +51,8 @@ class PeriodOption {
         }
     }
 
-    showBalance() {
-        throw new Error("Method 'showBalance()' must be implemented.");
+    showPeriodBalance() {
+        throw new Error("Method 'showPeriodBalance()' must be implemented.");
     }
 
     createOptionElement() {
@@ -69,7 +69,7 @@ class CurrentYearOption extends PeriodOption {
         super(periodName);
     }
 
-    async showBalance() {
+    async showPeriodBalance() {
         const today = new Date();
         const from = new Date(today.getFullYear(), 0, 2).toISOString().slice(0,10);
         const to = new Date(today.getFullYear(), 12, 1).toISOString().slice(0,10);
@@ -84,7 +84,7 @@ class CurrentMonthOption extends PeriodOption {
         super(periodName);
     }
 
-    async showBalance() {
+    async showPeriodBalance() {
         const today = new Date();
         const from = new Date(today.getFullYear(), today.getMonth(), 2).toISOString().slice(0,10);
         const to = new Date(today.getFullYear(), today.getMonth() + 1, 1).toISOString().slice(0,10);
@@ -99,7 +99,7 @@ class PreviousMonthOption extends PeriodOption {
         super(periodName);
     }
 
-    async showBalance() {
+    async showPeriodBalance() {
         const today = new Date();
         const from = new Date(today.getFullYear(), today.getMonth() - 1, 2).toISOString().slice(0,10);
         const to = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0,10);
@@ -138,7 +138,7 @@ class CustomDatesOption extends PeriodOption {
         return inputContent;
     }
     
-    async _showBalanceFromModal(dateFrom, dateTo) {
+    async _showPeriodBalanceFromModal(dateFrom, dateTo) {
         const userData = await getUserData(dateFrom, dateTo);
         showBalance(userData);
     }
@@ -187,7 +187,7 @@ class CustomDatesOption extends PeriodOption {
         submitButton.innerText = "Submit";
         submitButton.addEventListener("click", () => {
             submitButton.dataset.dismiss = "modal";
-            this._showBalanceFromModal(dateFromInput.value, dateToInput.value);
+            this._showPeriodBalanceFromModal(dateFromInput.value, dateToInput.value);
         })
         footerDiv.append(submitButton);
 
@@ -210,8 +210,8 @@ class CustomDatesOption extends PeriodOption {
         return newOption;
       }
 
-    showBalance() {
-        // Show a popup window to select dates and run showBalanceFromModal()
+      showPeriodBalance() {
+        // Show a popup window to select dates and run showPeriodBalanceFromModal()
         $(".modal").modal("show");
     }
 }

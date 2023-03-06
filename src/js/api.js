@@ -1,7 +1,64 @@
 /*
 This module exports FormAPI class which stores queries for getting data from the server.
 */
-export { API }
+import { UserData} from './user_data.js';
+export { deleteTransaction, getUserData, API }
+
+
+const getUserData = async (dateFrom=null, dateTo=null) => {
+    try {
+        const queryAPI = new API();
+        const dictAPI = await queryAPI.postDict(
+            "/my-wallet/src/server/login.php",
+            {
+                'dateFrom': dateFrom,
+                'dateTo': dateTo
+            }
+        );
+        if (dictAPI.successful) {
+            const userData = new UserData(
+                dictAPI.id,
+                dictAPI.userName,
+                dictAPI.userData.incomeData.incomes,
+                dictAPI.userData.expenseData.expenses,
+                dictAPI.userData.incomeData.incomeOptions,
+                dictAPI.userData.expenseData.expenseOptions,
+                dictAPI.userData.expenseData.paymentOptions
+            );
+            return userData;
+        } else {
+            throw new Exception(`User data from: '${dateFrom}' to: '${dateTo}' where not successfully queried from the server.`);
+        }
+    } catch (e) {
+        console.log(
+            "Unexpected error occured while querying data of the logged in user from server."
+        );
+        console.log("Error: ", e);
+    }
+}
+
+const deleteTransaction = async (transactionType, transactionID) => {
+    try {
+        const queryAPI = new API();
+        const dictAPI = await queryAPI.postDict(
+            "/my-wallet/src/server/transaction_operation.php",
+            {
+                'procedure': 'delete', 
+                'transaction_type': transactionType,
+                'transaction_id': transactionID
+            }
+        );
+        if (dictAPI.successful) {
+            return
+        } 
+        throw new Exception("Transaction could not be deleted");
+    } catch (e) {
+        console.log(
+            "Unexpected error occured while deleting transaction record of the logged in user from server."
+        );
+        console.log("Error: ", e);
+    }
+}
 
 class API {
 

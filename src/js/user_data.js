@@ -3,42 +3,19 @@ This module stores objects to operate on:
     - user data received from the server
     - options for income and expense settings
 */
-import { API } from './api.js';
+import { showBalance } from './balance.js';
+import { getUserData } from './api.js';
+import { deleteTransaction } from './api.js';
 import { capitalizeFirstLetter} from './utils.js';
-export { getUserData, UserData, Options }
+export { UserData }
 
 
-const getUserData = async (dateFrom=null, dateTo=null) => {
-    try {
-        const queryAPI = new API();
-        const dictAPI = await queryAPI.postDict(
-            "/my-wallet/src/server/login.php",
-            {
-                'dateFrom': dateFrom,
-                'dateTo': dateTo
-            }
-        );
-        if (dictAPI.successful) {
-            const userData = new UserData(
-                dictAPI.id,
-                dictAPI.userName,
-                dictAPI.userData.incomeData.incomes,
-                dictAPI.userData.expenseData.expenses,
-                dictAPI.userData.incomeData.incomeOptions,
-                dictAPI.userData.expenseData.expenseOptions,
-                dictAPI.userData.expenseData.paymentOptions
-            );
-            return userData;
-        } else {
-            throw new Exception(`User data from: '${dateFrom}' to: '${dateTo}' where not successfully queried from the server.`);
-        }
-    } catch (e) {
-        console.log(
-            "Unexpected error occured while querying data of the logged in user from server."
-        );
-        console.log("Error: ", e);
-    }
+const deleteUserTransaction = async (transactionType, transactionID) => {
+    await deleteTransaction(transactionType, transactionID);
+    window.userData = await getUserData(window.userDateFrom, window.userDateTo);
+    showBalance(window.userData);
 }
+
 
 class UserData {
 
@@ -154,7 +131,7 @@ class UserData {
                 iconDelete.classList.add("fa", "fa-eraser");
                 divDeleteTransaction.append(iconDelete);
                 divDeleteTransaction.addEventListener("click", () => {
-
+                    deleteUserTransaction(transactionType, catTransaction["id"]);
                 })
                 divRow.append(divDeleteTransaction);
 
@@ -294,12 +271,12 @@ class UserData {
 
     showIncomes(sectionDiv) {
         this.showPieChart(sectionDiv, this.incomes, "_incomes");
-        sectionDiv.append(this._createTable(this.incomes, "incomes"));
+        sectionDiv.append(this._createTable(this.incomes, "income"));
     }
     
     showExpenses(sectionDiv) {
         this.showPieChart(sectionDiv, this.expenses, "_expenses");
-        sectionDiv.append(this._createTable(this.expenses, "expenses"));
+        sectionDiv.append(this._createTable(this.expenses, "expense"));
     }
 }
 
