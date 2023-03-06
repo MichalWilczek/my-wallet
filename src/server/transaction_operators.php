@@ -85,6 +85,7 @@ class ExpenseDataValidator extends IncomeDataValidator {
     protected $paymentOption;
 
     function __construct() {
+        parent::__construct();
         $this->typeName = "expense";
     }
 
@@ -110,7 +111,7 @@ interface TransactionOperator {
 
 class IncomeTransactionAddition implements TransactionOperator {
 
-    private $validator;
+    protected $validator;
 
     function __construct() {
         $this->validator = new IncomeDataValidator();
@@ -135,7 +136,11 @@ class IncomeTransactionAddition implements TransactionOperator {
             $query->execute();
             return [];
         } catch (Exception $error) {
+            $errors["db_connection"] = "Server error while adding income record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while adding income record! Apologies for inconvenience. Please, register at another time.";
             $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while adding income record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while adding income record! Apologies for inconvenience. Please, register at another time.";
             return $errors;
         }
     }
@@ -143,9 +148,8 @@ class IncomeTransactionAddition implements TransactionOperator {
 
 class ExpenseTransactionAddition extends IncomeTransactionAddition {
 
-    private $validator;
-
     function __construct() {
+        parent::__construct();
         $this->validator = new ExpenseDataValidator();
     }
 
@@ -168,14 +172,19 @@ class ExpenseTransactionAddition extends IncomeTransactionAddition {
             $query->execute();
             return [];
         } catch (Exception $error) {
+            $errors["db_connection"] = "Server error while adding expense record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while adding expense record! Apologies for inconvenience. Please, register at another time.";
             $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while adding expense record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while adding expense record! Apologies for inconvenience. Please, register at another time.";
             return $errors;
         }
     }
 }
 
 class IncomeTransactionDeletion implements TransactionOperator {
-    private $validator;
+
+    protected $validator;
 
     function __construct() {
         $this->validator = new IncomeDataValidator();
@@ -199,16 +208,20 @@ class IncomeTransactionDeletion implements TransactionOperator {
             $query->execute();
             return [];
         } catch (Exception $error) {
+            $errors["db_connection"] = "Server error while deleting transaction record! Apologies for inconvenience. Please, delete transaction at another time.";
+            $errors["db_connection"] = "Server error while deleting transaction record! Apologies for inconvenience. Please, delete transaction at another time.";
             $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, delete transaction at another time.";
+            $errors["db_connection"] = "Server error while deleting transaction record! Apologies for inconvenience. Please, delete transaction at another time.";
+            $errors["db_connection"] = "Server error while deleting transaction record! Apologies for inconvenience. Please, delete transaction at another time.";
             return $errors;
         }
     }
 }
 
 class ExpenseTransactionDeletion extends IncomeTransactionDeletion {
-    private $validator;
 
     function __construct() {
+        parent::__construct();
         $this->validator = new ExpenseDataValidator();
     }
 
@@ -219,7 +232,8 @@ class ExpenseTransactionDeletion extends IncomeTransactionDeletion {
 }
 
 class IncomeTransactionModification implements TransactionOperator {
-    private $validator;
+
+    protected $validator;
 
     function __construct() {
         $this->validator = new IncomeDataValidator();
@@ -232,6 +246,7 @@ class IncomeTransactionModification implements TransactionOperator {
         $this->validator->validateComment();
         $this->validator->validateTransactionID();
     }
+
     function runOperationInDb($dbConnect, $userID) {
         try {
             $incomeCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "incomeTables", $this->validator->getType());
@@ -245,16 +260,20 @@ class IncomeTransactionModification implements TransactionOperator {
             $query->execute();
             return [];
         } catch (Exception $error) {
+            $errors["db_connection"] = "Server error while modifying income record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while modifying income record! Apologies for inconvenience. Please, register at another time.";
             $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while modifying income record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while modifying income record! Apologies for inconvenience. Please, register at another time.";
             return $errors;
         }
     }
 }
 
 class ExpenseTransactionModification extends IncomeTransactionModification {
-    private $validator;
 
     function __construct() {
+        parent::__construct();
         $this->validator = new ExpenseDataValidator();
     }
 
@@ -263,6 +282,7 @@ class ExpenseTransactionModification extends IncomeTransactionModification {
         $this->validator->validatePaymentOption();
         return $this->validator->getErrors();
     }
+    
     function runOperationInDb($dbConnect, $userID) {
         try {
             $expenseCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "expenseTables", $this->validator->getType());
@@ -278,7 +298,11 @@ class ExpenseTransactionModification extends IncomeTransactionModification {
             $query->execute();
             return [];
         } catch (Exception $error) {
+            $errors["db_connection"] = "Server error while modifying expense record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while modifying expense record! Apologies for inconvenience. Please, register at another time.";
             $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while modifying expense record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while modifying expense record! Apologies for inconvenience. Please, register at another time.";
             return $errors;
         }
     }

@@ -78,7 +78,6 @@ function getTransactionOptionIDAssignedToUser($dbConnect, $userID, $categoryType
         $query->execute();
         $result = $query->fetch();
         return $result["id"];
-        
     } catch (Exception $error) {
         echo "Server error while modifying transaction options for the user \n \n";
     }
