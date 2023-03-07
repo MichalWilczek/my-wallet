@@ -130,7 +130,7 @@ const registerUser = (elementID) => {
     const button = document.createElement("button");
     button.type = "submit";
     button.innerText = "Register";
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         // Remove the messages from previous round if they exist.
@@ -139,7 +139,7 @@ const registerUser = (elementID) => {
             msgFromPrevIteration.remove()
         }
         const registrationQuery = new API("Your account has been successfully created!");
-        const results = registrationQuery.postForm(
+        const results = await registrationQuery.postForm(
             "/my-wallet/src/server/registration.php", 
             form
         );
