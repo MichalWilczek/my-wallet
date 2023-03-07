@@ -11,13 +11,13 @@ export {
 
 const addIncome = (elementID) => {
     const elem = document.querySelector(`#${elementID}`);
-    obj = new IncomeTransactionAddition();
+    const obj = new IncomeTransactionAddition();
     obj.formTransaction(elem);
 }
 
 const addExpense = (elementID) => {
     const elem = document.querySelector(`#${elementID}`);
-    obj = new ExpenseTransactionAddition();
+    const obj = new ExpenseTransactionAddition();
     obj.formTransaction(elem);
 }
 
@@ -36,7 +36,7 @@ class IncomeDataGenerator {
         this.utils = new Utils();
     }
 
-    createAmountInput(defaultValue=Nan) {
+    createAmountInput(defaultValue=NaN) {
         const div = this.utils.createFormElementDiv();
         const icon = document.createElement("i");
         icon.classList.add("fa", "fa-money");
@@ -123,6 +123,7 @@ class TransactionOperator {
 class IncomeTransactionAddition extends TransactionOperator {
 
     constructor() {
+        super();
         this.headerMsg = "Please, add income below:";
         this.utils = new Utils();
         this.dataGenerator = new IncomeDataGenerator();
@@ -176,10 +177,10 @@ class IncomeTransactionAddition extends TransactionOperator {
 
         const divForm = document.createElement("div");
         const form = this.generateForm();
-        form.append(this.createButtonElement);
-        form = this.generateOnSubmitEvent(form, bodyDiv);
+        form.append(this.createButtonElement());
+        this.generateOnSubmitEvent(form, bodyDiv);
         divForm.append(form);
-        bodyDiv.append(divElement);
+        bodyDiv.append(divForm);
         return bodyDiv;
     } 
 }
@@ -229,14 +230,29 @@ class ExpenseTransactionAddition extends IncomeTransactionAddition {
 
 class IncomeTransactionModification extends IncomeTransactionAddition {
 
+    BUTTON_ELEM = null;
+
     constructor(transactionBaseData) {
         super();
         this.headerMsg = "Please, modify income below:";
         this.transactionBaseData = transactionBaseData;
     }
 
+    getButtonElem() {
+        return this.BUTTON_ELEM;
+    }
+
     async addTransaction(form, div) {
         clickAddTransaction(form, div, {'procedure': 'modify', 'transaction_type': 'income'});
+    }
+
+    createButtonElement() {
+        const div = this.utils.createFormElementDiv();
+        const button = document.createElement("button");
+        button.innerText = "Modify";
+        this.BUTTON_ELEM = button;
+        div.append(button);
+        return div;
     }
 
     generateForm() {
@@ -252,14 +268,29 @@ class IncomeTransactionModification extends IncomeTransactionAddition {
 
 class ExpenseTransactionModification extends ExpenseTransactionAddition {
 
+    BUTTON_ELEM = null;
+
     constructor(transactionBaseData) {
         super();
         this.headerMsg = "Please, modify expense below:";
         this.transactionBaseData = transactionBaseData;
     }
 
+    getButtonElem() {
+        return this.BUTTON_ELEM;
+    }
+    
     async addTransaction(form, div) {
         clickAddTransaction(form, div, {'procedure': 'modify', 'transaction_type': 'expense'});
+    }
+
+    createButtonElement() {
+        const div = this.utils.createFormElementDiv();
+        const button = document.createElement("button");
+        button.innerText = "Add";
+        this.BUTTON_ELEM = button;
+        div.append(button);
+        return div;
     }
 
     generateForm() {

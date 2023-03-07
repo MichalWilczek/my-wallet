@@ -74,7 +74,7 @@ const logIn = (elementID, loginButtonID) => {
     const button = document.createElement("button");
     button.type = "submit";
     button.innerText = "Log in";
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         // Remove the messages from previous round if they exist.
@@ -82,7 +82,7 @@ const logIn = (elementID, loginButtonID) => {
         if(msgFromPrevIteration!==null) {
             msgFromPrevIteration.remove()
         }
-        clickLogin(form, sectionRegister);
+        await clickLogin(form, sectionRegister);
       }
     )
     form.append(button);

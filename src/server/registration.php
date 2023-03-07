@@ -124,7 +124,7 @@ if (isset($_POST["username"]) && isset($_POST["email"]) && isset($_POST["passwor
     }
 } else {
     $apiResult["successful"] = false;
-    $apiResult["errors"] = [];
+    $apiResult["errors"] = ["The registration could not be carried out as necessary post variables are not set."];
 }
 header("Content-Type: application/json");
 echo json_encode($apiResult);

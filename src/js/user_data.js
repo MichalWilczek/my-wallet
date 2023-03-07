@@ -7,6 +7,7 @@ import { showBalance } from './balance.js';
 import { getUserData } from './api.js';
 import { API } from './api.js';
 import { capitalizeFirstLetter} from './utils.js';
+import { IncomeTransactionModification, ExpenseTransactionModification } from './transaction_operators.js';
 export { UserData }
 
 
@@ -24,8 +25,16 @@ const deleteUserTransaction = async (transactionType, transactionID) => {
     showBalance(window.userData);
 }
 
-const modifyUserTransaction = async (transactionType, transactionID) => {
-
+const modifyUserTransaction = async (transactionType, transactionData) => {
+    if (transactionType === 'income') {
+        const obj = IncomeTransactionModification(transactionData);  
+    } else if (transactionType === 'expense') {
+        const obj = ExpenseTransactionModification(transactionData);  
+    } else {
+        throw new Exception(`Transaction type: ${transactionType} must be either 'income' or 'expense'.`);
+    }
+    obj.generateForm(transactionData);
+    
 }
 
 class UserData {
@@ -155,7 +164,7 @@ class UserData {
                 iconModify.classList.add("fa", "fa-pencil-square-o");
                 divModifyTransaction.append(iconModify);
                 divModifyTransaction.addEventListener("click", () => {
-                    modifyUserTransaction(transactionType, catTransaction["id"]);
+                    modifyUserTransaction(transactionType, catTransaction);
                 })
                 divRow.append(divModifyTransaction);
 
