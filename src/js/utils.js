@@ -1,7 +1,11 @@
 /*
 This module useful objects to work on HTML format.
 */
-export {clearBox, createUserElementwithLabel, capitalizeFirstLetter}
+export {
+    clearBox,
+    createUserElementwithLabel,
+    capitalizeFirstLetter
+}
 
 
 const capitalizeFirstLetter = (string) => {

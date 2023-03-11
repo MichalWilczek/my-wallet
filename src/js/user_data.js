@@ -7,7 +7,11 @@ import { showBalance } from './balance.js';
 import { getUserData } from './api.js';
 import { API } from './api.js';
 import { capitalizeFirstLetter} from './utils.js';
-import { IncomeTransactionModification, ExpenseTransactionModification } from './transaction_operators.js';
+import { Modal } from './modal.js';
+import { 
+    IncomeTransactionModification, 
+    ExpenseTransactionModification 
+} from './transaction_operators.js';
 export { UserData }
 
 
@@ -26,16 +30,29 @@ const deleteUserTransaction = async (transactionType, transactionID) => {
 }
 
 const modifyUserTransaction = async (transactionType, transactionData) => {
+    const modalID = "modify-transaction-modal";
+    const modalElement = document.querySelector(`#${modalID}`);
+    if (modalElement !== null) {
+        modalElement.remove();
+    }
+    const modalObj = new Modal(modalID);
+
+    let transactionObj = null;
     if (transactionType === 'income') {
-        const obj = IncomeTransactionModification(transactionData);  
+        transactionObj = new IncomeTransactionModification(transactionData);
+        modalObj.createHeaderDiv("Modify income");
     } else if (transactionType === 'expense') {
-        const obj = ExpenseTransactionModification(transactionData);  
+        transactionObj = new ExpenseTransactionModification(transactionData); 
+        modalObj.createHeaderDiv("Modify expense"); 
     } else {
         throw new Exception(`Transaction type: ${transactionType} must be either 'income' or 'expense'.`);
     }
-
-    obj.generateForm(transactionData);
-    
+    const form = transactionObj.generateForm(transactionData);
+    modalObj.addBodyDiv(form);
+    const footer = document.createElement("div");
+    modalObj.addFooterDiv(footer);
+    document.body.append(modalObj.getModal());
+    modalObj.showModal();
 }
 
 class UserData {
@@ -165,7 +182,9 @@ class UserData {
                 iconModify.classList.add("fa", "fa-pencil-square-o");
                 divModifyTransaction.append(iconModify);
                 divModifyTransaction.addEventListener("click", () => {
-                    modifyUserTransaction(transactionType, catTransaction);
+                    const userTransactionDefaultData = catTransaction;
+                    userTransactionDefaultData["transaction_category"] = categoryTransactionName;
+                    modifyUserTransaction(transactionType, userTransactionDefaultData);
                 })
                 divRow.append(divModifyTransaction);
 
@@ -323,7 +342,7 @@ class Options {
             existingOption => existingOption !== optionName
         );
     }
-    createElement() {
+    createElement(defaultSelectedName=null) {
         const selectObj = document.createElement("select");
         selectObj.name = this.id;
         selectObj.id = `${this.id}`;
@@ -341,6 +360,9 @@ class Options {
             const newOption = document.createElement("option");
             newOption.value = option;
             newOption.innerText = option;
+            if (option === defaultSelectedName) {
+                newOption.selected = true;
+            }
             selectObj.append(newOption);
         }
         return selectObj;

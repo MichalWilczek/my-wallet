@@ -6,7 +6,10 @@ In this module, we put a set of user options such as:
         - change password
         - modify income and expense options
 */
-import { clearBox, createUserElementwithLabel } from './utils.js';
+import {
+    clearBox,
+    createUserElementwithLabel 
+} from './utils.js';
 export { changeSettings }
 
 

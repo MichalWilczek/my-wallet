@@ -84,9 +84,9 @@ class IncomeDataGenerator {
     }
 
     // ADD DEFAULT CATEGORY!!!
-    createTransactionCategoryInput() {
+    createTransactionCategoryInput(defaultValue) {
         const div = this.utils.createFormElementDiv();
-        const category = window.userData.incomeOptions.createElement();
+        const category = window.userData.incomeOptions.createElement(defaultValue);
         div.append(category);
         return div;
     }
@@ -95,17 +95,17 @@ class IncomeDataGenerator {
 class ExpenseDataGenerator extends IncomeDataGenerator {
 
     // ADD DEFAULT CATEGORY!!!
-    createTransactionCategoryInput() {
+    createTransactionCategoryInput(defaultValue) {
         const div = this.utils.createFormElementDiv();
-        const category = window.userData.expenseOptions.createElement();
+        const category = window.userData.expenseOptions.createElement(defaultValue);
         div.append(category);
         return div;
     }
 
     // ADD DEFAULT CATEGORY!!!
-    createPaymentOptionInput() {
+    createPaymentOptionInput(defaultValue) {
         const div = this.utils.createFormElementDiv();
-        const paymentMethod = window.userData.paymentOptions.createElement();
+        const paymentMethod = window.userData.paymentOptions.createElement(defaultValue);
         div.append(paymentMethod);
         return div;
     }
@@ -260,7 +260,7 @@ class IncomeTransactionModification extends IncomeTransactionAddition {
         const form = document.createElement("form");
         form.append(this.dataGenerator.createAmountInput(this.transactionBaseData.amount));
         form.append(this.dataGenerator.createDateInput(this.transactionBaseData.date));
-        form.append(this.dataGenerator.createTransactionCategoryInput());
+        form.append(this.dataGenerator.createTransactionCategoryInput(this.transactionBaseData["transaction_category"]));
         form.append(this.dataGenerator.createCommentInput(this.transactionBaseData.comment));
         return form;
     }
@@ -298,8 +298,8 @@ class ExpenseTransactionModification extends ExpenseTransactionAddition {
         const form = document.createElement("form");
         form.append(this.dataGenerator.createAmountInput(this.transactionBaseData.amount));
         form.append(this.dataGenerator.createDateInput(this.transactionBaseData.date));
-        form.append(this.dataGenerator.createTransactionCategoryInput());
-        form.append(this.dataGenerator.createPaymentOptionInput());
+        form.append(this.dataGenerator.createTransactionCategoryInput(this.transactionBaseData["transaction_category"]));
+        form.append(this.dataGenerator.createPaymentOptionInput(this.transactionBaseData["payment_method"]));
         form.append(this.dataGenerator.createCommentInput(this.transactionBaseData.comment));
         return form;
     }
