@@ -10,11 +10,16 @@ class Modal {
         this.modalDiv = document.createElement("div");
         this.dialogDiv = document.createElement("div");
         this.contentDiv = document.createElement("div");
+        this.closeButton = this._getCloseButton();
         this._createModalLayer(modalDivName);
     }
 
     getModal() {
         return this.modalDiv;
+    }
+
+    getCloseButton() {
+        return this.closeButton;
     }
 
     showModal() {
@@ -33,6 +38,14 @@ class Modal {
         this.dialogDiv.append(this.contentDiv);
     }
 
+    _getCloseButton() {
+        const closeButton = document.createElement("button");
+        closeButton.type = "button";
+        closeButton.dataset.dismiss = "modal";
+        closeButton.innerText = "Close";
+        return closeButton;
+    }
+
     createHeaderDiv(headerText) {
         const headerDiv = document.createElement("div");
         headerDiv.classList.add("modal-header");
@@ -47,13 +60,7 @@ class Modal {
 
     addFooterDiv(footerDiv) {
         footerDiv.classList.add("modal-footer");
-
-        // Add close button
-        const closeButton = document.createElement("button");
-        closeButton.type = "button";
-        closeButton.dataset.dismiss = "modal";
-        closeButton.innerText = "Close";
-        footerDiv.append(closeButton);
+        footerDiv.append(this.closeButton);
         this.contentDiv.append(footerDiv);
     }
 }

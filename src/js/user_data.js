@@ -47,9 +47,36 @@ const modifyUserTransaction = async (transactionType, transactionData) => {
     } else {
         throw new Exception(`Transaction type: ${transactionType} must be either 'income' or 'expense'.`);
     }
+    const divBody = document.createElement("div");
     const form = transactionObj.generateForm(transactionData);
-    modalObj.addBodyDiv(form);
+    divBody.append(form);
+    modalObj.addBodyDiv(divBody);
     const footer = document.createElement("div");
+    let submitButtonClicked = false;
+    const submitButton = document.createElement("button");
+        submitButton.type = "submit";
+        submitButton.innerText = "Modify";
+        submitButton.addEventListener("click", async () => {
+            const query = new API("Your transaction has been successfully modified!");
+            const result = await query.postForm(
+                "/my-wallet/src/server/transaction_operation.php",
+                form,
+                {
+                    'procedure': 'modify', 
+                    'transaction_type': transactionType,
+                    'transaction_id': transactionData.id
+                }
+            );
+            query.generateOutputMessage(result, divBody);
+            submitButtonClicked = true;
+        })
+    footer.append(submitButton);
+    modalObj.closeButton.addEventListener("click", async () => {
+        is (submitButtonClicked === true) {
+            window.userData = await getUserData(window.userDateFrom, window.userDateTo);
+            showBalance(window.userData);
+        }
+    })
     modalObj.addFooterDiv(footer);
     document.body.append(modalObj.getModal());
     modalObj.showModal();
@@ -169,8 +196,8 @@ class UserData {
                 iconDelete.classList.add("fa", "fa-eraser");
                 iconDelete.style = "cursor: pointer;"
                 divDeleteTransaction.append(iconDelete);
-                divDeleteTransaction.addEventListener("click", () => {
-                    deleteUserTransaction(transactionType, catTransaction["id"]);
+                divDeleteTransaction.addEventListener("click", async () => {
+                    await deleteUserTransaction(transactionType, catTransaction["id"]);
                 })
                 divRow.append(divDeleteTransaction);
 
@@ -181,10 +208,10 @@ class UserData {
                 iconModify.style = "cursor: pointer;"
                 iconModify.classList.add("fa", "fa-pencil-square-o");
                 divModifyTransaction.append(iconModify);
-                divModifyTransaction.addEventListener("click", () => {
+                divModifyTransaction.addEventListener("click", async () => {
                     const userTransactionDefaultData = catTransaction;
                     userTransactionDefaultData["transaction_category"] = categoryTransactionName;
-                    modifyUserTransaction(transactionType, userTransactionDefaultData);
+                    await modifyUserTransaction(transactionType, userTransactionDefaultData);
                 })
                 divRow.append(divModifyTransaction);
 

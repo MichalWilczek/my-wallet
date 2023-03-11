@@ -241,6 +241,7 @@ class IncomeTransactionModification implements TransactionOperator {
         $this->validator->validateType();
         $this->validator->validateComment();
         $this->validator->validateTransactionID();
+        return $this->validator->getErrors();
     }
 
     function runOperationInDb($dbConnect, $userID) {
@@ -256,11 +257,7 @@ class IncomeTransactionModification implements TransactionOperator {
             $query->execute();
             return [];
         } catch (Exception $error) {
-            $errors["db_connection"] = "Server error while modifying income record! Apologies for inconvenience. Please, register at another time.";
-            $errors["db_connection"] = "Server error while modifying income record! Apologies for inconvenience. Please, register at another time.";
-            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
-            $errors["db_connection"] = "Server error while modifying income record! Apologies for inconvenience. Please, register at another time.";
-            $errors["db_connection"] = "Server error while modifying income record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while modifying income transaction record! Apologies for inconvenience. Please, modify transaction at another time.";
             return $errors;
         }
     }
@@ -294,11 +291,7 @@ class ExpenseTransactionModification extends IncomeTransactionModification {
             $query->execute();
             return [];
         } catch (Exception $error) {
-            $errors["db_connection"] = "Server error while modifying expense record! Apologies for inconvenience. Please, register at another time.";
-            $errors["db_connection"] = "Server error while modifying expense record! Apologies for inconvenience. Please, register at another time.";
-            $errors["db_connection"] = "Server error! Apologies for inconvenience. Please, register at another time.";
-            $errors["db_connection"] = "Server error while modifying expense record! Apologies for inconvenience. Please, register at another time.";
-            $errors["db_connection"] = "Server error while modifying expense record! Apologies for inconvenience. Please, register at another time.";
+            $errors["db_connection"] = "Server error while modifying expense transaction record! Apologies for inconvenience. Please, modify transaction at another time.";
             return $errors;
         }
     }
