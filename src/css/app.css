@@ -41,6 +41,12 @@ div.form_element {
     text-align: center;
 }
 
+div.form_element i {
+    position: absolute; 
+    margin: 9px 13px;
+    opacity: 0.8;
+}
+
 div.transaction_category {
     font-size: 1.2em;
     text-align: center;
@@ -84,11 +90,6 @@ div.transaction_cell {
     text-decoration: underline;
 }
 
-div.form_element i {
-    position: absolute; 
-    margin: 9px 13px;
-    opacity: 0.8;
-}
 
 input[type="date"]::-webkit-calendar-picker-indicator {
     position: absolute; 
@@ -146,9 +147,11 @@ main button, main input, main select {
     border-radius: 0.2em;
 }
 
-.modal.custom input {
-    width: 10em;
-    height: 1.6em;
+.modal.custom input, .modal.custom select {
+    width: 12em;
+    height: 1.8em;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
     box-sizing: border-box;
     text-align: center;
     padding: 0.2em 0;
@@ -167,6 +170,7 @@ main button, main input, main select {
 }
 
 .modal.custom div {
+    text-align: center;
     margin-top: 3px;
     margin-bottom: 3px;
 }
@@ -174,15 +178,12 @@ main button, main input, main select {
 .modal.custom div.date-label-modal {
     display: inline-block;
     width: 30%;
-    text-align: center;
 }
 
 .modal.custom div.date-input-modal {
     display: inline-block;
     width: 70%;
 }
-
-
 
 button.log_button {
     border: 0.08em solid #313133;

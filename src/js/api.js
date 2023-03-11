@@ -101,8 +101,14 @@ class API {
     }
 
     generateOutputMessage(dictAPI, sectionObj) {
+        const msgID = "divMsgID"
+        const previousMsg = document.querySelector(`#${msgID}`)
+        if (previousMsg !== null) {
+            previousMsg.remove();
+        }
+
         const div = document.createElement("div");
-        div.id = "divMsgID";
+        div.id = msgID;
         if (dictAPI.successful) {
             div.append(
                 this._createDivWithMsg(

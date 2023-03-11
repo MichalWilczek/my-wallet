@@ -72,7 +72,7 @@ const modifyUserTransaction = async (transactionType, transactionData) => {
         })
     footer.append(submitButton);
     modalObj.closeButton.addEventListener("click", async () => {
-        is (submitButtonClicked === true) {
+        if (submitButtonClicked === true) {
             window.userData = await getUserData(window.userDateFrom, window.userDateTo);
             showBalance(window.userData);
         }
