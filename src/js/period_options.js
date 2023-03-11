@@ -3,6 +3,7 @@ TODO: ADD DOCUMENTATION
 */
 import { getUserData } from './api.js';
 import { showBalance } from './balance.js';
+import { Modal } from './modal.js';
 export { BalanceOptions }
 
 
@@ -114,6 +115,7 @@ class CustomDatesOption extends PeriodOption {
 
     constructor(periodName="Custom dates") {
         super(periodName);
+        this.modalGen = new Modal(this.MODAL_DIV_NAME);
     }
 
     _setDateInput (form, labelText, defaultDate) {
@@ -144,27 +146,9 @@ class CustomDatesOption extends PeriodOption {
     }
 
     _createModalElementForPeriodOptions() {
-        const mainDiv = document.createElement("div");
-        mainDiv.id = this.MODAL_DIV_NAME;
-        document.body.append(mainDiv);
-        mainDiv.classList.add("modal", "fade", "custom");
-        mainDiv.role = "dialog";
-    
-        const dialogDiv = document.createElement("div");
-        mainDiv.append(dialogDiv);
-        dialogDiv.classList.add("modal-dialog");
+        this.modalGen.createHeaderDiv('Select custom dates');
 
-        const contentDiv = document.createElement("div");
-        dialogDiv.append(contentDiv);
-        contentDiv.classList.add("modal-content");
-    
-        const headerDiv = document.createElement("div");
-        headerDiv.classList.add("modal-header");
-        headerDiv.innerHTML = 'Select custom dates';
-        contentDiv.append(headerDiv);
-    
         const bodyDiv = document.createElement("div");
-        bodyDiv.classList.add("modal-body");
         const dateFromInput = this._setDateInput(
             bodyDiv, 
             "From",
@@ -176,12 +160,9 @@ class CustomDatesOption extends PeriodOption {
             "To", 
             new Date().toISOString().slice(0,10)
         );
-        contentDiv.append(bodyDiv);
-    
-        const footerDiv = document.createElement("div");
-        footerDiv.classList.add("modal-footer");
+        this.modalGen.addBodyDiv(bodyDiv);
 
-        // Add submit button
+        const footerDiv = document.createElement("div");
         const submitButton = document.createElement("button");
         submitButton.type = "submit";
         submitButton.innerText = "Submit";
@@ -192,15 +173,9 @@ class CustomDatesOption extends PeriodOption {
             this._showPeriodBalanceFromModal(dateFromInput.value, dateToInput.value);
         })
         footerDiv.append(submitButton);
+        this.modalGen.addFooterDiv(footerDiv);
 
-        // Add close button
-        const closeButton = document.createElement("button");
-        closeButton.type = "button";
-        closeButton.dataset.dismiss = "modal";
-        closeButton.innerText = "Close";
-        footerDiv.append(closeButton);
-        
-        contentDiv.append(footerDiv);
+        document.body.append(this.modalGen.getModal());
     }
 
     createOptionElement() {
@@ -213,7 +188,6 @@ class CustomDatesOption extends PeriodOption {
       }
 
       showPeriodBalance() {
-        // Show a popup window to select dates and run showPeriodBalanceFromModal()
-        $(".modal").modal("show");
+        this.modalGen.showModal();
     }
 }

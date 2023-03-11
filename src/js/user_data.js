@@ -33,6 +33,7 @@ const modifyUserTransaction = async (transactionType, transactionData) => {
     } else {
         throw new Exception(`Transaction type: ${transactionType} must be either 'income' or 'expense'.`);
     }
+
     obj.generateForm(transactionData);
     
 }
