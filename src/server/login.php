@@ -15,7 +15,6 @@ function loginToAccount() {
 		$userData = $userQuery->fetch();
 
 		if ($userData && password_verify($password, $userData['password'])) {
-			echo "Hello World! \n \n";
 			$tempLoginData = new UserData(
 				true, 
 				$userData['id'], 
