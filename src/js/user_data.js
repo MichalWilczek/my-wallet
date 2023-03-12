@@ -182,19 +182,16 @@ class UserData {
                 divRow.append(divAmount);
 
                 const divComment = document.createElement("div");
-                divComment.classList.add("transaction_cell");
-                divComment.style = "width: 200px;";
+                divComment.classList.add("transaction_cell", "transaction-cell-comment");
                 const spanComment = document.createElement("span");
                 spanComment.textContent = catTransaction["comment"];
                 divComment.append(spanComment);
                 divRow.append(divComment);
 
                 const divDeleteTransaction = document.createElement("div");
-                divDeleteTransaction.classList.add("transaction_cell");
-                divDeleteTransaction.style = "width: 35px;";
+                divDeleteTransaction.classList.add("transaction_cell", "transaction-cell-icon");
                 const iconDelete = document.createElement("i");
-                iconDelete.classList.add("fa", "fa-eraser");
-                iconDelete.style = "cursor: pointer;"
+                iconDelete.classList.add("fa", "fa-eraser", "custom-icon-style");
                 divDeleteTransaction.append(iconDelete);
                 divDeleteTransaction.addEventListener("click", async () => {
                     await deleteUserTransaction(transactionType, catTransaction["id"]);
@@ -202,11 +199,9 @@ class UserData {
                 divRow.append(divDeleteTransaction);
 
                 const divModifyTransaction = document.createElement("div");
-                divModifyTransaction.classList.add("transaction_cell");
-                divModifyTransaction.style = "width: 35px;";
+                divModifyTransaction.classList.add("transaction_cell", "transaction-cell-icon");
                 const iconModify = document.createElement("i");
-                iconModify.style = "cursor: pointer;"
-                iconModify.classList.add("fa", "fa-pencil-square-o");
+                iconModify.classList.add("fa", "fa-pencil-square-o", "custom-icon-style");
                 divModifyTransaction.append(iconModify);
                 divModifyTransaction.addEventListener("click", async () => {
                     const userTransactionDefaultData = catTransaction;

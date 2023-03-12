@@ -3,19 +3,40 @@
 @import url("https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap");
 
 
+/* Define variables */
+:root {
+    --primary-bg-color: #f2efef;
+    --secondary-bg-color: #d5d3d3;
+    --primary-font-color: #000000;
+    --alarm-font-color: red;
+    --success-font-color: green;
+    --font-family: 'Arapey', 'Open Sans', 'serif';
+    --border-color: #313133;
+    --border-radius: 0.2em;
+}
+
+
 html {
     font-size: 20px;
 }
 
 body {
-    background-color: #f2efef;
-    color: #000000;
-    font-family: 'Arapey', 'Open Sans', 'serif';
+    background-color: var(--body-bg-color);
+    color: var(--body-color);
+    font-family: var(--font-family);
+}
+
+:hover {
+    transition: 0.3s cubic-bezier(0.33, 1, 0.68, 1);  /* Taken from https://easings.net/ as 'easeOutCubic'. */
+}
+
+button:hover, select:hover, a:hover {
+    cursor: pointer;
 }
 
 #upper_nav_bar {
-    background-color: #d5d3d3;
-    border-bottom: 1.5px solid #313133;
+    background-color: var(--secondary-bg-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 div.upper_nav_bar_logout {
@@ -50,7 +71,7 @@ div.form_element i {
 div.transaction_category {
     font-size: 1.2em;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 30px;
     margin-bottom: 10px;
 }
 
@@ -58,14 +79,14 @@ hr {
     margin-left: auto;
     margin-right: auto;
     width: 80%;
-    border-top: 2px solid black;
+    border-top: 1px solid var(--primary-font-color);
 }
 
 div.transaction_category hr {
     width: 50%;
     margin-top: 8px;
     margin-bottom: 8px;
-    border-top: 1px solid black;
+    border-top: 1px solid var(--primary-font-color);
 }
 
 div.transaction_row {
@@ -79,9 +100,25 @@ div.transaction_cell {
     width: 100px;
 }
 
+div.transaction-cell-icon {
+    width: 35px;
+}
+
+div.transaction-cell-comment {
+    width: 200px;
+}
+
+div.transaction_cell i {
+    cursor: pointer;
+}
+
+div.transaction_cell i:hover {
+    opacity: 0.7;
+}
+
 .clickable_span {
     cursor: pointer;
-    color: #313133;
+    color: var(--border-color);
     font-weight: 700;
 }
 
@@ -90,7 +127,6 @@ div.transaction_cell {
     text-decoration: underline;
 }
 
-
 input[type="date"]::-webkit-calendar-picker-indicator {
     position: absolute; 
     margin: 9px 10px;
@@ -98,10 +134,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 footer {
-    background-color: #dddac6;
+    background-color: var(--secondary-bg-color);
     height: 75px;
-    border-top: 1.5px solid #313133;
+    border-top: 1px solid var(--border-color);
     font-size: 1em;
+}
+
+footer a {
+    color: var(--primary-font-color);
+}
+
+footer a:hover {
+    color: var(--border-color);
 }
 
 h1 {
@@ -143,7 +187,7 @@ main button, main input, main select {
     text-align: center;
     
     padding: 0.2em 0;
-    border: 0.08em solid #313133;
+    border: 0.1em solid var(--border-color);
     border-radius: 0.2em;
 }
 
@@ -155,7 +199,7 @@ main button, main input, main select {
     box-sizing: border-box;
     text-align: center;
     padding: 0.2em 0;
-    border: 0.08em solid #313133;
+    border: 0.08em solid var(--border-color);
     border-radius: 0.2em;
 }
 
@@ -165,7 +209,7 @@ main button, main input, main select {
     box-sizing: border-box;
     text-align: center;
     padding: 0.2em 0;
-    border: 0.08em solid #313133;
+    border: 0.08em solid var(--border-color);
     border-radius: 0.2em;
 }
 
@@ -186,22 +230,15 @@ main button, main input, main select {
 }
 
 button.log_button {
-    border: 0.08em solid #313133;
+    border: 0.08em solid var(--border-color);
     border-radius: 0.2em;
     width: 5em;
     height: 2em;
 }
 
 button:hover {
-    background-color: #313133;
-    color: #f2efef;
-    transition: 0.7s cubic-bezier(0.33, 1, 0.68, 1);  /* Taken from https://easings.net/ as 'easeOutCubic'. */
-}
-
-button:focus {
-    background-color: #27242f;
-    border-color: #27242f;
-    color: #f2efef;
+    background-color: var(--border-color);
+    color: var(--primary-bg-color);
 }
 
 button.navbar-toggler {
@@ -215,18 +252,17 @@ button.navbar-toggler {
 .navbar-nav > a {
     width: 6.2em; 
     text-align: center;
-    border-left: 1px dashed #313133;
-    color: #313133;
+    border-left: 1px dashed var(--border-color);
+    color: var(--border-color);
 }
 
 .navbar-nav > a:last-child {
-    border-right: 1px dashed #313133;
+    border-right: 1px dashed var(--border-color);
 }
 
-.navbar-nav > a:hover, .navbar-nav > a:focus {
-    cursor: pointer;
+.navbar-nav > a:hover {
     background-color: #27242f;
-    color: #f2efef;
+    color: var(--primary-bg-color);
 }
 
 #divMsgID > .msg_div {
@@ -234,12 +270,12 @@ button.navbar-toggler {
 }
 
 #divMsgID .msg_error {
-    color: red;
+    color: var(--alarm-font-color);
     font-weight: 500;
 }
 
 #divMsgID .msg_success {
-    color: green;
+    color: var(--success-font-color);
     font-weight: 500;
 }
 
@@ -253,12 +289,28 @@ button.navbar-toggler {
     .logo_text {
         display: none;
     }
-    h2, h3 {
-        font-size: 1.2em;
-    }
 }
 
 @media (max-width: 767px) {
+
+    html {
+        font-size: 18px;
+    }
+
+    div.transaction_cell {
+        display: inline-block;
+        text-align: left;
+        width: 90px;
+    }
+    
+    div.transaction-cell-icon {
+        width: 30px;
+    }
+    
+    div.transaction-cell-comment {
+        width: 160px;
+    }
+
     .navbar-nav {
         display: flex;
         justify-content: center;
@@ -284,8 +336,5 @@ button.navbar-toggler {
     }
     #logOutButton {
         width: 75%;
-    }
-    h2, h3 {
-        font-size: 1em;
     }
 }
