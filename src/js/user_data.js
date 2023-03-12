@@ -54,22 +54,22 @@ const modifyUserTransaction = async (transactionType, transactionData) => {
     const footer = document.createElement("div");
     let submitButtonClicked = false;
     const submitButton = document.createElement("button");
-        submitButton.type = "submit";
-        submitButton.innerText = "Modify";
-        submitButton.addEventListener("click", async () => {
-            const query = new API("Your transaction has been successfully modified!");
-            const result = await query.postForm(
-                "/my-wallet/src/server/transaction_operation.php",
-                form,
-                {
-                    'procedure': 'modify', 
-                    'transaction_type': transactionType,
-                    'transaction_id': transactionData.id
-                }
-            );
-            query.generateOutputMessage(result, divBody);
-            submitButtonClicked = true;
-        })
+    submitButton.type = "submit";
+    submitButton.innerText = "Modify";
+    submitButton.addEventListener("click", async () => {
+        const query = new API("Your transaction has been successfully modified!");
+        const result = await query.postForm(
+            "/my-wallet/src/server/transaction_operation.php",
+            form,
+            {
+                'procedure': 'modify', 
+                'transaction_type': transactionType,
+                'transaction_id': transactionData.id
+            }
+        );
+        query.generateOutputMessage(result, divBody);
+        submitButtonClicked = true;
+    })
     footer.append(submitButton);
     modalObj.closeButton.addEventListener("click", async () => {
         if (submitButtonClicked === true) {

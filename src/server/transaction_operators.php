@@ -38,6 +38,7 @@ class IncomeDataValidator {
 
     function validateAmount() {
         $this->amount = filter_input(INPUT_POST, "amount");
+        // echo "Amount: ".$this->amount."\n \n";
         if (filter_var($this->amount, FILTER_VALIDATE_FLOAT) == false) {
             $this->inputErrors["amount"] = "The input cash amount must be a number.";
         }
@@ -280,7 +281,8 @@ class ExpenseTransactionModification extends IncomeTransactionModification {
         try {
             $expenseCategoryID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "expenseTables", $this->validator->getType());
             $paymentOptionID = getTransactionOptionIDAssignedToUser($dbConnect, $userID, "paymentTables", $this->validator->getPaymentOption());
-            $query = $dbConnect->prepare("UPDATE expenses SET user_id=:user_id, expense_category_assigned_to_user_id=:expense_category_assigned_to_user_id, payment_method_assigned_to_user_id=:payment_method_assigned_to_user_id, amount=:amount, date_of_expense=:date_of_expense, expense_comment:expense_comment WHERE id=:id");
+
+            $query = $dbConnect->prepare("UPDATE expenses SET user_id=:user_id, expense_category_assigned_to_user_id=:expense_category_assigned_to_user_id, payment_method_assigned_to_user_id=:payment_method_assigned_to_user_id, amount=:amount, date_of_expense=:date_of_expense, expense_comment=:expense_comment WHERE id=:id");
             $query->bindValue(":user_id", $userID, PDO::PARAM_INT);
             $query->bindValue(":expense_category_assigned_to_user_id", $expenseCategoryID, PDO::PARAM_INT);
             $query->bindValue(":payment_method_assigned_to_user_id", $paymentOptionID, PDO::PARAM_INT);

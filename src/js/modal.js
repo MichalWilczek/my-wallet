@@ -23,13 +23,18 @@ class Modal {
     }
 
     showModal() {
-        $(`#${this.MODAL_NAME_ID}`).modal("show");
+        const modal = new bootstrap.Modal(document.querySelector(`#${this.MODAL_NAME_ID}`));
+        modal.show();
     }
 
     _createModalLayer(modalDivName) {
         this.modalDiv.id = modalDivName;
         this.modalDiv.classList.add("modal", "fade", "custom");
-        this.modalDiv.role = "dialog";
+        this.modalDiv.tabIndex = -1;
+        this.modalDiv.setAttribute("aria-hidden", "true");
+        this.modalDiv.setAttribute("aria-modal", "true");
+        this.modalDiv.setAttribute("role", "dialog");
+        this.modalDiv.setAttribute("id", modalDivName);
 
         this.dialogDiv.classList.add("modal-dialog");
         this.contentDiv.classList.add("modal-content");
@@ -41,7 +46,7 @@ class Modal {
     _getCloseButton() {
         const closeButton = document.createElement("button");
         closeButton.type = "button";
-        closeButton.dataset.dismiss = "modal";
+        closeButton.setAttribute("data-bs-dismiss", "modal");
         closeButton.innerText = "Close";
         return closeButton;
     }

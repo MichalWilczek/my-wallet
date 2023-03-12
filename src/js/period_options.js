@@ -167,7 +167,7 @@ class CustomDatesOption extends PeriodOption {
         submitButton.type = "submit";
         submitButton.innerText = "Submit";
         submitButton.addEventListener("click", () => {
-            submitButton.dataset.dismiss = "modal";
+            submitButton.setAttribute("data-bs-dismiss", "modal");
             window.userDateFrom = dateFromInput.value;
             window.userDateTo = dateToInput.value;
             this._showPeriodBalanceFromModal(dateFromInput.value, dateToInput.value);

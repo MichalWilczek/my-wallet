@@ -15,11 +15,11 @@ if (!isset($_SESSION["userID"]) && !isset($_SESSION["loggedInUsername"])) {
         <title>Your Budget</title>
 
         <!-- Bootstrap CSS file. -->
-        <link 
-            rel="stylesheet" 
-            href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
-            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-            crossorigin="anonymous">
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+            crossorigin="anonymous" />
         <!-- CSS file with fonts. -->
         <link
             rel="stylesheet"
@@ -45,8 +45,8 @@ if (!isset($_SESSION["userID"]) && !isset($_SESSION["loggedInUsername"])) {
                 <button
                     class="navbar-toggler"
                     type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarNavAltMarkup"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavAltMarkup"
                     aria-controls="navbarNavAltMarkup"
                     aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -57,30 +57,30 @@ if (!isset($_SESSION["userID"]) && !isset($_SESSION["loggedInUsername"])) {
                     <div class="navbar-nav">
                         <a
                             class="nav-link"
-                            data-toggle="collapse" 
-                            data-target=".navbar-collapse.show"
+                            data-bs-toggle="collapse" 
+                            data-bs-target=".navbar-collapse.show"
                             aria-current="page"
                             onclick="runUserPortal();"
                             >Home</a
                         >
                         <a
                             class="nav-link"
-                            data-toggle="collapse" 
-                            data-target=".navbar-collapse.show"
+                            data-bs-toggle="collapse" 
+                            data-bs-target=".navbar-collapse.show"
                             onclick="addIncome('main_page_content');"
                             >Add Income</a
                         >
                         <a
                             class="nav-link"
-                            data-toggle="collapse" 
-                            data-target=".navbar-collapse.show"
+                            data-bs-toggle="collapse" 
+                            data-bs-target=".navbar-collapse.show"
                             onclick="addExpense('main_page_content');"
                             >Add Expense</a
                         >
                         <a
                             class="nav-link"
-                            data-toggle="collapse" 
-                            data-target=".navbar-collapse.show"
+                            data-bs-toggle="collapse" 
+                            data-bs-target=".navbar-collapse.show"
                             onclick="changeSettings('main_page_content');"
                             >Settings</a
                         >
@@ -111,9 +111,14 @@ if (!isset($_SESSION["userID"]) && !isset($_SESSION["loggedInUsername"])) {
         </footer>
 
         <!-- Bootstrap scripts -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
+            integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
+            crossorigin="anonymous"></script>
 
         <!-- ReCaptcha script -->
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
