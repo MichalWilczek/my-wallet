@@ -28,7 +28,6 @@ if (!isset($_SESSION["userID"]) && !isset($_SESSION["loggedInUsername"])) {
         <link 
             rel="stylesheet" 
             href="css/app.css" />
-
     </head>
     <body
         onload="runUserPortal();">
@@ -46,41 +45,42 @@ if (!isset($_SESSION["userID"]) && !isset($_SESSION["loggedInUsername"])) {
                 <button
                     class="navbar-toggler"
                     type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavAltMarkup"
+                    data-toggle="collapse"
+                    data-target="#navbarNavAltMarkup"
                     aria-controls="navbarNavAltMarkup"
                     aria-expanded="false"
                     aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
+                    <!-- <span class="navbar-toggler-icon glyphicon glyphicon-menu-hamburger"></span> -->
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         <a
                             class="nav-link"
-                            data-bs-toggle="collapse" 
-                            data-bs-target=".navbar-collapse.show"
+                            data-toggle="collapse" 
+                            data-target=".navbar-collapse.show"
                             aria-current="page"
                             onclick="runUserPortal();"
                             >Home</a
                         >
                         <a
                             class="nav-link"
-                            data-bs-toggle="collapse" 
-                            data-bs-target=".navbar-collapse.show"
+                            data-toggle="collapse" 
+                            data-target=".navbar-collapse.show"
                             onclick="addIncome('main_page_content');"
                             >Add Income</a
                         >
                         <a
                             class="nav-link"
-                            data-bs-toggle="collapse" 
-                            data-bs-target=".navbar-collapse.show"
+                            data-toggle="collapse" 
+                            data-target=".navbar-collapse.show"
                             onclick="addExpense('main_page_content');"
                             >Add Expense</a
                         >
                         <a
                             class="nav-link"
-                            data-bs-toggle="collapse" 
-                            data-bs-target=".navbar-collapse.show"
+                            data-toggle="collapse" 
+                            data-target=".navbar-collapse.show"
                             onclick="changeSettings('main_page_content');"
                             >Settings</a
                         >

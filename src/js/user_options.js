@@ -106,7 +106,7 @@ const changeSettings = (elementID) => {
     window.scrollTo(0, 0);
 
     const header = document.createElement("h2");
-    header.innerText = "Please, select one of the options below:"
+    header.innerText = "Select one of the options:"
     document.querySelector(`#${elementID}`).append(header);
 
     const divElement1 = document.createElement("div");
