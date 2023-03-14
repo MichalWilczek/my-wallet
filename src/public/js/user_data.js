@@ -18,7 +18,7 @@ export { UserData }
 const deleteUserTransaction = async (transactionType, transactionID) => {
     const transactionQuery = new API();
     await transactionQuery.postDict(
-        "/my-wallet/src/server/transaction_operation.php", 
+        "/server/transaction_operation.php", 
         {
             'procedure': 'delete', 
             'transaction_type': transactionType,
@@ -59,7 +59,7 @@ const modifyUserTransaction = async (transactionType, transactionData) => {
     submitButton.addEventListener("click", async () => {
         const query = new API("Your transaction has been successfully modified!");
         const result = await query.postForm(
-            "/my-wallet/src/server/transaction_operation.php",
+            "/server/transaction_operation.php",
             form,
             {
                 'procedure': 'modify', 

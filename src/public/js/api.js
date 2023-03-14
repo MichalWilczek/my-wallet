@@ -8,7 +8,7 @@ export { addTransaction, getUserData, API }
 const addTransaction = async (form, div, transactionDict) => {
     const transactionQuery = new API("You have successfully posted a transaction!");
     const res = await transactionQuery.postForm(
-        "/my-wallet/src/server/transaction_operation.php", 
+        "/server/transaction_operation.php", 
         form, 
         transactionDict
     );
@@ -19,7 +19,7 @@ const getUserData = async (dateFrom=null, dateTo=null) => {
     try {
         const queryAPI = new API();
         const dictAPI = await queryAPI.postDict(
-            "/my-wallet/src/server/login.php",
+            "/server/login.php",
             {
                 'dateFrom': dateFrom,
                 'dateTo': dateTo

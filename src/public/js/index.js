@@ -39,12 +39,12 @@ const showUserID = (elementID) => {
 const clickLogin = async (form, div) => {
     const loginQuery = new API("You have been successfully logged in to your account!");
     const data = await loginQuery.postForm(
-        "/my-wallet/src/server/login.php", 
+        "/server/login.php", 
         form
     )
     loginQuery.generateOutputMessage(data, div);
     if (data.successful) {
-        location.assign("/my-wallet/src/user_portal.php");
+        location.assign("/user_portal.php");
         window.userData = new UserData(
             data.id,
             data.userName,
@@ -108,7 +108,7 @@ const logIn = (elementID, loginButtonID) => {
 
 const logOut = async (elementID) => {
     document.querySelector(`#${elementID}`)
-    .addEventListener("click", () => (location.assign("/my-wallet/src/server/logout.php")));
+    .addEventListener("click", () => (location.assign("/server/logout.php")));
 }
 
 const registerUser = (elementID) => {
@@ -140,7 +140,7 @@ const registerUser = (elementID) => {
         }
         const registrationQuery = new API("Your account has been successfully created!");
         const results = await registrationQuery.postForm(
-            "/my-wallet/src/server/registration.php", 
+            "/server/registration.php", 
             form
         );
         registrationQuery.generateOutputMessage(results, sectionRegister);
