@@ -21,14 +21,29 @@ SET time_zone = "+00:00";
 --
 -- Database: `mywallet`
 --
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `username` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_polish_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  `is_active` BOOLEAN NOT NULL DEFAULT FALSE, 
+  `activation_hash` varchar(64) NULL DEFAULT NULL,
+  `password_reset_hash` varchar(64) COLLATE utf8_polish_ci NULL,
+  `password_reset_expires_at` datetime NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
--- --------------------------------------------------------
 
---
--- Structure for table `expenses`
---
+CREATE TABLE IF NOT EXISTS `remembered_logins` (
+  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `token_hash` varchar(100) COLLATE utf8_polish_ci NOT NULL,
+  `expires_at` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+ALTER TABLE `remembered_logins`
+  ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE;
 
-CREATE TABLE `expenses` (
+
+CREATE TABLE IF NOT EXISTS `expenses` (
   `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `user_id` int(11) UNSIGNED NOT NULL,
   `expense_category_assigned_to_user_id` int(11) UNSIGNED NOT NULL,
@@ -37,34 +52,23 @@ CREATE TABLE `expenses` (
   `date_of_expense` date NOT NULL,
   `expense_comment` varchar(100) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+ALTER TABLE `expenses`
+  ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE;
 
--- --------------------------------------------------------
 
---
--- Structure for table `expenses_category_assigned_to_users`
---
-
-CREATE TABLE `expenses_category_assigned_to_users` (
+CREATE TABLE IF NOT EXISTS `expenses_category_assigned_to_users` (
   `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `user_id` int(11) UNSIGNED NOT NULL,
   `name` varchar(50) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+ALTER TABLE `expenses_category_assigned_to_users`
+  ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE;
 
--- --------------------------------------------------------
 
---
--- Structure for table `expenses_category_default`
---
-
-CREATE TABLE `expenses_category_default` (
+CREATE TABLE IF NOT EXISTS `expenses_category_default` (
   `id` int(11) UNSIGNED NOT NULL PRIMARY KEY,
   `name` varchar(50) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
-
---
--- Preliminary rows for table `expenses_category_default`
---
-
 INSERT INTO `expenses_category_default` (`id`, `name`) VALUES
 (1, 'Transport'),
 (2, 'Books'),
@@ -82,14 +86,11 @@ INSERT INTO `expenses_category_default` (`id`, `name`) VALUES
 (14, 'Debt Repayment'),
 (15, 'Gift'),
 (16, 'Another');
+ALTER TABLE `expenses_category_default`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
--- --------------------------------------------------------
 
---
--- Structure for table `incomes`
---
-
-CREATE TABLE `incomes` (
+CREATE TABLE IF NOT EXISTS `incomes` (
   `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `user_id` int(11) UNSIGNED NOT NULL,
   `income_category_assigned_to_user_id` int(11) UNSIGNED NOT NULL,
@@ -97,112 +98,53 @@ CREATE TABLE `incomes` (
   `date_of_income` date NOT NULL,
   `income_comment` varchar(100) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+ALTER TABLE `incomes`
+  ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE;
 
--- --------------------------------------------------------
 
---
--- Structure for table `incomes_category_assigned_to_users`
---
-
-CREATE TABLE `incomes_category_assigned_to_users` (
+CREATE TABLE IF NOT EXISTS `incomes_category_assigned_to_users` (
   `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `user_id` int(11) UNSIGNED NOT NULL,
   `name` varchar(50) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+ALTER TABLE `incomes_category_assigned_to_users`
+  ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE;
 
--- --------------------------------------------------------
 
---
--- Structure for table `incomes_category_default`
---
-
-CREATE TABLE `incomes_category_default` (
+CREATE TABLE IF NOT EXISTS `incomes_category_default` (
   `id` int(11) UNSIGNED NOT NULL PRIMARY KEY,
   `name` varchar(50) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
-
---
--- Preliminary rows for table `incomes_category_default`
---
-
 INSERT INTO `incomes_category_default` (`id`, `name`) VALUES
 (1, 'Salary'),
 (2, 'Interest'),
 (3, 'Allegro'),
 (4, 'Another');
+ALTER TABLE `incomes_category_default`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
--- --------------------------------------------------------
 
---
--- Structure for table `payment_methods_assigned_to_users`
---
-
-CREATE TABLE `payment_methods_assigned_to_users` (
+CREATE TABLE IF NOT EXISTS `payment_methods_assigned_to_users` (
   `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `user_id` int(11) UNSIGNED NOT NULL,
   `name` varchar(50) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+ALTER TABLE `payment_methods_assigned_to_users`
+  ADD FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE;
 
--- --------------------------------------------------------
 
---
--- Structure for table `payment_methods_default`
---
-
-CREATE TABLE `payment_methods_default` (
-  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS `payment_methods_default` (
+  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY ,
   `name` varchar(50) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
-
---
--- Preliminary rows for table `payment_methods_default`
---
-
 INSERT INTO `payment_methods_default` (`id`, `name`) VALUES
 (1, 'Cash'),
 (2, 'Debit Card'),
 (3, 'Credit Card');
-
--- --------------------------------------------------------
-
---
--- Structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY,
-  `username` varchar(50) COLLATE utf8_polish_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8_polish_ci NOT NULL,
-  `email` varchar(50) COLLATE utf8_polish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `expenses_category_default`
---
-ALTER TABLE `expenses_category_default`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT for table `incomes_category_default`
---
-ALTER TABLE `incomes_category_default`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `payment_methods_default`
---
 ALTER TABLE `payment_methods_default`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

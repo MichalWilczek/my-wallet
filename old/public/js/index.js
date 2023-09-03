@@ -140,7 +140,7 @@ const registerUser = (elementID) => {
         }
         const registrationQuery = new API("Your account has been successfully created!");
         const results = await registrationQuery.postForm(
-            "/server/registration.php", 
+            "/user/signup.php", 
             form
         );
         registrationQuery.generateOutputMessage(results, sectionRegister);

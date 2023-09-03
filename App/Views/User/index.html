@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Your Budget - User{% endblock %}
+
+{% block body %}
+
+<body onload="runUserPortal('main_page_content');">
+        
+    <nav class="navbar navbar-expand-md sticky-top p-1" id="upper_nav_bar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="img/logo-1.png" alt="Your Budget" height="50" />
+                <img src="img/logo-2.png" alt="Your Budget" height="50" />
+                <img
+                    src="img/logo-3.png"
+                    class="logo_text"
+                    alt="Your Budget"
+                    height="50" />
+            </a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a
+                        class="nav-link"
+                        data-bs-toggle="collapse" 
+                        data-bs-target=".navbar-collapse.show"
+                        aria-current="page"
+                        onclick="runUserPortal('main_page_content');"
+                        >Home</a
+                    >
+                    <a
+                        class="nav-link"
+                        data-bs-toggle="collapse" 
+                        data-bs-target=".navbar-collapse.show"
+                        onclick="addTransaction('income', 'main_page_content');"
+                        >Add Income</a
+                    >
+                    <a
+                        class="nav-link"
+                        data-bs-toggle="collapse" 
+                        data-bs-target=".navbar-collapse.show"
+                        onclick="addTransaction('expense', 'main_page_content');"
+                        >Add Expense</a
+                    >
+                    <a
+                        class="nav-link"
+                        data-bs-toggle="collapse" 
+                        data-bs-target=".navbar-collapse.show"
+                        onclick="changeSettings('main_page_content');"
+                        >Settings</a
+                    >
+                </div>
+                <div id="logOutDiv">
+                    <span id="upper_nav_bar_span_id">{{ current_user.username }}</span>
+                    <button
+                        id="logOutButton"
+                        class="log_button"
+                        onclick="window.location.href='/account/logout';">
+                        Log out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <main id="main_page_content"></main>
+    </div>
+    
+    <footer>
+        <nav class="navbar">
+            <div class="container-fluid">
+              <a class="nav-link p-2" href="#">About me</a>
+            </div>
+          </nav>
+    </footer>    
+
+</body>
+
+{% endblock %}

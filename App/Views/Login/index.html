@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Wallet - Login{% endblock %}
+
+{% block body %}
+
+<body>
+
+    <nav class="navbar p-1" id="upper_nav_bar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="/img/logo-1.png" alt="Your Budget" height="50">
+                <img src="/img/logo-2.png" alt="Your Budget" height="50">
+                <img src="/img/logo-3.png" class="logo_text" alt="Your Budget" height="50">
+            </a>
+        </div>
+    </nav>
+
+    {% for message in flash_messages %}
+    <div class="alert alert-{{ message.type }}">
+        {{ message.body }}
+    </div>
+    {% endfor %}
+
+    <div class="container">
+        <main id="main_page_content">
+
+            <section class="login_registration">
+                <h2>Log in</h2>
+                
+                <form action="/account/login" method="post" id="formLogin">
+                    
+                    <label>Email</label>
+                    <div class="form_element"><i class="fa fa-user"></i>
+                        <input type="text" id="user-name-email-id" name="email" value="{{ email }}" autofocus required>
+                    </div>
+                    
+                    <label>Password</label>
+                    <div class="form_element"><i class="fa fa-unlock-alt"></i>
+                        <input type="password" id="password-login-id" name="password" required>
+                    </div>
+
+                    <label>Remember me</label>
+                    <div class="form_element">
+                        <input type="checkbox" name="remember_me" {% if remember_me %} checked="checked"{% endif %}>
+                    </div>
+                    
+                    <button type="submit">Log in</button>
+                </form>
+            </section>
+
+            {% if user.errors is not empty %}
+            <p>Errors:</p>
+                <ul>
+                    {% for error in user.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            
+            <section>
+                <p>
+                    <span>Forgot password? Click </span>
+                    <span class="clickable_span" onclick="window.location.href='/password/forgot';">here</span>
+                    <span>!</span>
+                </p>
+            </section>
+
+            <section>
+                <p>
+                    <span>Don't have an account yet? Sign up </span>
+                    <span class="clickable_span" onclick="window.location.href='/account/signing-up';">here</span>
+                    <span>!</span>
+                </p>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+
+{% endblock %}

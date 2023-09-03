@@ -1,0 +1,12 @@
+# Git files
+.git/
+
+# Log files
+logs/
+
+# Composer directories
+vendor/
+composer.lock
+
+# Configuration files
+*Config.php
