@@ -39,104 +39,82 @@ class User extends \Core\Model {
     }
 
     public function add() {
-        try {
-            $this->validate();
+        $this->validate();
 
-            if (empty($this->errors)) {
-    
-                $passwordHash = password_hash($this->password, PASSWORD_DEFAULT);
+        if (empty($this->errors)) {
 
-                $token = new Token();
-                $hashedToken = $token->getHash();
-                $this->activation_token = $token->getValue();
-    
-                $sql = 'INSERT INTO users (username, email, password, activation_hash)
-                        VALUES (:name, :email, :password_hash, :activation_hash)';
-    
-                $db = static::getDB();
-                $stmt = $db->prepare($sql);
-    
-                $stmt->bindValue(':name', $this->username, PDO::PARAM_STR);
-                $stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
-                $stmt->bindValue(':password_hash', $passwordHash, PDO::PARAM_STR);
-                $stmt->bindValue(':activation_hash', $hashedToken, PDO::PARAM_STR);
-                
-                if ($stmt->execute()) {
-                    $user = $this->findByEmail($this->email);
-                    $this->addDefaultUserCategories($user->id);
-                    return true;    
-                }
+            $passwordHash = password_hash($this->password, PASSWORD_DEFAULT);
 
-                return false;
+            $token = new Token();
+            $hashedToken = $token->getHash();
+            $this->activation_token = $token->getValue();
+
+            $sql = 'INSERT INTO users (username, email, password, activation_hash)
+                    VALUES (:name, :email, :password_hash, :activation_hash)';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':name', $this->username, PDO::PARAM_STR);
+            $stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
+            $stmt->bindValue(':password_hash', $passwordHash, PDO::PARAM_STR);
+            $stmt->bindValue(':activation_hash', $hashedToken, PDO::PARAM_STR);
+            
+            if ($stmt->execute()) {
+                $user = $this->findByEmail($this->email);
+                $this->addDefaultUserCategories($user->id);
+                return true;    
             }
+
             return false;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }  
+        }
+        return false;
     }
 
     public static function authenticate($email, $password) {
-        try {
-            $user = static::findByEmail($email);
+        $user = static::findByEmail($email);
 
-            if ($user && $user->is_active) {
-                if (password_verify($password, $user->password)) {
-                    return $user;
-                }
+        if ($user && $user->is_active) {
+            if (password_verify($password, $user->password)) {
+                return $user;
             }
+        }
 
-            return false;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }  
+        return false; 
     }
 
     public static function emailExists($email, $ignoreID=null) {
-        try {
-            $user = static::findByEmail($email);
+        $user = static::findByEmail($email);
 
-            if ($user && $user->id != $ignoreID) {
-                return true;
-            }
-            
-            return false;
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }  
-
+        if ($user && $user->id != $ignoreID) {
+            return true;
+        }
+        
         return false;
     }
 
     public static function findByEmail($email) {
-        try {
-            $db = static::getDB();
-            $sql = "SELECT * FROM users WHERE email = :email";
+        $db = static::getDB();
+        $sql = "SELECT * FROM users WHERE email = :email";
 
-            $stmt = $db->prepare($sql);
-            $stmt->bindValue(":email", $email, PDO::PARAM_STR);
-            $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
-            $stmt->execute();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+        $stmt->execute();
 
-            return $stmt->fetch();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }  
+        return $stmt->fetch();
     }
 
     public static function findByID($id) {
-        try {
-            $db = static::getDB();
-            $sql = "SELECT * FROM users WHERE id = :id";
+        $db = static::getDB();
+        $sql = "SELECT * FROM users WHERE id = :id";
 
-            $stmt = $db->prepare($sql);
-            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
-            $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
-            $stmt->execute();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+        $stmt->execute();
 
-            return $stmt->fetch();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }  
+        return $stmt->fetch();
     }
 
     protected function addDefaultUserCategories($userID) {
@@ -210,22 +188,18 @@ class User extends \Core\Model {
 
         $expiryTimestamp = time() + 60 * 60 * 2;  // 2 hours from now
 
-        try {
-            $sql = "UPDATE users 
-                    SET password_reset_hash = :password_reset_hash,
-                        password_reset_expires_at = :expires_at
-                    WHERE id = :id";
+        $sql = "UPDATE users 
+                SET password_reset_hash = :password_reset_hash,
+                    password_reset_expires_at = :expires_at
+                WHERE id = :id";
 
-            $db = static::getDB();
-            $stmt = $db->prepare($sql);
-            $stmt->bindValue(":password_reset_hash", $hashedToken, PDO::PARAM_STR);
-            $stmt->bindValue(":expires_at", date('Y-m-d H:i:s', $expiryTimestamp), PDO::PARAM_STR);
-            $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(":password_reset_hash", $hashedToken, PDO::PARAM_STR);
+        $stmt->bindValue(":expires_at", date('Y-m-d H:i:s', $expiryTimestamp), PDO::PARAM_STR);
+        $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
 
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }  
+        return $stmt->execute();
     }
 
     protected function sendPasswordResetEmail() {
@@ -242,23 +216,19 @@ class User extends \Core\Model {
         $hashedToken = $token->getHash();
         $currentTimestamp = date('Y-m-d H:i:s');
 
-        try {
-            $sql = "SELECT * 
-                    FROM users
-                    WHERE password_reset_hash = :token_hash
-                    AND password_reset_expires_at > :current_timestamp";
+        $sql = "SELECT * 
+                FROM users
+                WHERE password_reset_hash = :token_hash
+                AND password_reset_expires_at > :current_timestamp";
 
-            $db = static::getDB();
-            $stmt = $db->prepare($sql);
-            $stmt->bindValue(":token_hash", $hashedToken, PDO::PARAM_STR);
-            $stmt->bindValue(":current_timestamp", $currentTimestamp, PDO::PARAM_STR);
-            $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
-            $stmt->execute();
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(":token_hash", $hashedToken, PDO::PARAM_STR);
+        $stmt->bindValue(":current_timestamp", $currentTimestamp, PDO::PARAM_STR);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+        $stmt->execute();
 
-            return $stmt->fetch();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }  
+        return $stmt->fetch();
     }
 
     public function resetPasword($password, $passwordRepeated) {
@@ -269,7 +239,6 @@ class User extends \Core\Model {
         if (empty($this->errors)) {
             $passwordHash = password_hash($this->password, PASSWORD_DEFAULT);
 
-            try {
             $sql = 'UPDATE users
                     SET password = :password_hash,
                         password_reset_hash = NULL,
@@ -281,11 +250,7 @@ class User extends \Core\Model {
             $stmt->bindValue(":password_hash", $passwordHash, PDO::PARAM_STR);
             $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
 
-            return $stmt->execute();
-
-            } catch (PDOException $e) {
-                echo $e->getMessage();
-            }  
+            return $stmt->execute(); 
         }
         return false;
     }
@@ -303,20 +268,15 @@ class User extends \Core\Model {
         $token = new Token($token);
         $tokenHash = $token->getHash();
 
-        try {
-            $sql = 'UPDATE users
-                    SET is_active = 1,
-                        activation_hash = NULL
-                    WHERE activation_hash = :hashed_token';
+        $sql = 'UPDATE users
+                SET is_active = 1,
+                    activation_hash = NULL
+                WHERE activation_hash = :hashed_token';
 
-            $db = static::getDB();
-            $stmt = $db->prepare($sql);
-            $stmt->bindValue(":hashed_token", $tokenHash, PDO::PARAM_STR);
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(":hashed_token", $tokenHash, PDO::PARAM_STR);
 
-            return $stmt->execute();
-
-            } catch (PDOException $e) {
-                echo $e->getMessage();
-            } 
+        return $stmt->execute();
     }
 }
