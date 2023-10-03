@@ -53,24 +53,6 @@ const getIncomes = async (dateFrom=null, dateTo=null) => {
     if (dateFrom !== null) params['dateFrom'] = dateFrom;
     if (dateTo !== null) params['dateTo'] = dateTo;
     return await _sendRequest("GET", URL_GET_INCOMES, params);
-
-    
-    // if (dateFrom !== null) params.push(['dateFrom', dateFrom]);
-    // if (dateTo !== null) params.push(['dateTo', dateTo]);
-
-    const config = {
-      method: 'get', // You can specify other HTTP methods here if needed
-      url: URL_GET_INCOMES,
-      params
-    };
-    const response = await axios(config);
-    return response.data;
-
-
-
-    // const searchParams = new URLSearchParams(params);
-
-    // return await _sendRequest("GET", URL_GET_INCOMES, searchParams);
 }
 
 
