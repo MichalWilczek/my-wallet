@@ -46,7 +46,8 @@ abstract class Category extends Authenticated {
         $userID = Auth::getUserID();
 
         $tableData = new $this->tableDataObj();
-        $category = new TransactionCategory($userID, $tableData->tableName);
+        $_POST['categoryID'] = $this->route_params['id'];
+        $category = new TransactionCategory($userID, $tableData->tableName, $_POST);
         $response = $category->delete();
 
         if ($response) {
@@ -62,7 +63,8 @@ abstract class Category extends Authenticated {
         $userID = Auth::getUserID();
 
         $tableData = new $this->tableDataObj();
-        $category = new TransactionCategory($userID, $tableData->tableName);
+        $_POST['categoryID'] = $this->route_params['id'];
+        $category = new TransactionCategory($userID, $tableData->tableName, $_POST);
         $response = $category->modify();
 
         if ($response) {

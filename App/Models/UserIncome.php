@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use PDO, PDOException;
+use PDO;
 use \App\Models\TableNames\Income;
 use \App\Models\TransactionCategory;
 

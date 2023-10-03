@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use PDO, PDOException;
+use PDO;
 use \App\Token;
 
 

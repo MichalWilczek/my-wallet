@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use PDO, PDOException;
+use PDO;
 
 
 class TransactionCategory extends \Core\Model {
     protected $userID;
     protected $tableName;
 
+    protected $categoryID;
     protected $transactionName;
-    protected $newTransactionName;
     protected $errors = [];
 
     public function __construct($userID, $tableName, $data = []) {
@@ -44,7 +44,13 @@ class TransactionCategory extends \Core\Model {
             return false;
         }
 
-        // TODO: Add function!!!
+        $db = static::getDB();
+
+        $stmt = $db->prepare("INSERT INTO $this->tableName VALUES(NULL, :user_id, :name)");
+        $stmt->bindValue(":user_id", $this->userID, PDO::PARAM_INT);
+        $stmt->bindValue(":name", $this->transactionName, PDO::PARAM_STR);
+
+        return $stmt->execute();
     }
 
     public function addDefault($defaultTableName) {
@@ -67,33 +73,33 @@ class TransactionCategory extends \Core\Model {
     }
 
     public function modify() {
+        $this->validateID();
         $this->validateTransactionName();
-        $this->validateNewTransactionName();
         if (!$this->checkValidate()) {
             return false;
         }
 
         $db = static::getDB();
 
-        $stmt = $db->prepare("UPDATE $this->tableName SET name = :name WHERE user_id = :user_id AND name = :old_name");
-        $stmt->bindValue(":name", ucfirst($this->newTransactionName), PDO::PARAM_STR);
+        $stmt = $db->prepare("UPDATE $this->tableName SET name = :name WHERE user_id = :user_id AND id = :id");
+        $stmt->bindValue(":name", ucfirst($this->transactionName), PDO::PARAM_STR);
         $stmt->bindValue(":user_id", $this->userID, PDO::PARAM_INT);
-        $stmt->bindValue(":old_name", ucfirst($this->transactionName), PDO::PARAM_STR);
+        $stmt->bindValue(":id", $this->categoryID, PDO::PARAM_INT);
         
         return $stmt->execute();
     }
 
     public function delete() {
-        $this->validateTransactionName();
+        $this->validateID();
         if (!$this->checkValidate()) {
             return false;
         }
 
         $db = static::getDB();
 
-        $stmt = $db->prepare("DELETE FROM $this->tableName WHERE user_id = :user_id AND name = :old_name");
+        $stmt = $db->prepare("DELETE FROM $this->tableName WHERE user_id = :user_id AND id = :id");
         $stmt->bindValue(":user_id", $this->userID, PDO::PARAM_INT);
-        $stmt->bindValue(":old_name", ucfirst($this->transactionName), PDO::PARAM_STR);
+        $stmt->bindValue(":id", $this->categoryID, PDO::PARAM_INT);
         
         return $stmt->execute();
     }
@@ -110,21 +116,21 @@ class TransactionCategory extends \Core\Model {
         return $result["id"];
     }
 
+    protected function validateID() {
+        if (filter_var($this->categoryID, FILTER_SANITIZE_NUMBER_INT) == false) {
+            $this->errors['category_ID'] = 'Category ID must be an integer.';
+        }
+    }
+
     protected function validateTransactionName() {
+        if (filter_var($this->transactionName, FILTER_SANITIZE_FULL_SPECIAL_CHARS) == false) {
+            $this->errors["transaction_name"] = "Not a string.";
+        }
         if ($this->transactionName == "") {
             $this->errors['transaction_name'] = "Transaction name must be at least one character.";
         }
         if (filter_var($this->transactionName, FILTER_SANITIZE_STRING) == false) {
             $this->errors['transaction_name'] = 'Transaction name must be a string.';
-        }
-    }
-
-    protected function validateNewTransactionName() {
-        if ($this->newTransactionName == "") {
-            $this->errors['new_transaction_name'] = "New transaction name must be at least one character.";
-        }
-        if (filter_var($this->transactionName, FILTER_SANITIZE_STRING) == false) {
-            $this->errors['new_transaction_name'] = 'New transaction name must be a string.';
         }
     }
 
