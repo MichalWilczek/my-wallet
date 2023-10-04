@@ -1,4 +1,6 @@
-export { 
+export {
+    deleteAccount,
+    changePassword,
     getIncomes,
     getExpenses,
     getIncomeCategories,
@@ -45,6 +47,20 @@ const URL_GET_PAYMENT_OPTIONS = '/payment-option/get';
 const URL_ADD_PAYMENT_OPTION = '/payment-option/add';
 const URL_DELETE_PAYMENT_OPTION = '/payment-option/delete/{id}';
 const URL_MODIFY_PAYMENT_OPTION= '/payment-option/modify/{id}';
+
+const URL_DELETE_ACCOUNT = '/account/delete';
+const URL_CHANGE_PASSWORD = '/account/change-user-password'
+
+
+// ENDPOINTS for ACCOUNT
+const deleteAccount = async () => {
+    return await _sendRequest("POST", URL_DELETE_ACCOUNT);
+}
+
+
+const changePassword = async (form) => {
+    return await _postFormRequest(URL_CHANGE_PASSWORD, form);
+}
 
 
 // Endpoints of INCOMES

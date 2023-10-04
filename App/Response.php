@@ -5,7 +5,7 @@ namespace App;
 
 class Response {
 
-    public static function success($resource, $msg="") {
+    public static function success($resource=[], $msg="") {
         $response = array(
             'status' => 'success',
             'data' => [

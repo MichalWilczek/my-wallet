@@ -279,4 +279,15 @@ class User extends \Core\Model {
 
         return $stmt->execute();
     }
+
+    public function deleteAccount() {
+        $sql = 'DELETE FROM users
+                WHERE id = :user_id';
+        
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(":user_id", $this->id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
 }

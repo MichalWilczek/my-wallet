@@ -1,11 +1,8 @@
-/*
-In this module, we put a set of user options such as:
-    - add income
-    - add expense
-    - change settings including
-        - change password
-        - modify income and expense options
-*/
+import { Modal } from './modal.js';
+import {
+    changePassword,
+    deleteAccount
+} from './endpoints.js';
 import {
     clearBox,
     createUserElementwithLabel 
@@ -13,7 +10,7 @@ import {
 export { changeSettings }
 
 
-const changePassword = (elementID) => {
+const modifyPassword = (elementID) => {
     clearBox(elementID);
     window.scrollTo(0, 0);
 
@@ -37,6 +34,9 @@ const changePassword = (elementID) => {
     document.querySelector(`#${elementID}`).append(divElement);
 }
 
+// TODO: Next step!
+// TODO: Modify this function so that I can add, delete, or modify income/expense/payment options!!!
+// In the new version we run those operations based on category IDs which has to be stored in the frontend!!!
 const modifyOptions = (elementID, optionsObj) => {
     clearBox(elementID);
     window.scrollTo(0, 0);
@@ -101,6 +101,38 @@ const modifyOptions = (elementID, optionsObj) => {
     document.querySelector(`#${elementID}`).append(divElement);
 }
 
+
+const removeAccount = () => {
+    const modal = new Modal("delete_account_div");
+    modal.createHeaderDiv("Delete account");
+
+    const bodyDiv = document.createElement("div");
+    const text = document.createElement("p");
+    text.innerText = "Are you sure you want to delete your account?";
+    bodyDiv.append(text);
+    modal.addBodyDiv(bodyDiv);
+
+    const footerDiv = document.createElement("div");
+    const deleteButton = document.createElement("button");
+    deleteButton.innerText = "Delete";
+    deleteButton.addEventListener(
+        "click",
+        async () => {
+            deleteButton.setAttribute("data-bs-dismiss", "modal");
+            const result = await deleteAccount();
+            if (result["status"] === 'success') {
+                window.location.href='/';
+            }
+        }
+    )
+    footerDiv.append(deleteButton);
+    modal.addFooterDiv(footerDiv);
+
+    document.body.append(modal.getModal());
+    modal.showModal();
+}
+
+
 const changeSettings = (elementID) => {
     clearBox(elementID);
     window.scrollTo(0, 0);
@@ -109,47 +141,58 @@ const changeSettings = (elementID) => {
     header.innerText = "Select one of the options:"
     document.querySelector(`#${elementID}`).append(header);
 
-    const divElement1 = document.createElement("div");
-    divElement1.classList.add("form_element");
-    const passwordChange = document.createElement("button");
-    passwordChange.addEventListener(
+    const divElementPassword = document.createElement("div");
+    divElementPassword.classList.add("form_element");
+    const passwordChangeButton = document.createElement("button");
+    passwordChangeButton.addEventListener(
         "click",
-        () => {changePassword(elementID)}
+        () => {modifyPassword(elementID)}
     );
-    passwordChange.textContent = "Change Password";
-    divElement1.append(passwordChange);
-    document.querySelector(`#${elementID}`).append(divElement1);
+    passwordChangeButton.textContent = "Change Password";
+    divElementPassword.append(passwordChangeButton);
+    document.querySelector(`#${elementID}`).append(divElementPassword);
  
-    const divElement2 = document.createElement("div");
-    divElement2.classList.add("form_element");
-    const paymentOptionsEdition = document.createElement("button");
-    paymentOptionsEdition.addEventListener(
-        "click",
-        () => {modifyOptions(elementID, window.userData.incomeOptions)}
-    );
-    paymentOptionsEdition.textContent = "Edit Payment Options";
-    divElement2.append(paymentOptionsEdition);
-    document.querySelector(`#${elementID}`).append(divElement2);
- 
-    const divElement3 = document.createElement("div");
-    divElement3.classList.add("form_element");
-    const incomeCategoriesEdition = document.createElement("button");
-    incomeCategoriesEdition.addEventListener(
+    const divElementPaymentOptions = document.createElement("div");
+    divElementPaymentOptions.classList.add("form_element");
+    const paymentOptionsEditionButton = document.createElement("button");
+    paymentOptionsEditionButton.addEventListener(
         "click",
         () => {modifyOptions(elementID, window.userData.incomeOptions)}
     );
-    incomeCategoriesEdition.textContent = "Edit Income Categories";
-    divElement3.append(incomeCategoriesEdition);
-    document.querySelector(`#${elementID}`).append(divElement3);
+    paymentOptionsEditionButton.textContent = "Edit Payment Options";
+    divElementPaymentOptions.append(paymentOptionsEditionButton);
+    document.querySelector(`#${elementID}`).append(divElementPaymentOptions);
  
-    let divElement4 = document.createElement("div");
-    divElement4.classList.add("form_element");
-    const expenseCategoriesEdition = document.createElement("button");
-    expenseCategoriesEdition.addEventListener(
+    const divElementIncomeCategories = document.createElement("div");
+    divElementIncomeCategories.classList.add("form_element");
+    const incomeCategoriesEditionButton = document.createElement("button");
+    incomeCategoriesEditionButton.addEventListener(
+        "click",
+        () => {modifyOptions(elementID, window.userData.incomeOptions)}
+    );
+    incomeCategoriesEditionButton.textContent = "Edit Income Categories";
+    divElementIncomeCategories.append(incomeCategoriesEditionButton);
+    document.querySelector(`#${elementID}`).append(divElementIncomeCategories);
+ 
+    let divElementExpenseCategories = document.createElement("div");
+    divElementExpenseCategories.classList.add("form_element");
+    const expenseCategoriesEditionButton = document.createElement("button");
+    expenseCategoriesEditionButton.addEventListener(
         "click",
         () => {modifyOptions(elementID, window.userData.expenseOptions)}
     );
-    expenseCategoriesEdition.textContent = "Edit Expense Categories";
-    divElement4.append(expenseCategoriesEdition);
-    document.querySelector(`#${elementID}`).append(divElement4);
+    expenseCategoriesEditionButton.textContent = "Edit Expense Categories";
+    divElementExpenseCategories.append(expenseCategoriesEditionButton);
+    document.querySelector(`#${elementID}`).append(divElementExpenseCategories);
+
+    let divElementRemoveAccount = document.createElement("div");
+    divElementRemoveAccount.classList.add("form_element");
+    const accountRemovalButton = document.createElement("button");
+    accountRemovalButton.addEventListener(
+        "click",
+        () => {removeAccount(elementID)}
+    )
+    accountRemovalButton.textContent = "Delete Account";
+    divElementRemoveAccount.append(accountRemovalButton);
+    document.querySelector(`#${elementID}`).append(divElementRemoveAccount);
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Auth;
 use \App\Flash;
+use \App\Response;
 use \App\Models\User;
 
 
@@ -66,5 +67,20 @@ class Account extends \Core\Controller {
 
     public function activatedAction() {
         View::renderTemplate('Signup/activated.html');
+    }
+
+    public function delete() {
+        $user = Auth::getUser();
+
+        if ($user) {
+            if ($user->deleteAccount()) {
+                Auth::logout();
+                http_response_code(200);
+                Response::success();
+                return;
+            }
+        }
+        http_response_code(404);
+        Response::error("Not found");
     }
 }

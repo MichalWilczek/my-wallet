@@ -25,6 +25,15 @@
         </div>
     </nav>
 
+    {% if user.errors is not empty %}
+    <p>Errors:</p>
+        <ul>
+            {% for error in user.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <div class="container">
         <main id="main_page_content">
             <div class="row text-center">
