@@ -8,7 +8,21 @@ import {
     modifyIncome,
     modifyExpense,
 } from "./endpoints.js";
+import {
+    createValueInput,
+    createDateInput,
+    createTextInput,
+    createSelectInput,
+    createButton,
+    createFormOutputMsg,
+} from "./components.js";
+import {
+    getIncomeCategoriesObj,
+    getExpenseCategoriesObj,
+    getPaymentOptionsObj,
+} from "./options.js"
 import { Modal } from "./modal.js";
+
 export {
     addTransaction,
     deleteTransaction,
@@ -21,6 +35,7 @@ const addTransaction = (transactionType, elementID) => {
     const elem = document.querySelector(`#${elementID}`);
     transactionObj.formTransaction(elem);
 }
+
 
 const deleteTransaction = async (transactionType, transactionID) => {
     if (transactionType === 'income') {
@@ -46,6 +61,7 @@ const deleteTransaction = async (transactionType, transactionID) => {
     }
 }
 
+
 const modifyTransaction = async (transactionType, transactionData) => {
     const modalID = "modify-transaction-modal";
     const modalElement = document.querySelector(`#${modalID}`);
@@ -61,16 +77,18 @@ const modifyTransaction = async (transactionType, transactionData) => {
     const form = transactionObj.generateForm();
     divBody.append(form);
     modalObj.addBodyDiv(divBody);
+    
     const footer = document.createElement("div");
     let submitButtonClicked = false;
-    const submitButton = document.createElement("button");
-    submitButton.type = "submit";
-    submitButton.innerText = "Modify";
-    submitButton.addEventListener("click", async () => {
-        transactionObj.requestTransaction(form, divBody);
-        submitButtonClicked = true;
-    })
+    const submitButton = createButton(
+        "Modify", 
+        async () => {
+            transactionObj.requestTransaction(form, divBody);
+            submitButtonClicked = true;
+        }
+    )
     footer.append(submitButton);
+    
     modalObj.closeButton.addEventListener("click", async () => {
         if (submitButtonClicked === true) {
             showBalance();
@@ -106,122 +124,38 @@ class TransactionFactory {
 }
 
 
-class IncomeDataGenerator {
-
-    createAmountInput(defaultValue=NaN) {
-        const div = createFormElementDiv();
-        const icon = document.createElement("i");
-        icon.classList.add("fa", "fa-money");
-        div.append(icon);
-        const amount = document.createElement("input");
-        amount.type = "number";
-        amount.name = "amount"
-        if (!isNaN(defaultValue)) {
-            amount.value = defaultValue
-        }
-        amount.placeholder = "amount";
-        amount.min = 0;
-        amount.step = 0.01;
-        amount.required = true;
-        div.append(amount);
-        return div;
-    }
-
-    createDateInput(defaultValue=null) {
-        const div = createFormElementDiv();
-        const date = document.createElement("input");
-        date.type = "date";
-        date.name = "date";
-        if (defaultValue === null) {
-            date.value = new Date().toISOString().slice(0,10);
-        } else {
-            date.value = defaultValue
-        }
-        date.required = true;
-        div.append(date);
-        return div;
-    }
-
-    createCommentInput(defaultValue=null) {
-        const div = createFormElementDiv();
-        const comments = document.createElement("input");
-        comments.type = "text";
-        comments.name = "comment";
-        if (defaultValue !== null) {
-            comments.value = defaultValue;
-        }
-        comments.placeholder = "comment (optional)";
-        div.append(comments);
-        return div;
-    }
-
-    createTransactionCategoryInput(defaultValue) {
-        const div = createFormElementDiv();
-        const category = window.userData.incomeOptions.createElement(defaultValue);
-        div.append(category);
-        return div;
-    }
-}
-
-class ExpenseDataGenerator extends IncomeDataGenerator {
-
-    createTransactionCategoryInput(defaultValue) {
-        const div = createFormElementDiv();
-        const category = window.userData.expenseOptions.createElement(defaultValue);
-        div.append(category);
-        return div;
-    }
-
-    createPaymentOptionInput(defaultValue) {
-        const div = createFormElementDiv();
-        const paymentMethod = window.userData.paymentOptions.createElement(defaultValue);
-        div.append(paymentMethod);
-        return div;
-    }
-}
-
-// Abstract class
 class TransactionOperator {
     formTransaction(...args) {
         throw new Error("Method 'formTransaction()' must be implemented.");
     }
 }
 
+
 class IncomeTransactionAddition extends TransactionOperator {
-
     HEADER_NAME = 'income';
-
-    constructor() {
-        super();
-        this.headerMsg = "Please, add income below:";
-        this.dataGenerator = new IncomeDataGenerator();
-    }
+    HEADER_MSG = 'Add income:';
+    incomeCategoriesObj = getIncomeCategoriesObj()
 
     async requestTransaction(formData, div) {
         const result = await addIncome(formData);
         if (result["status"] === 'success') {
             const latestIncomes = await getIncomes();
             window.userData.setIncomes(latestIncomes['data']['resource']);
-            generateFormOutputMessage("You have successfully added income!", div);
+            createFormOutputMsg("You have successfully added income!", div);
         } else {
-            generateFormOutputMessage(result["errorMessage"], div, false);
+            createFormOutputMsg(result["errorMessage"], div, false);
         }
-    }
-
-    createButtonElement() {
-        const div = createFormElementDiv();
-        const button = document.createElement("button");
-        button.innerText = "Add";
-        div.append(button);
-        return div;
     }
 
     generateForm() {
         const form = document.createElement("form");
-        form.append(this.dataGenerator.createAmountInput());
-        form.append(this.dataGenerator.createDateInput());
-        form.append(this.dataGenerator.createTransactionCategoryInput());
-        form.append(this.dataGenerator.createCommentInput());
+        form.append(createValueInput());
+        form.append(createDateInput());
+        form.append(createSelectInput(
+            this.incomeCategoriesObj.optionBaseName,
+            this.incomeCategoriesObj.getOptionNames()
+        ));
+        form.append(createTextInput("comment", "optional comment"));
         return form;
     }
 
@@ -234,7 +168,7 @@ class IncomeTransactionAddition extends TransactionOperator {
             if(msgFromPrevIteration!==null) {
                 msgFromPrevIteration.remove()
             }
-            const tempOption = document.querySelector(`#${window.userData.incomeOptions.id}_base_option`);
+            const tempOption = document.querySelector(`#${window.userData.incomeOptions.optionBaseName}_base_option`);
             tempOption.disabled = false;
             this.requestTransaction(form, bodyDiv)
             tempOption.disabled = true;
@@ -247,12 +181,12 @@ class IncomeTransactionAddition extends TransactionOperator {
         window.scrollTo(0, 0);
 
         const header = document.createElement("h2");
-        header.innerText = this.headerMsg;
+        header.innerText = this.HEADER_MSG;
         bodyDiv.append(header)
 
         const divForm = document.createElement("div");
         const form = this.generateForm();
-        form.append(this.createButtonElement());
+        form.append(createButton("Add"));
         this.generateOnSubmitEvent(form, bodyDiv);
         divForm.append(form);
         bodyDiv.append(divForm);
@@ -260,34 +194,37 @@ class IncomeTransactionAddition extends TransactionOperator {
     } 
 }
 
+
 class ExpenseTransactionAddition extends IncomeTransactionAddition {
-
     HEADER_NAME = 'expense';
-
-    constructor() {
-        super();
-        this.headerMsg = "Please, add expense below:";
-        this.dataGenerator = new ExpenseDataGenerator();
-    }
+    HEADER_MSG = 'Add expense:';
+    expenseCategoriesObj = getExpenseCategoriesObj();
+    paymentOptionsObj = getPaymentOptionsObj();
 
     async requestTransaction(formData, div) {
         const result = await addExpense(formData);
         if (result["status"] === 'success') {
             const latestExpenses = await getExpenses();
             window.userData.setExpenses(latestExpenses['data']['resource']);
-            generateFormOutputMessage("You have successfully added expense!", div);
+            createFormOutputMsg("You have successfully added expense!", div);
         } else {
-            generateFormOutputMessage(result["errorMessage"], div, false);
+            createFormOutputMsg(result["errorMessage"], div, false);
         }
     }
 
     generateForm() {
         const form = document.createElement("form");
-        form.append(this.dataGenerator.createAmountInput());
-        form.append(this.dataGenerator.createDateInput());
-        form.append(this.dataGenerator.createTransactionCategoryInput());
-        form.append(this.dataGenerator.createPaymentOptionInput());
-        form.append(this.dataGenerator.createCommentInput());
+        form.append(createValueInput());
+        form.append(createDateInput());
+        form.append(createSelectInput(
+            this.expenseCategoriesObj.optionBaseName,
+            this.expenseCategoriesObj.getOptionNames()
+        ));
+        form.append(createSelectInput(
+            this.paymentOptionsObj.optionBaseName,
+            this.paymentOptionsObj.getOptionNames()
+        ));
+        form.append(createTextInput("comment", "optional comment"));
         return form;
     }
 
@@ -300,8 +237,8 @@ class ExpenseTransactionAddition extends IncomeTransactionAddition {
             if(msgFromPrevIteration!==null) {
                 msgFromPrevIteration.remove()
             }
-            const tempExpOption = document.querySelector(`#${window.userData.expenseOptions.id}_base_option`);
-            const tempPayOption = document.querySelector(`#${window.userData.paymentOptions.id}_base_option`);
+            const tempExpOption = document.querySelector(`#${window.userData.expenseOptions.optionBaseName}_base_option`);
+            const tempPayOption = document.querySelector(`#${window.userData.paymentOptions.optionBaseName}_base_option`);
             tempExpOption.disabled = false;
             tempPayOption.disabled = false;
             this.requestTransaction(form, bodyDiv);
@@ -312,18 +249,13 @@ class ExpenseTransactionAddition extends IncomeTransactionAddition {
     }
 }
 
-class IncomeTransactionModification extends IncomeTransactionAddition {
 
-    BUTTON_ELEM = null;
+class IncomeTransactionModification extends IncomeTransactionAddition {
+    HEADER_NAME = 'income';
+    HEADER_MSG = 'Modify income:';
 
     constructor(transactionBaseData) {
-        super();
-        this.headerMsg = "Please, modify income below:";
         this.transactionBaseData = transactionBaseData;
-    }
-
-    getButtonElem() {
-        return this.BUTTON_ELEM;
     }
 
     async requestTransaction(formData, div) {
@@ -331,107 +263,48 @@ class IncomeTransactionModification extends IncomeTransactionAddition {
         if (result["status"] === 'success') {
             const latestIncomes = await getIncomes();
             window.userData.setIncomes(latestIncomes['data']['resource']);
-            generateFormOutputMessage("You have successfully modified income!", div);
+            createFormOutputMsg("You have successfully modified income!", div);
         } else {
-            generateFormOutputMessage(result["errorMessage"], div, false);
+            createFormOutputMsg(result["errorMessage"], div, false);
         }
-    }
-
-    createButtonElement() {
-        const div = createFormElementDiv();
-        const button = document.createElement("button");
-        button.innerText = "Modify";
-        this.BUTTON_ELEM = button;
-        div.append(button);
-        return div;
     }
 
     generateForm() {
         const form = document.createElement("form");
-        form.append(this.dataGenerator.createAmountInput(this.transactionBaseData["amount"]));
-        form.append(this.dataGenerator.createDateInput(this.transactionBaseData["date"]));
-        form.append(this.dataGenerator.createTransactionCategoryInput(this.transactionBaseData["transaction_category"]));
-        form.append(this.dataGenerator.createCommentInput(this.transactionBaseData["comment"]));
+        form.append(createValueInput(this.transactionBaseData["amount"]));
+        form.append(createDateInput(this.transactionBaseData["date"]));
+        form.append(createSelectInput(this.transactionBaseData["transaction_category"]));
+        form.append(createTextInput("comment", "optional comment", this.transactionBaseData["comment"]));
         return form;
     }
 }
 
 class ExpenseTransactionModification extends ExpenseTransactionAddition {
-
-    BUTTON_ELEM = null;
+    HEADER_NAME = 'expense';
+    HEADER_MSG = 'Modify expense:';
 
     constructor(transactionBaseData) {
-        super();
-        this.headerMsg = "Please, modify expense below:";
         this.transactionBaseData = transactionBaseData;
     }
 
-    getButtonElem() {
-        return this.BUTTON_ELEM;
-    }
-    
     async requestTransaction(formData, div) {
         const result = await modifyExpense(this.transactionBaseData['id'], formData);
         if (result["status"] === 'success') {
             const latestExpenses = await getExpenses();
             window.userData.setExpenses(latestExpenses['data']['resource']);
-            generateFormOutputMessage("You have successfully modified expense!", div);
+            createFormOutputMsg("You have successfully modified expense!", div);
         } else {
-            generateFormOutputMessage(result["errorMessage"], div, false);
+            createFormOutputMsg(result["errorMessage"], div, false);
         }
-    }
-
-    createButtonElement() {
-        const div = createFormElementDiv();
-        const button = document.createElement("button");
-        button.innerText = "Add";
-        this.BUTTON_ELEM = button;
-        div.append(button);
-        return div;
     }
 
     generateForm() {
         const form = document.createElement("form");
-        form.append(this.dataGenerator.createAmountInput(this.transactionBaseData["amount"]));
-        form.append(this.dataGenerator.createDateInput(this.transactionBaseData["date"]));
-        form.append(this.dataGenerator.createTransactionCategoryInput(this.transactionBaseData["transaction_category"]));
-        form.append(this.dataGenerator.createPaymentOptionInput(this.transactionBaseData["payment_method"]));
-        form.append(this.dataGenerator.createCommentInput(this.transactionBaseData["comment"]));
+        form.append(createValueInput(this.transactionBaseData["amount"]));
+        form.append(createDateInput(this.transactionBaseData["date"]));
+        form.append(createSelectInput(this.transactionBaseData["transaction_category"]));
+        form.append(createSelectInput(this.transactionBaseData["payment_method"]));
+        form.append(createTextInput("comment", "optional comment", this.transactionBaseData["comment"]));
         return form;
     }
-}
-
-
-const createFormElementDiv = () => {
-    const div = document.createElement("div");
-    div.classList.add("form_element");
-    return div;
-}
-
-
-const generateFormOutputMessage = (msg, sectionObj, success=true) => {
-    let spanClassName = "msg_error";
-    if (success) {
-        spanClassName = "msg_success";
-    }
-    
-    const msgID = "divMsgID";
-    const previousMsg = document.querySelector(`#${msgID}`)
-    if (previousMsg !== null) {
-        previousMsg.remove();
-    }
-
-    const divMsg = document.createElement("div");
-    divMsg.classList.add("msg_div");
-    const span = document.createElement("span");
-    span.classList.add(spanClassName);
-    span.textContent = msg;
-    divMsg.append(span);
-
-    const div = document.createElement("div");
-    div.id = msgID;
-    div.append(divMsg);
-    sectionObj.append(div);
-
-    return sectionObj;
 }

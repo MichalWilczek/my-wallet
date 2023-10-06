@@ -1,19 +1,20 @@
 import {
     getIncomes,
     getExpenses,
-    getIncomeCategories,
-    getExpenseCategories,
-    getPaymentOptions,
 } from './endpoints.js';
 import {
     deleteTransaction,
     modifyTransaction
 } from './transactions.js'
-import { Options } from './options.js';
+import { 
+    getIncomeCategoriesObj,
+    getExpenseCategoriesObj,
+    getPaymentOptionsObj
+} from './options.js';
 import { BalanceOptions } from './balance_options.js';
 import { clearBox, capitalizeFirstLetter } from './utils.js';
-export { runUserPortal, showBalance }
 
+export { runUserPortal, showBalance }
 
 
 const runUserPortal = async (
@@ -48,31 +49,12 @@ const getUserData = async (dateFrom=null, dateTo=null) => {
         expenses = [];
     }
 
-    let incomeCategories = await getIncomeCategories();
-    if (incomeCategories["status"] === 'success') {
-        incomeCategories = incomeCategories['data']['resource'];
-    } else {
-        errors.push(incomeCategories["errorMessage"]);
-        incomeCategories = [];
-    }
-
-    let expenseCategories = await getExpenseCategories();
-    if (expenseCategories["status"] === 'success') {
-        expenseCategories = expenseCategories['data']['resource'];
-    } else {
-        errors.push(expenseCategories["errorMessage"]);
-        expenseCategories = [];
-    }
-
-    let paymentOptions = await getPaymentOptions();
-    if (paymentOptions["status"] === 'success') {
-        paymentOptions = paymentOptions['data']['resource'];
-    } else {
-        errors.push(paymentOptions["errorMessage"]);
-        paymentOptions = [];
-    }
-
     window.appErrors = errors;
+
+    const incomeCategories = await getIncomeCategoriesObj();
+    const expenseCategories = await getExpenseCategoriesObj();
+    const paymentOptions = await getPaymentOptionsObj();
+
     window.userData = new UserData(
         incomes, 
         expenses,
@@ -143,25 +125,25 @@ class UserData {
     constructor(
         incomes=[], 
         expenses=[],
-        incomeOptions=[],
-        expenseOptions=[],
-        paymentOptions=[]
+        incomeOptions=getIncomeCategoriesObj(),
+        expenseOptions=getExpenseCategoriesObj(),
+        paymentOptions=getPaymentOptionsObj()
     ) {
-        this.incomeOptions = new Options("income-option", incomeOptions);
-        this.expenseOptions = new Options("expense-option", expenseOptions);
-        this.paymentOptions = new Options("payment-option", paymentOptions);
-        this.incomes = this._aggregateTransactionData(incomes, incomeOptions);
-        this.expenses = this._aggregateTransactionData(expenses, expenseOptions);
+        this.incomeOptions = incomeOptions;
+        this.expenseOptions = expenseOptions;
+        this.paymentOptions = paymentOptions;
+        this.incomes = this._aggregateTransactionData(incomes, this.incomeOptions.getOptionNames());
+        this.expenses = this._aggregateTransactionData(expenses, this.expenseOptions.getOptionNames());
     }
 
     setIncomes(incomes) {
         this.incomes = [];
-        this.incomes = this._aggregateTransactionData(incomes, this.incomeOptions.options);
+        this.incomes = this._aggregateTransactionData(incomes, this.incomeOptions.getOptionNames());
     }
 
     setExpenses(expenses) {
         this.expenses = [];
-        this.expenses = this._aggregateTransactionData(expenses, this.expenseOptions.options);
+        this.expenses = this._aggregateTransactionData(expenses, this.expenseOptions.getOptionNames());
     }
 
     showIncomeExpenseSummaryChart(sectionDiv, idAddName="") {

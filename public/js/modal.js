@@ -47,7 +47,7 @@ class Modal {
         const closeButton = document.createElement("button");
         closeButton.type = "button";
         closeButton.setAttribute("data-bs-dismiss", "modal");
-        closeButton.innerText = "Close";
+        closeButton.innerText = "Cancel";
         return closeButton;
     }
 

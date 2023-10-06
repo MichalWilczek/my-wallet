@@ -25,17 +25,17 @@ class TransactionCategory extends \Core\Model {
     public function get() {
         $db = static::getDB();
 
-        $stmt = $db->prepare("SELECT name FROM $this->tableName WHERE user_id = :user_id");
+        $stmt = $db->prepare("SELECT id, name FROM $this->tableName WHERE user_id = :user_id");
         $stmt->bindValue(":user_id", $this->userID, PDO::PARAM_INT);
         $stmt->execute();
         $categories = $stmt->fetchAll();
 
-        $results = [];
-        foreach($categories as $category) {
-            array_push($results, $category["name"]);
-        }
-        
-        return $results;
+        return array_map(function ($category) {
+            return [
+                'id' => $category['id'],
+                'name' => $category['name'],
+            ];
+        }, $categories);
     }
 
     public function add() {

@@ -1,49 +1,188 @@
-export { Options }
+import {
+    getIncomeCategories,
+    getExpenseCategories,
+    getPaymentOptions,
+    deleteIncomeCategory,
+    deleteExpenseCategory,
+    deletePaymentOption,
+    modifyIncomeCategory,
+    modifyExpenseCategory,
+    modifyPaymentOption,
+    addIncomeCategory,
+    addExpenseCategory,
+    addPaymentOption
+} from './endpoints.js';
+
+export { 
+    Options,
+    getIncomeCategoriesObj,
+    getExpenseCategoriesObj,
+    getPaymentOptionsObj
+}
+
+
+const getIncomeCategoriesObj = async () => {
+    const category = new IncomeCategory();
+    if (window.userData === null) {
+        return category;
+    }
+
+    if (window.userData.incomeOptions === null) {
+        await category.getOptions();
+        window.userData.incomeOptions === category;
+        return category;
+    }
+    return window.userData.incomeOptions;
+}
+
+const getExpenseCategoriesObj = async () => {
+    const category = new ExpenseCategory();
+    if (window.userData === null) {
+        return category;
+    }
+
+    if (window.userData.expenseOptions === null) {
+        await category.getOptions();
+        window.userData.expenseOptions === category;
+        return category;
+    }
+    return window.userData.expenseOptions;
+}
+
+const getPaymentOptionsObj = async () => {
+    const category = new PaymentOption();
+    if (window.userData === null) {
+        return category;
+    }
+
+    if (window.userData.paymentOptions === null) {
+        await category.getOptions();
+        window.userData.paymentOptions === category;
+        return category;
+    }
+    return window.userData.paymentOptions;
+}
 
 
 class Options {
-    constructor(id, optionNames) {
-        this.options = [];
-        this.id = id;
-        this.addOptions(optionNames);
-    }
-    addOption(optionName) {
-        this.options.push(optionName);
-        this.options.sort();
-    }
-    addOptions(optionNames) {
-        for (let optionName of optionNames) {
-            this.addOption(optionName);
-        }
-    }
-    removeOption(optionName) {
-        this.options = this.options.filter(
-            existingOption => existingOption !== optionName
-        );
-    }
-    createElement(defaultSelectedName=null) {
-        const selectObj = document.createElement("select");
-        selectObj.name = this.id;
-        selectObj.id = `${this.id}`;
-        selectObj.required = true;
+    constructor(
+        getOptionsQueryFunction,
+        addOptionQueryFunction,
+        deleteOptionQueryFunction,
+        modifyOptionQueryFunction,
+        optionName, 
+        optionsData = []
+    ) {
+        this.getOptionsQueryFunction = getOptionsQueryFunction;
+        this.addOptionQueryFunction = addOptionQueryFunction;
+        this.deleteOptionQueryFunction = deleteOptionQueryFunction;
+        this.modifyOptionQueryFunction = modifyOptionQueryFunction;
 
-        const baseOption = document.createElement("option");
-        baseOption.id = `${this.id}_base_option`
-        baseOption.value = this.id;
-        baseOption.disabled = true;
-        baseOption.selected = true;
-        baseOption.innerText = `--- ${this.id} ---`;
-        selectObj.append(baseOption);
+        this.optionBaseName = optionName;
+        this.optionsData = this.aggregateOptions(optionsData);
+    }
 
-        for (let option of this.options) {
-            const newOption = document.createElement("option");
-            newOption.value = option;
-            newOption.innerText = option;
-            if (option === defaultSelectedName) {
-                newOption.selected = true;
-            }
-            selectObj.append(newOption);
+    aggregateOptions(options) {
+        const aggregatedOptions = {};
+        for (let optionData of options) {
+            aggregatedOptions[optionData['name']] = optionData['id'];
         }
-        return selectObj;
+        return aggregatedOptions;
+    }
+
+    getOptionNames() {
+        return Object.keys(this.optionsData).sort();
+    }
+
+    async getOptions() {
+        const errors = [];
+        const result = await this.getOptionsQueryFunction();
+        if (result["status"] === 'success') {
+            this.optionsData = this.aggregateOptions(result['data']['resource']);
+        } else {
+            errors.push(result["errorMessage"]);
+            this.optionsData = {};
+        }
+        return errors;
+    }
+
+    async addOption(optionName) {
+        const result = await this.addOptionQueryFunction(optionName);
+
+        if (result["status"] == 'success') {
+            await this.getOptions();
+        }
+        return result;
+    }
+
+    async modifyOption(optionName, newOptionName) {
+        const optionID = this.optionsData[optionName];
+        const result = await this.modifyOptionQueryFunction(optionID);
+
+        if (result["status"] == 'success') {
+            await this.getOptions();
+        }
+        return result;
+    }
+
+    async deleteOption(optionName) {
+        const optionID = this.optionsData[optionName];
+        const result = await this.deleteOptionQueryFunction(optionID);
+
+        if (result["status"] == 'success') {
+            await this.getOptions();
+        }
+        return result;
+    }
+}
+
+
+class IncomeCategory extends Options {
+    constructor() {
+        super(
+            getIncomeCategories,
+            addIncomeCategory,
+            deleteIncomeCategory,
+            modifyIncomeCategory,
+            'income-category'
+        )
+    }
+
+    updateGlobals() {
+        window.userData.incomeOptions = this;
+    }
+}
+
+
+class ExpenseCategory extends Options {
+    constructor() {
+        super(
+            getExpenseCategories,
+            addExpenseCategory,
+            deleteExpenseCategory,
+            modifyExpenseCategory,
+            'expense-category'
+        )
+    }
+
+    updateGlobals() {
+        window.userData.expenseOptions = this;
+    }
+}
+
+
+class PaymentOption extends Options {
+    constructor() {
+        super(
+            getPaymentOptions,
+            addPaymentOption,
+            deletePaymentOption,
+            modifyPaymentOption,
+            'payment-option'
+        )
+    }
+
+    updateGlobals() {
+        window.userData.paymentOptions = this;
     }
 }
